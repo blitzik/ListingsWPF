@@ -78,6 +78,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Exceptions\ListingItemAlreadyExistsException.cs" />
+    <Compile Include="Exceptions\LunchHoursOutOfWorkedHoursRangeException.cs" />
+    <Compile Include="Exceptions\LunchHoursRangeException.cs" />
+    <Compile Include="Exceptions\WorkedHoursRangeException.cs" />
+    <Compile Include="Models\ListingItem.cs" />
     <Compile Include="Utils\Time.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

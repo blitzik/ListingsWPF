@@ -47,6 +47,9 @@ namespace Listings.Models
         }
 
 
+        private List<ListingItem> _items;
+
+
         private int _workedDays;
         public int WorkedDays
         {
@@ -67,6 +70,25 @@ namespace Listings.Models
         {
             Year = year;
             Month = month;
+
+            _items = new List<ListingItem>();
         }
+
+
+        public void AddItem(int day, Time start, Time end, Time lunchStart, Time lunchEnd)
+        {
+            if (_items.Exists(i => i.Day == day)) {
+                throw new ListingItemAlreadyExistsException();
+            }
+
+            _items.Insert(day, new ListingItem(this, day, start, end, lunchStart, lunchEnd));
+        }
+
+
+        public ListingItem GetItemByDay(int day)
+        {
+            return _items.ElementAt(day);
+        }
+        
     }
 }
