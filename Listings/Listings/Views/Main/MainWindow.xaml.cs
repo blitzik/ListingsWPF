@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Db4objects.Db4o;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Listings
+namespace Listings.Views.Main
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

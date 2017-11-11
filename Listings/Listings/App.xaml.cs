@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Listings.Views.Main;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,16 @@ namespace Listings
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnActivated(e);
+
+            MainWindow mw = new MainWindow();
+            MainViewModel mainViewModel = new MainViewModel();
+
+            mw.DataContext = mainViewModel;
+
+            mw.Show();
+        }
     }
 }

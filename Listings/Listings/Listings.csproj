@@ -78,13 +78,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Exceptions\ListingItemAlreadyExistsException.cs" />
     <Compile Include="Exceptions\LunchHoursOutOfWorkedHoursRangeException.cs" />
     <Compile Include="Exceptions\LunchHoursRangeException.cs" />
     <Compile Include="Exceptions\WorkedHoursRangeException.cs" />
     <Compile Include="Models\ListingItem.cs" />
+    <Compile Include="Services\Db4oObjectContainerFactory.cs" />
     <Compile Include="Utils\Time.cs" />
-    <Page Include="MainWindow.xaml">
+    <Compile Include="Views\Main\ViewModel.cs" />
+    <Page Include="Views\Main\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -93,7 +96,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Exceptions\OutOfRangeException.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\Main\MainViewModel.cs" />
+    <Compile Include="Views\Main\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -126,8 +130,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
