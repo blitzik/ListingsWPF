@@ -1,4 +1,7 @@
-﻿using Listings.Views.Main;
+﻿using Listings.Services;
+using Listings.Facades;
+using Db4objects.Db4o;
+using Listings.Views;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,16 +17,33 @@ namespace Listings
     /// </summary>
     public partial class App : Application
     {
+        private IObjectContainer _db;
+
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnActivated(e);
 
-            MainWindow mw = new MainWindow();
-            MainViewModel mainViewModel = new MainViewModel();
+            Db4oObjectContainerFactory dbFactory = new Db4oObjectContainerFactory();
+            _db = dbFactory.Create("data.dbs");
 
-            mw.DataContext = mainViewModel;
+            ListingFacade listingFacade = new ListingFacade(_db);
+            MainViewModel mainViewModel = new MainViewModel(listingFacade);
+
+            MainWindow mw = new MainWindow
+            {
+                DataContext = mainViewModel
+            };
 
             mw.Show();
+        }
+
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+
+            _db.Close();
         }
     }
 }

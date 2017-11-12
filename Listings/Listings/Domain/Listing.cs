@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Listings.Models
+namespace Listings.Domain
 {
     public class Listing
     {
@@ -22,7 +22,7 @@ namespace Listings.Models
         public int Year
         {
             get { return _year; }
-            set
+            private set
             {
                 if (value < 1) {
                     throw new OutOfRangeException("Only numbers higher than 0 can pass");
@@ -37,7 +37,7 @@ namespace Listings.Models
         public int Month
         {
             get { return _month; }
-            set
+            private set
             {
                 if (value < 1 || value > 12) {
                     throw new OutOfRangeException();
@@ -50,7 +50,7 @@ namespace Listings.Models
         private List<ListingItem> _items;
 
 
-        private int _workedDays;
+        private int _workedDays = 0;
         public int WorkedDays
         {
             get { return _workedDays; }
@@ -58,7 +58,7 @@ namespace Listings.Models
         }
 
 
-        private Time _workedHours;
+        private Time _workedHours = new Time("00:00");
         public Time WorkedHours
         {
             get { return _workedHours; }
@@ -75,13 +75,13 @@ namespace Listings.Models
         }
 
 
-        public void AddItem(int day, Time start, Time end, Time lunchStart, Time lunchEnd)
+        public void AddItem(int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd)
         {
             if (_items.Exists(i => i.Day == day)) {
                 throw new ListingItemAlreadyExistsException();
             }
 
-            _items.Insert(day, new ListingItem(this, day, start, end, lunchStart, lunchEnd));
+            _items.Insert(day, new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd));
         }
 
 

@@ -1,5 +1,4 @@
-﻿using Db4objects.Db4o;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,11 +16,11 @@ using System.Windows.Shapes;
 namespace Listings.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for NewListingView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ListingView : UserControl
     {
-        public MainWindow()
+        public ListingView()
         {
             InitializeComponent();
         }

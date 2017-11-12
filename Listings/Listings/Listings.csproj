@@ -60,6 +60,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -79,14 +81,25 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\DelegateCommand.cs" />
+    <Compile Include="Converters\MonthNameToIntConverter.cs" />
     <Compile Include="Exceptions\ListingItemAlreadyExistsException.cs" />
     <Compile Include="Exceptions\LunchHoursOutOfWorkedHoursRangeException.cs" />
     <Compile Include="Exceptions\LunchHoursRangeException.cs" />
     <Compile Include="Exceptions\WorkedHoursRangeException.cs" />
-    <Compile Include="Models\ListingItem.cs" />
+    <Compile Include="Domain\ListingItem.cs" />
+    <Compile Include="Facades\ListingFacade.cs" />
     <Compile Include="Services\Db4oObjectContainerFactory.cs" />
+    <Compile Include="Utils\Date.cs" />
     <Compile Include="Utils\Time.cs" />
+    <Compile Include="Views\ListingsOverview\ListingsOverviewViewModel.cs" />
     <Compile Include="Views\Main\ViewModel.cs" />
+    <Compile Include="Views\ListingsOverview\ListingsOverviewView.xaml.cs">
+      <DependentUpon>ListingsOverviewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Listing\ListingView.xaml.cs">
+      <DependentUpon>ListingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Listing\ListingViewModel.cs" />
     <Page Include="Views\Main\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -101,9 +114,17 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\ListingsOverview\ListingsOverviewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Listing\ListingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Listing.cs" />
+    <Compile Include="Domain\Listing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Listings.Exceptions;
 
-namespace Listings.Models
+namespace Listings.Domain
 {
     public class ListingItem
     {
@@ -33,7 +33,7 @@ namespace Listings.Models
         }
 
 
-        public Time _shiftStart;
+        private Time _shiftStart;
         public Time ShiftStart
         {
             get { return _shiftStart; }
@@ -41,7 +41,7 @@ namespace Listings.Models
         }
 
 
-        public Time _shiftEnd;
+        private Time _shiftEnd;
         public Time ShiftEnd
         {
             get { return _shiftEnd; }
@@ -49,7 +49,7 @@ namespace Listings.Models
         }
 
 
-        public Time _shiftLunchStart;
+        private Time _shiftLunchStart;
         public Time ShiftLunchStart
         {
             get { return _shiftLunchStart; }
@@ -57,11 +57,19 @@ namespace Listings.Models
         }
 
 
-        public Time _shiftLunchEnd;
+        private Time _shiftLunchEnd;
         public Time ShiftLunchEnd
         {
             get { return _shiftLunchEnd; }
             set { ChangeHours(ShiftStart, ShiftEnd, ShiftLunchStart, value); }
+        }
+
+
+        private string _locality;
+        public string Locality
+        {
+            get { return _locality; }
+            set { _locality = value; }
         }
 
 
@@ -77,13 +85,14 @@ namespace Listings.Models
         }
 
 
-        public ListingItem(Listing listing, int day, Time start, Time end, Time lunchStart, Time lunchEnd)
+        public ListingItem(Listing listing, int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd)
         {
             _day = day;
             Date = new DateTime(listing.Year, listing.Month, day);
 
             Listing = listing;
 
+            Locality = locality;
             ShiftStart = start;
             ShiftEnd = end;
             ShiftLunchStart = lunchStart;
@@ -105,10 +114,10 @@ namespace Listings.Models
                 throw new LunchHoursOutOfWorkedHoursRangeException();
             }
 
-            ShiftStart = start;
-            ShiftEnd = end;
-            ShiftLunchStart = lunchStart;
-            ShiftLunchEnd = lunchEnd;
+            _shiftStart = start;
+            _shiftEnd = end;
+            _shiftLunchStart = lunchStart;
+            _shiftLunchEnd = lunchEnd;
         }
 
     }
