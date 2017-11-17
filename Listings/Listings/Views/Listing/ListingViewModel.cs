@@ -15,7 +15,7 @@ namespace Listings.Views
         private ListingFacade _listingFacade;
 
 
-        private List<int> _years = Date.GetLastYears(5);
+        private List<int> _years = Date.GetLastYears(3);
         public List<int> Years
         {
             get { return _years; }

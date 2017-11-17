@@ -1,5 +1,7 @@
 ﻿using Db4objects.Db4o;
 using Listings.Commands;
+using Listings.Domain;
+using Listings.EventArguments;
 using Listings.Facades;
 using Listings.Services;
 using System;
@@ -34,10 +36,19 @@ namespace Listings.Views
             {
                 if (_listingsOverviewViewModel == null) {
                     _listingsOverviewViewModel = new ListingsOverviewViewModel(_listingFacade, "Přehled výčetek");
+                    _listingsOverviewViewModel.OnListingSelected += OnListingSelected;
                 }
 
                 return _listingsOverviewViewModel;
             }
+        }
+
+
+        private void OnListingSelected(object sender, SelectedListingArgs args)
+        {
+            ListingDetailViewModel.Listing = args.SelectedListing;
+            CurrentViewModel = ListingDetailViewModel;
+            WindowTitle = CurrentViewModel.WindowTitle;
         }
 
 
@@ -51,6 +62,20 @@ namespace Listings.Views
                 }
 
                 return _listingViewModel;
+            }
+        }
+
+
+        private ListingDetailViewModel _listingDetailViewModel;
+        private ListingDetailViewModel ListingDetailViewModel
+        {
+            get
+            {
+                if (_listingDetailViewModel == null) {
+                    _listingDetailViewModel = new ListingDetailViewModel(_listingFacade, "Detail výčetky");
+                }
+
+                return _listingDetailViewModel;
             }
         }
 

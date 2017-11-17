@@ -1,8 +1,11 @@
-﻿using Listings.Domain;
+﻿using Listings.Commands;
+using Listings.Domain;
+using Listings.EventArguments;
 using Listings.Facades;
 using Listings.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,11 +17,28 @@ namespace Listings.Views
         private ListingFacade _listingFacade;
 
 
-        private List<Listing> _listings;
-        public List<Listing> Listings
+        private DelegateCommand _openListingCommand;
+        public DelegateCommand OpenListingCommand
+        {
+            get
+            {
+                if (_openListingCommand == null) {
+                    _openListingCommand = new DelegateCommand(p => OpenListing((Listing)p));
+                }
+
+                return _openListingCommand;
+            }
+        }
+
+
+        private ObservableCollection<Listing> _listings;
+        public ObservableCollection<Listing> Listings
         {
             get { return _listings; }
-            set { _listings = value; }
+            set {
+                _listings = value;
+                RaisePropertyChanged();
+            }
         }
 
 
@@ -44,18 +64,8 @@ namespace Listings.Views
             {
                 _selectedYear = value;
                 RaisePropertyChanged();
-            }
-        }
 
-
-        private int _selectedMonth;
-        public int SelectedMonth
-        {
-            get { return _selectedMonth; }
-            set
-            {
-                _selectedMonth = value;
-                RaisePropertyChanged();
+                LoadListings(SelectedYear);
             }
         }
 
@@ -64,16 +74,32 @@ namespace Listings.Views
         {
             _listingFacade = listingFacade;
 
-            Listings = listingFacade.FindListings();
+            Listings = new ObservableCollection<Listing>(listingFacade.FindListings(DateTime.Now.Year));
 
             _selectedYear = DateTime.Now.Year;
-            _selectedMonth = DateTime.Now.Month;
             _windowTitle = windowTitle;
         }
 
 
         public ListingsOverviewViewModel(ListingFacade listingFacade) : this(listingFacade, null)
         {
+        }
+
+
+        private void LoadListings(int year)
+        {
+            Listings = new ObservableCollection<Listing>(_listingFacade.FindListings(year));
+        }
+
+
+        public delegate void ListingSelectionHandler(object sender, SelectedListingArgs args);
+        public event ListingSelectionHandler OnListingSelected;
+        private void OpenListing(Listing listing)
+        {
+            ListingSelectionHandler handler = OnListingSelected;
+            if (handler != null) {
+                handler(this, new SelectedListingArgs(listing));
+            }
         }
 
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Db4objects.Db4o;
 using Db4objects.Db4o.Config;
 using System.IO;
+using Listings.Domain;
 
 namespace Listings.Services
 {
@@ -28,6 +29,8 @@ namespace Listings.Services
             config.Common.ActivationDepth = 2;
             config.Common.UpdateDepth = 5;
 
+            config.Common.ObjectClass(typeof(Listing)).ObjectField("_year").Indexed(true);
+  
             return config;
         }
 

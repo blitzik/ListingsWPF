@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <Style TargetType="{x:Type TextBlock}">
+        <Style x:Key="BoldText" TargetType="{x:Type TextBlock}">
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Margin" Value="0 0 0 5" />
             <Setter Property="FontWeight" Value="Bold" />
@@ -28,10 +28,7 @@
     </UserControl.Resources>
 
     <StackPanel>
-        <TextBlock Text="Název výčetky" />
-        <TextBox Text="{Binding Name}" />
-
-        <Grid Margin="0 15 0 0">
+        <Grid Margin="0 0 0 15">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
@@ -43,20 +40,23 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Rok" />
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Rok" Style="{StaticResource BoldText}" />
             <ComboBox Grid.Row="1"
                       Grid.Column="0"
                       Padding="8"
                       ItemsSource="{Binding Years}"
                       SelectedItem="{Binding SelectedYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock Grid.Row="0" Grid.Column="2" Text="Měsíc" />
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="Měsíc" Style="{StaticResource BoldText}" />
             <ComboBox Grid.Row="1"
                       Grid.Column="2"
                       Padding="8"
                       ItemsSource="{Binding Months}"
                       SelectedItem="{Binding SelectedMonth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MonthNameToIntConverter}}" />
         </Grid>
+
+        <TextBlock Text="Název výčetky" Style="{StaticResource BoldText}" />
+        <TextBox Text="{Binding Name}" MaxLength="100" />
 
         <Button Content="Uložit" Command="{Binding SaveCommand}" Width="150" HorizontalAlignment="Right" Margin="0 15 0 0" />
     </StackPanel>

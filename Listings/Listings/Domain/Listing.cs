@@ -47,6 +47,14 @@ namespace Listings.Domain
         }
 
 
+        private DateTime _createdAt;
+        public DateTime CreatedAt
+        {
+            get { return _createdAt; }
+            private set { _createdAt = value; }
+        }
+
+
         public int DaysInMonth
         {
             get
@@ -79,6 +87,7 @@ namespace Listings.Domain
         {
             Year = year;
             Month = month;
+            CreatedAt = DateTime.Now;
 
             _items = new List<ListingItem>();
         }

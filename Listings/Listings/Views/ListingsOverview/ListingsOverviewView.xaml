@@ -10,73 +10,87 @@
         <converters:MonthNameToIntConverter x:Key="MonthNameToIntConverter" />
     </UserControl.Resources>
        
-    <Grid>
+    <Grid x:Name="TopElement">
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
             <RowDefinition Height="10" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
         <ComboBox Grid.Row="0"
-                  Grid.Column="0"
+                  Width="150"
+                  HorizontalAlignment="Left"
                   ItemsSource="{Binding Years}"
                   SelectedItem="{Binding SelectedYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        
-        <ComboBox Grid.Row="0"
-                  Grid.Column="2"
-                  ItemsSource="{Binding Months}"
-                  SelectedItem="{Binding SelectedMonth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MonthNameToIntConverter}}" />
 
-        <ItemsControl Grid.Row="2" Grid.ColumnSpan="3" ItemsSource="{Binding Listings}" HorizontalContentAlignment="Stretch">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <DataTemplate.Resources>
-                        <Style TargetType="{x:Type Border}">
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" Value="Red" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataTemplate.Resources>
-                    <Border Background="#fff" BorderBrush="#CCC" BorderThickness="1" Margin="0 0 0 10" Padding="10">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="10" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+        <ScrollViewer Grid.Row="2" Padding="0 0 5 0" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Listings}" HorizontalContentAlignment="Stretch">
+                <ItemsControl.Style>
+                    <Style TargetType="{x:Type ItemsControl}"
+                           BasedOn="{StaticResource {x:Type ItemsControl}}">
+                        <Style.Triggers>
+                            <Trigger Property="HasItems" Value="False">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <TextBlock>Nebyly nalezeny žádné výčetky</TextBlock>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ItemsControl.Style>
+                
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border x:Name="Bd" BorderBrush="Transparent" BorderThickness="0" Margin="0 0 0 10">
+                            <Button Command="{Binding ElementName=TopElement, Path=DataContext.OpenListingCommand}" CommandParameter="{Binding ElementName=Bd, Path=DataContext}" Background="#fff" BorderBrush="#CCC" BorderThickness="1" Padding="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Name}" FontWeight="Bold" />
-                            <TextBlock Grid.Row="0" Grid.Column="2">
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}{0} {1}">
-                                        <Binding Path="Month" Converter="{StaticResource MonthNameToIntConverter}" />
-                                        <Binding Path="Year" />
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
-                            <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding WorkedHours}" />
-                            <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding WorkedDays}" />
-
-                            <Button Content="ABC" Grid.Row="0" Grid.Column="4" Grid.RowSpan="3" />
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                                    <!-- Name -->
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Name}" FontWeight="Bold" />
+                                    
+                                    <!-- Worked days -->
+                                    <TextBlock Grid.Row="2" Grid.Column="0">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} / {1}">
+                                                <Binding Path="WorkedDays" />
+                                                <Binding Path="DaysInMonth" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    
+                                    <!-- Worked hours -->
+                                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding WorkedHours}" HorizontalAlignment="Center" />
+                                    
+                                    <!-- Listing period -->
+                                    <TextBlock Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding Path="Month" Converter="{StaticResource MonthNameToIntConverter}" />
+                                                <Binding Path="Year" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Grid>
+                            </Button>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </UserControl>

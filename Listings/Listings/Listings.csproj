@@ -82,6 +82,7 @@
     </ApplicationDefinition>
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Converters\MonthNameToIntConverter.cs" />
+    <Compile Include="EventArguments\SelectedListingArgs.cs" />
     <Compile Include="Exceptions\ListingItemAlreadyExistsException.cs" />
     <Compile Include="Exceptions\LunchHoursOutOfWorkedHoursRangeException.cs" />
     <Compile Include="Exceptions\LunchHoursRangeException.cs" />
@@ -92,6 +93,10 @@
     <Compile Include="Services\Navigation\NavigationItem.cs" />
     <Compile Include="Utils\Date.cs" />
     <Compile Include="Utils\Time.cs" />
+    <Compile Include="Views\ListingDetail\ListingDetailView.xaml.cs">
+      <DependentUpon>ListingDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ListingDetail\ListingDetailViewModel.cs" />
     <Compile Include="Views\ListingsOverview\ListingsOverviewViewModel.cs" />
     <Compile Include="Views\Main\ViewModel.cs" />
     <Compile Include="Views\ListingsOverview\ListingsOverviewView.xaml.cs">
@@ -101,6 +106,10 @@
       <DependentUpon>ListingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Listing\ListingViewModel.cs" />
+    <Page Include="Views\ListingDetail\ListingDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Main\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
