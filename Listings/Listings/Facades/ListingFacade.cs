@@ -35,10 +35,10 @@ namespace Listings.Facades
         }
 
 
-        private delegate int OnListingsLoad(Listing l1, Listing l2);
+        private delegate int ListingsComparisonHandler(Listing l1, Listing l2);
         public List<Listing> FindListings(int year, string order = "DESC")
         {
-            OnListingsLoad comparer = LoadInASC;
+            ListingsComparisonHandler comparer = LoadInASC;
             switch (order) {
                 case "DESC":
                     comparer = LoadInDESC;
