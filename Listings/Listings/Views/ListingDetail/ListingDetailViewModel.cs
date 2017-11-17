@@ -1,4 +1,5 @@
-﻿using Listings.Domain;
+﻿using Listings.Commands;
+using Listings.Domain;
 using Listings.Facades;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,20 @@ namespace Listings.Views
         }
 
 
+        private DelegateCommand _backToOverviewCommand;
+        public DelegateCommand BackToOverviewCommand
+        {
+            get
+            {
+                if (_backToOverviewCommand == null) {
+                    _backToOverviewCommand = new DelegateCommand(p => DisplayListingsOverview());
+                }
+
+                return _backToOverviewCommand;
+            }
+        }
+
+
         public ListingDetailViewModel(ListingFacade listingFacade, string windowTitle)
         {
             _listingFacade = listingFacade;
@@ -32,6 +47,15 @@ namespace Listings.Views
         }
 
 
+        public delegate void SwitchViewHandler(object sender, EventArgs args);
+        public event SwitchViewHandler OnDisplayListingsOverviewClicked;
+        private void DisplayListingsOverview()
+        {
+            SwitchViewHandler handler = OnDisplayListingsOverviewClicked;
+            if (handler != null) {
+                handler(this, EventArgs.Empty);
+            }
+        }
 
     }
 }

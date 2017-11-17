@@ -8,13 +8,17 @@
              d:DesignHeight="500" d:DesignWidth="700">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="10" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Border Background="#FFF" BorderBrush="#CCC" BorderThickness="1">
-            <TextBlock Text="Listopad" />
+        <Button Grid.Row="0" Content="Zpět na přehled výčetek" Command="{Binding BackToOverviewCommand}" Width="200" HorizontalAlignment="Left" />
+
+        <Border Grid.Row="2" Background="#FFF" BorderBrush="#CCC" BorderThickness="1">
+            <TextBlock Text="{Binding Listing.Name}" />
         </Border>
         
         
