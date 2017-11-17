@@ -10,6 +10,18 @@ namespace Listings.Views
 {
     public abstract class ViewModel : INotifyPropertyChanged
     {
+        protected string _windowTitle;
+        public string WindowTitle
+        {
+            get { return _windowTitle; }
+            set
+            {
+                _windowTitle = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged([CallerMemberName]string propertyName = "")
         {

@@ -13,7 +13,7 @@ namespace Listings.Domain
         private string _name;
         public string Name
         {
-            get { return _name; }
+            get { return string.IsNullOrEmpty(_name) ? "Bez názvu" : _name; }
             set { _name = value; }
         }
 
@@ -43,6 +43,15 @@ namespace Listings.Domain
                     throw new OutOfRangeException();
                 }
                 _month = value;
+            }
+        }
+
+
+        public int DaysInMonth
+        {
+            get
+            {
+                return DateTime.DaysInMonth(Year, Month);
             }
         }
 

@@ -75,13 +75,13 @@ namespace Listings.Domain
 
         public Time LunchHours
         {
-            get { return ShiftLunchEnd.Sub(ShiftLunchStart); }
+            get { return ShiftLunchEnd - ShiftLunchStart; }
         }
 
 
         public Time WorkedHours
         {
-            get { return ShiftEnd.Sub(ShiftStart).Sub(LunchHours); }
+            get { return ShiftEnd - ShiftStart - LunchHours; }
         }
 
 
@@ -102,15 +102,15 @@ namespace Listings.Domain
 
         public void ChangeHours(Time start, Time end, Time lunchStart, Time lunchEnd)
         {
-            if (start.IsHigherOrEqualTo(end)) {
+            if (start >= end) {
                 throw new WorkedHoursRangeException();
             }
 
-            if (lunchStart.IsHigherOrEqualTo(lunchEnd)) {
+            if (lunchStart >= lunchEnd) {
                 throw new LunchHoursRangeException();
             }
 
-            if (lunchStart.IsLowerOrEqualTo(start) || lunchEnd.IsHigherOrEqualTo(end)) {
+            if (lunchStart <= start || lunchEnd >= end) {
                 throw new LunchHoursOutOfWorkedHoursRangeException();
             }
 

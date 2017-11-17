@@ -17,5 +17,17 @@ namespace Listings.Utils
         {
             get { return _months; }
         }
+
+
+        public static List<int> GetLastYears(int numberOfYears)
+        {
+            int stopYear = DateTime.Now.Year - numberOfYears;
+            List<int> list = new List<int>();
+            for (int year = DateTime.Now.Year; year > stopYear; year--) {
+                list.Add(year);
+            }
+
+            return list;
+        }
     }
 }

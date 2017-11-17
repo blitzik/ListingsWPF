@@ -1,6 +1,7 @@
 ﻿using Db4objects.Db4o;
 using Listings.Commands;
 using Listings.Facades;
+using Listings.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,27 +27,13 @@ namespace Listings.Views
         }
 
 
-        private ICommand _navigationCommand;
-        public ICommand NavigationCommand
-        {
-            get
-            {
-                if (_navigationCommand == null) {
-                    _navigationCommand = new DelegateCommand(p => OnNav((string)p));
-                }
-
-                return _navigationCommand;
-            }
-        }
-
-
         private ListingsOverviewViewModel _listingsOverviewViewModel;
         private ListingsOverviewViewModel ListingsOverviewViewModel
         {
             get
             {
                 if (_listingsOverviewViewModel == null) {
-                    _listingsOverviewViewModel = new ListingsOverviewViewModel(_listingFacade);
+                    _listingsOverviewViewModel = new ListingsOverviewViewModel(_listingFacade, "Přehled výčetek");
                 }
 
                 return _listingsOverviewViewModel;
@@ -60,7 +47,7 @@ namespace Listings.Views
             get
             {
                 if (_listingViewModel == null) {
-                    _listingViewModel = new ListingViewModel(_listingFacade);
+                    _listingViewModel = new ListingViewModel(_listingFacade, "Nová výčetka");
                 }
 
                 return _listingViewModel;
@@ -71,15 +58,51 @@ namespace Listings.Views
         private ListingFacade _listingFacade;
 
 
-        public MainViewModel(ListingFacade listingFacade)
+        private List<NavigationItem> _navigation;
+        public List<NavigationItem> Navigation
         {
-            _listingFacade = listingFacade;
+            get { return _navigation; }
+            set
+            {
+                _navigation = value;
+                RaisePropertyChanged();
+            }
         }
 
 
-        private void OnNav(string destination)
+        private NavigationItem _selectedNavigationItem;
+        public NavigationItem SelectedNavigationItem
         {
-            switch (destination) {
+            get { return _selectedNavigationItem; }
+            set
+            {
+                _selectedNavigationItem = value;
+                RaisePropertyChanged();
+
+                OnNav(_selectedNavigationItem);
+            }
+        }
+
+
+        public MainViewModel(ListingFacade listingFacade)
+        {
+            _listingFacade = listingFacade;
+
+            NavigationItem defaultItem = new NavigationItem("listingsOverview", "Přehled výčetek");
+
+            _navigation = new List<NavigationItem>();
+            _navigation.Add(defaultItem);
+            _navigation.Add(new NavigationItem("newListing", "Nová výčetka"));
+            _navigation.Add(new NavigationItem("employersManagement", "Správa zaměstnavatelů"));
+            _navigation.Add(new NavigationItem("settings", "Nastavení"));
+
+            SelectedNavigationItem = defaultItem;
+        }
+
+
+        private void OnNav(NavigationItem navItem)
+        {
+            switch (navItem.Index) {
                 case "listingsOverview":
                     CurrentViewModel = ListingsOverviewViewModel;
                     break;
@@ -88,6 +111,8 @@ namespace Listings.Views
                     CurrentViewModel = ListingViewModel;
                     break;
             }
+
+            WindowTitle = CurrentViewModel.WindowTitle;
         }
     }
 }

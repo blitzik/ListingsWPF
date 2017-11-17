@@ -54,75 +54,16 @@ namespace Listings.Utils
         }
 
 
-        public Time Sum(Time time2sum)
-        {
-            return new Time(Seconds + time2sum.Seconds);
-        }
-
-
-        public Time Sub(Time time2sub)
-        {
-            return new Time(Seconds - time2sub.Seconds);
-        }
-
-
-        public int Compare(Time time)
-        {
-            if (Seconds > time.Seconds) {
-                return 1;
-            }
-
-            if (Seconds < time.Seconds) {
-                return -1;
-            }
-
-            return 0;
-        }
-
-
-        public bool IsLowerThan(Time time)
-        {
-            return Compare(time) < 0;
-        }
-
-
-        public bool IsLowerOrEqualTo(Time time)
-        {
-            return Compare(time) <= 0;
-        }
-
-
-        public bool IsHigherThan(Time time)
-        {
-            return Compare(time) > 0;
-        }
-
-
-        public bool IsHigherOrEqualTo(Time time)
-        {
-            return Compare(time) >= 0;
-        }
-
-
-        public bool IsEqualTo(Time time)
-        {
-            return Compare(time) == 0;
-        }
-
-
-        public override string ToString()
-        {
-            return Text;
-        }
-
-
         public static string Seconds2Time(int seconds)
         {
-            int hours = seconds / 3600;
-            int minutes = Math.Abs((seconds % 3600) / 60);
-            int secs = Math.Abs((seconds % 3600) % 60);
+            bool isNegative = seconds < 0;
 
-            return string.Format("{0}:{1}:{2}", (hours > -10 && hours < 10) ? hours.ToString("D2") : hours.ToString(), minutes.ToString("D2"), secs.ToString("D2"));
+            seconds = Math.Abs(seconds);
+            int hours = seconds / 3600;
+            int minutes = (seconds % 3600) / 60;
+            int secs = (seconds % 3600) % 60;
+
+            return string.Format("{0}{1}:{2}:{3}", isNegative ? "-" : null, (hours > -10 && hours < 10) ? hours.ToString("D2") : hours.ToString(), minutes.ToString("D2"), secs.ToString("D2"));
         }
 
 
@@ -140,5 +81,60 @@ namespace Listings.Utils
             return ((Math.Abs(hours) * 3600) + (minutes * 60) + seconds) * (hours < 0 ? -1 : 1);
         }
 
+
+        public static Time operator +(Time a, Time b)
+        {
+            return new Time(a.Seconds + b.Seconds);
+        }
+
+
+        public static Time operator -(Time a, Time b)
+        {
+            return new Time(a.Seconds - b.Seconds);
+        }
+
+
+        public static bool operator >(Time a, Time b)
+        {
+            return a.Seconds > b.Seconds;
+        }
+
+
+        public static bool operator <(Time a, Time b)
+        {
+            return a.Seconds < b.Seconds;
+        }
+
+
+        public static bool operator <=(Time a, Time b)
+        {
+            return a.Seconds <= b.Seconds;
+        }
+
+
+        public static bool operator >=(Time a, Time b)
+        {
+            return a.Seconds >= b.Seconds;
+        }
+
+
+        public static bool operator ==(Time a, Time b)
+        {
+            return a.Seconds == b.Seconds;
+        }
+
+
+        public static bool operator !=(Time a, Time b)
+        {
+            return a.Seconds != b.Seconds;
+        }
+
+
+        public override string ToString()
+        {
+            return Text;
+        }
+
     }
+
 }

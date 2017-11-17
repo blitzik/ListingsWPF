@@ -15,7 +15,7 @@ namespace Listings.Views
         private ListingFacade _listingFacade;
 
 
-        private List<int> _years = new List<int>();
+        private List<int> _years = Date.GetLastYears(5);
         public List<int> Years
         {
             get { return _years; }
@@ -79,14 +79,18 @@ namespace Listings.Views
         }
 
 
-        public ListingViewModel(ListingFacade listingFacade)
+        public ListingViewModel(ListingFacade listingFacade, string windowTitle)
         {
             _listingFacade = listingFacade;
 
-            GenerateYears(_years);
-
             _selectedYear = DateTime.Now.Year;
             _selectedMonth = DateTime.Now.Month;
+            _windowTitle = windowTitle;
+        }
+
+
+        public ListingViewModel(ListingFacade listingFacade) : this(listingFacade, null)
+        {
         }
 
 
@@ -100,13 +104,5 @@ namespace Listings.Views
             _listingFacade.Save(newListing);
         }
 
-
-        private void GenerateYears(List<int> list)
-        {
-            int stopYear = DateTime.Now.Year - 5;
-            for (int year = DateTime.Now.Year; year > stopYear; year--) {
-                list.Add(year);
-            }
-        }
     }
 }

@@ -89,6 +89,7 @@
     <Compile Include="Domain\ListingItem.cs" />
     <Compile Include="Facades\ListingFacade.cs" />
     <Compile Include="Services\Db4oObjectContainerFactory.cs" />
+    <Compile Include="Services\Navigation\NavigationItem.cs" />
     <Compile Include="Utils\Date.cs" />
     <Compile Include="Utils\Time.cs" />
     <Compile Include="Views\ListingsOverview\ListingsOverviewViewModel.cs" />
@@ -151,6 +152,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
