@@ -29,6 +29,20 @@ namespace Listings.Views
         }
 
 
+        private DelegateCommand _navigationCommand;
+        public DelegateCommand NavigationCommand
+        {
+            get
+            {
+                if (_navigationCommand == null) {
+                    _navigationCommand = new DelegateCommand(p => ChangeView((string)p));
+                }
+
+                return _navigationCommand;
+            }
+        }
+
+
         private ListingsOverviewViewModel _listingsOverviewViewModel;
         private ListingsOverviewViewModel ListingsOverviewViewModel
         {
@@ -47,8 +61,7 @@ namespace Listings.Views
         private void OnListingSelected(object sender, SelectedListingArgs args)
         {
             ListingDetailViewModel.Listing = args.SelectedListing;
-            CurrentViewModel = ListingDetailViewModel;
-            WindowTitle = CurrentViewModel.WindowTitle;
+            ChangeView(nameof(ListingDetailViewModel));
         }
 
 
@@ -73,6 +86,7 @@ namespace Listings.Views
             {
                 if (_listingDetailViewModel == null) {
                     _listingDetailViewModel = new ListingDetailViewModel(_listingFacade, "Detail výčetky");
+                    _listingDetailViewModel.OnDisplayListingsOverviewClicked += OnDisplayListingsOverviewClicked;
                 }
 
                 return _listingDetailViewModel;
@@ -80,60 +94,36 @@ namespace Listings.Views
         }
 
 
+        private void OnDisplayListingsOverviewClicked(object sender, EventArgs args)
+        {
+            ChangeView(nameof(ListingsOverviewViewModel));
+        }
+
+
         private ListingFacade _listingFacade;
-
-
-        private List<NavigationItem> _navigation;
-        public List<NavigationItem> Navigation
-        {
-            get { return _navigation; }
-            set
-            {
-                _navigation = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-        private NavigationItem _selectedNavigationItem;
-        public NavigationItem SelectedNavigationItem
-        {
-            get { return _selectedNavigationItem; }
-            set
-            {
-                _selectedNavigationItem = value;
-                RaisePropertyChanged();
-
-                OnNav(_selectedNavigationItem);
-            }
-        }
 
 
         public MainViewModel(ListingFacade listingFacade)
         {
             _listingFacade = listingFacade;
 
-            NavigationItem defaultItem = new NavigationItem("listingsOverview", "Přehled výčetek");
-
-            _navigation = new List<NavigationItem>();
-            _navigation.Add(defaultItem);
-            _navigation.Add(new NavigationItem("newListing", "Nová výčetka"));
-            _navigation.Add(new NavigationItem("employersManagement", "Správa zaměstnavatelů"));
-            _navigation.Add(new NavigationItem("settings", "Nastavení"));
-
-            SelectedNavigationItem = defaultItem;
+            ChangeView(nameof(ListingsOverviewViewModel));
         }
 
 
-        private void OnNav(NavigationItem navItem)
+        private void ChangeView(string viewCode)
         {
-            switch (navItem.Index) {
-                case "listingsOverview":
+            switch (viewCode) {
+                case nameof(ListingsOverviewViewModel):
                     CurrentViewModel = ListingsOverviewViewModel;
                     break;
 
-                case "newListing":
+                case nameof(ListingViewModel):
                     CurrentViewModel = ListingViewModel;
+                    break;
+
+                case nameof(ListingDetailViewModel):
+                    CurrentViewModel = ListingDetailViewModel;
                     break;
             }
 
