@@ -24,6 +24,7 @@ namespace Listings.Facades
         public void Save(Listing listing)
         {
             _db.Store(listing);
+            _db.Commit();
         }
 
 
@@ -59,13 +60,13 @@ namespace Listings.Facades
 
         private int LoadInASC(Listing l1, Listing l2)
         {
-            return l1.CreatedAt.CompareTo(l2.CreatedAt);
+            return l1.Month.CompareTo(l2.Month);
         }
 
 
         private  int LoadInDESC(Listing l1, Listing l2)
         {
-            return l2.CreatedAt.CompareTo(l1.CreatedAt);
+            return l2.Month.CompareTo(l1.Month);
         }
 
     }

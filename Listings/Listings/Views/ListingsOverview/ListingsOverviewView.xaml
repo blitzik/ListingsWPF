@@ -23,7 +23,7 @@
                   ItemsSource="{Binding Years}"
                   SelectedItem="{Binding SelectedYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-        <ScrollViewer Grid.Row="2" Padding="0 0 5 0" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="2" Padding="0 0 10 0" VerticalScrollBarVisibility="Auto" Template="{StaticResource ScrollViewerControlTemplate}">
             <ItemsControl ItemsSource="{Binding Listings}" HorizontalContentAlignment="Stretch">
                 <ItemsControl.Style>
                     <Style TargetType="{x:Type ItemsControl}"
@@ -44,50 +44,61 @@
                 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border x:Name="Bd" BorderBrush="Transparent" BorderThickness="0" Margin="0 0 0 10">
-                            <Button Command="{Binding ElementName=TopElement, Path=DataContext.OpenListingCommand}" CommandParameter="{Binding ElementName=Bd, Path=DataContext}" Background="#fff" BorderBrush="#CCC" BorderThickness="1" Padding="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*" />
-                                        <RowDefinition Height="10" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="10" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="10" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <StackPanel.Resources>
+                                <Style x:Key="LabelText" TargetType="{x:Type TextBlock}">
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                </Style>
+                            </StackPanel.Resources>
+                            <!-- Name -->
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="17" />
 
-                                    <!-- Name -->
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Name}" FontWeight="Bold" />
-                                    
-                                    <!-- Worked days -->
-                                    <TextBlock Grid.Row="2" Grid.Column="0">
-                                        <TextBlock.Text>
-                                            <MultiBinding StringFormat="{}{0} / {1}">
-                                                <Binding Path="WorkedDays" />
-                                                <Binding Path="DaysInMonth" />
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                    
-                                    <!-- Worked hours -->
-                                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding WorkedHours}" HorizontalAlignment="Center" />
-                                    
-                                    <!-- Listing period -->
-                                    <TextBlock Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center">
-                                        <TextBlock.Text>
-                                            <MultiBinding StringFormat="{}{0} {1}">
-                                                <Binding Path="Month" Converter="{StaticResource MonthNameToIntConverter}" />
-                                                <Binding Path="Year" />
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                </Grid>
-                            </Button>
-                        </Border>
+                            <Border x:Name="Bd" BorderBrush="Transparent" BorderThickness="0" Margin="0 5 0 15">
+                                <Button Command="{Binding ElementName=TopElement, Path=DataContext.OpenListingCommand}" CommandParameter="{Binding ElementName=Bd, Path=DataContext}" Background="#fff" BorderBrush="#CCC" BorderThickness="1 1 1 3" Padding="10" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="5" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Listing period -->
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Období" Style="{StaticResource LabelText}" HorizontalAlignment="Left" />
+                                        <TextBlock Grid.Row="2" Grid.Column="0">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} {1}">
+                                                    <Binding Path="Month" Converter="{StaticResource MonthNameToIntConverter}" />
+                                                    <Binding Path="Year" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+
+                                        <!-- Worked hours -->
+                                        <TextBlock Grid.Row="0" Grid.Column="2" Text="Odpracované hodiny" Style="{StaticResource LabelText}" />
+                                        <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding WorkedHours}" HorizontalAlignment="Center" />
+
+                                        <!-- Worked days -->
+                                        <TextBlock Grid.Row="0" Grid.Column="4" Text="Odpracované dny" Style="{StaticResource LabelText}" />
+                                        <TextBlock Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} / {1}">
+                                                    <Binding Path="WorkedDays" />
+                                                    <Binding Path="DaysInMonth" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Grid>
+                                </Button>
+                            </Border>
+                        </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

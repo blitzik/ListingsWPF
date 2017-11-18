@@ -50,18 +50,14 @@ namespace Listings.Views
             {
                 if (_listingsOverviewViewModel == null) {
                     _listingsOverviewViewModel = new ListingsOverviewViewModel(_listingFacade, "Přehled výčetek");
-                    _listingsOverviewViewModel.OnListingSelected += OnListingSelected;
+                    _listingsOverviewViewModel.OnListingSelected += (object sender, SelectedListingArgs args) => {
+                        ListingDetailViewModel.Listing = args.SelectedListing;
+                        ChangeView(nameof(ListingDetailViewModel));
+                    };
                 }
 
                 return _listingsOverviewViewModel;
             }
-        }
-
-
-        private void OnListingSelected(object sender, SelectedListingArgs args)
-        {
-            ListingDetailViewModel.Listing = args.SelectedListing;
-            ChangeView(nameof(ListingDetailViewModel));
         }
 
 
@@ -86,17 +82,10 @@ namespace Listings.Views
             {
                 if (_listingDetailViewModel == null) {
                     _listingDetailViewModel = new ListingDetailViewModel(_listingFacade, "Detail výčetky");
-                    _listingDetailViewModel.OnDisplayListingsOverviewClicked += OnDisplayListingsOverviewClicked;
                 }
 
                 return _listingDetailViewModel;
             }
-        }
-
-
-        private void OnDisplayListingsOverviewClicked(object sender, EventArgs args)
-        {
-            ChangeView(nameof(ListingsOverviewViewModel));
         }
 
 

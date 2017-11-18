@@ -82,7 +82,9 @@
     </ApplicationDefinition>
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Converters\MonthNameToIntConverter.cs" />
+    <Compile Include="Domain\DayItem.cs" />
     <Compile Include="EventArguments\SelectedListingArgs.cs" />
+    <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Exceptions\ListingItemAlreadyExistsException.cs" />
     <Compile Include="Exceptions\LunchHoursOutOfWorkedHoursRangeException.cs" />
     <Compile Include="Exceptions\LunchHoursRangeException.cs" />

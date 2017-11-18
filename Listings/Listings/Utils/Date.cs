@@ -19,6 +19,15 @@ namespace Listings.Utils
         }
 
 
+        private static readonly List<string> _daysOfWeek = new List<string>() {
+            "Neděle", "Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek"
+        };
+        public static List<string> DaysOfWeek
+        {
+            get { return _daysOfWeek; }
+        }
+
+
         public static List<int> GetLastYears(int numberOfYears)
         {
             int stopYear = DateTime.Now.Year - numberOfYears;

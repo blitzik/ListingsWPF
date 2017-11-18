@@ -65,6 +65,14 @@ namespace Listings.Domain
 
 
         private List<ListingItem> _items;
+        public List<ListingItem> Items
+        {
+            get { return _items; }
+            private set
+            {
+                _items = value;
+            }
+        }
 
 
         private int _workedDays = 0;
@@ -99,13 +107,24 @@ namespace Listings.Domain
                 throw new ListingItemAlreadyExistsException();
             }
 
-            _items.Insert(day, new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd));
+            _items.Add(new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd));
+        }
+
+
+        public void ReplaceItem(int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd)
+        {
+            if (_items.Exists(i => i.Day == day)) {
+                _items[day] = new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd);
+                return;
+            }
+
+            AddItem(day, locality, start, end, lunchStart, lunchEnd);
         }
 
 
         public ListingItem GetItemByDay(int day)
         {
-            return _items.ElementAt(day);
+            return _items.ElementAtOrDefault(day);
         }
         
     }
