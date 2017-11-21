@@ -4,6 +4,7 @@ using Listings.Domain;
 using Listings.EventArguments;
 using Listings.Facades;
 using Listings.Services;
+using Listings.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,6 +54,11 @@ namespace Listings.Views
                     _listingsOverviewViewModel.OnListingSelected += (object sender, SelectedListingArgs args) => {
                         ListingDetailViewModel.Listing = args.SelectedListing;
                         ChangeView(nameof(ListingDetailViewModel));
+
+                        /*IObjectContainer db = _listingFacade._db;
+                        args.SelectedListing.AddItem(3, "Lorem ipsum dolor sit amet consecteteur Lorem ipsum dolor sit amet consecteteur Lorem ipsum dolor sit amet consecteteur", new Time("6:00"), new Time("16:00"), new Time("11:00"), new Time("12:00"));
+                        db.Store(args.SelectedListing);
+                        db.Commit();*/
                     };
                 }
 
@@ -82,9 +88,23 @@ namespace Listings.Views
             {
                 if (_listingDetailViewModel == null) {
                     _listingDetailViewModel = new ListingDetailViewModel(_listingFacade, "Detail výčetky");
+                    _listingDetailViewModel.OnListingItemClicked += (object sender, SelectedDayItemArgs args) => {
+                        _listingItemViewModel = new ListingItemViewModel(_listingFacade, args.DayItem, "Detail položky");
+                        ChangeView(nameof(ListingItemViewModel));
+                    };
                 }
 
                 return _listingDetailViewModel;
+            }
+        }
+
+
+        private ListingItemViewModel _listingItemViewModel;
+        private ListingItemViewModel ListingItemViewModel
+        {
+            get
+            {
+                return _listingItemViewModel;
             }
         }
 
@@ -113,6 +133,10 @@ namespace Listings.Views
 
                 case nameof(ListingDetailViewModel):
                     CurrentViewModel = ListingDetailViewModel;
+                    break;
+
+                case nameof(ListingItemViewModel):
+                    CurrentViewModel = ListingItemViewModel;
                     break;
             }
 

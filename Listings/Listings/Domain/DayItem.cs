@@ -92,12 +92,24 @@ namespace Listings.Domain
 
 
         private ListingItem _listingItem;
-
-
-        public DayItem(int year, int month, int day)
+        public ListingItem ListingItem
         {
-            _year = year;
-            _month = month;
+            get { return _listingItem; }
+        }
+
+
+        private Listing _listing;
+        public Listing Listing
+        {
+            get { return _listing; }
+        }
+
+
+        public DayItem(Listing listing, int day)
+        {
+            _listing = listing;
+            _year = listing.Year;
+            _month = listing.Month;
             _day = day;
         }
 
@@ -105,10 +117,11 @@ namespace Listings.Domain
         public DayItem(ListingItem item)
         {
             _listingItem = item;
+            _listing = item.Listing;
 
             _year = item.Date.Year;
             _month = item.Date.Month;
-            _day = item.Date.Day;
+            _day = item.Day;
 
             _locality = item.Locality;
             _shiftStart = item.ShiftStart;

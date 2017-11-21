@@ -26,8 +26,8 @@ namespace Listings.Services
             IEmbeddedConfiguration config = Db4oEmbedded.NewConfiguration();
 
             config.File.BlockSize = 8;
-            config.Common.ActivationDepth = 2;
-            config.Common.UpdateDepth = 5;
+            config.Common.ActivationDepth = 4;
+            config.Common.UpdateDepth = 8;
 
             config.Common.ObjectClass(typeof(Listing)).ObjectField("_year").Indexed(true);
   

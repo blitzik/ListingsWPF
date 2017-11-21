@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Domain
 {
-    public class Listing
+    public class Listing : BindableObject
     {
         private string _name;
         public string Name
@@ -107,14 +107,22 @@ namespace Listings.Domain
                 throw new ListingItemAlreadyExistsException();
             }
 
-            _items.Add(new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd));
+            ListingItem newItem = new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd);
+            _items.Add(newItem);
+            WorkedDays++;
+            WorkedHours += newItem.WorkedHours;
         }
 
 
         public void ReplaceItem(int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd)
         {
             if (_items.Exists(i => i.Day == day)) {
-                _items[day] = new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd);
+                ListingItem currentItem = GetItemByDay(day);
+                ListingItem newItem = new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd);
+
+                WorkedHours += newItem.WorkedHours - currentItem.WorkedHours;
+
+                _items[_items.IndexOf(currentItem)] = newItem;
                 return;
             }
 
@@ -124,7 +132,7 @@ namespace Listings.Domain
 
         public ListingItem GetItemByDay(int day)
         {
-            return _items.ElementAtOrDefault(day);
+            return _items.FirstOrDefault<ListingItem>(i => i.Day == day);
         }
         
     }

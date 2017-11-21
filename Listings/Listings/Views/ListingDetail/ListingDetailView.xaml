@@ -10,6 +10,8 @@
 
     <UserControl.Resources>
         <converters:MonthNameToIntConverter x:Key="MonthNameToIntConverter" />
+        <converters:TimeToHoursAndMinutesRangeConverter x:Key="TimeToHoursAndMinutesRangeConverter" />
+        <converters:TimeToHoursAndMinutesConverter x:Key="TimeToHoursAndMinutesConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -28,7 +30,7 @@
                     <Setter Property="Width" Value="125" />
                 </Style>
             </StackPanel.Resources>
-            <Button Content="Generoat PDF" />
+            <Button Content="Generovat PDF" />
             <Button Content="Upravit" />
             <Button Content="Odstranit" Width="125" Style="{StaticResource CriticalButton}" />
         </StackPanel>
@@ -72,7 +74,7 @@
 
                 <!-- Worked hours -->
                 <TextBlock Grid.Row="2" Grid.Column="2" Text="Odpracované hodiny" Style="{StaticResource LabelText}" />
-                <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding WorkedHours}" HorizontalAlignment="Center" />
+                <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding WorkedHours, Converter={StaticResource TimeToHoursAndMinutesConverter}}" HorizontalAlignment="Center" />
 
                 <!-- Worked days -->
                 <TextBlock Grid.Row="2" Grid.Column="4" Text="Odpracované dny" Style="{StaticResource LabelText}" />
@@ -88,7 +90,7 @@
         </Border>
 
 
-        <ScrollViewer Grid.Row="4" Padding="0 0 10 0" VerticalScrollBarVisibility="Auto" Template="{StaticResource ScrollViewerControlTemplate}">
+        <ScrollViewer x:Name="ScrollViewer" Grid.Row="4" Padding="0 0 10 0" VerticalScrollBarVisibility="Auto" Template="{StaticResource ScrollViewerControlTemplate}">
             <ItemsControl ItemsSource="{Binding DayItems}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -99,7 +101,7 @@
                                 <ColumnDefinition Width="50" />
                             </Grid.ColumnDefinitions>
                             
-                            <Button Grid.Column="0" Padding="7" Background="#FFF" BorderBrush="#CCC" BorderThickness="1 1 1 3" HorizontalContentAlignment="Stretch">
+                            <Button Grid.Column="0" Padding="7" Command="{Binding ElementName=ScrollViewer, Path=DataContext.OpenListingItemDetailCommand}" CommandParameter="{Binding Day}" Background="#FFF" BorderBrush="#CCC" BorderThickness="1 1 1 3" HorizontalContentAlignment="Stretch">
                                 <Button.Resources>
                                     <Style x:Key="LabelText" TargetType="{x:Type TextBlock}">
                                         <Setter Property="FontWeight" Value="Bold" />
@@ -144,13 +146,13 @@
 
                                     <!-- Job description - locality -->
                                     <TextBlock Grid.Row="0" Grid.Column="4" Text="Popis práce - místo" Style="{StaticResource LabelText}" HorizontalAlignment="Left" />
-                                    <TextBlock Grid.Row="2" Grid.Column="4" Text="{Binding Locality}" />
+                                    <TextBlock Grid.Row="2" Grid.Column="4" Text="{Binding Locality}" TextWrapping="Wrap" />
 
                                     <!-- Shift hours -->
                                     <TextBlock Grid.Row="0" Grid.Column="6" Text="Odpr. hodiny" Style="{StaticResource LabelText}" HorizontalAlignment="Center" />
                                     <TextBlock Grid.Row="2" Grid.Column="6" HorizontalAlignment="Center">
                                         <TextBlock.Text>
-                                            <MultiBinding StringFormat="{}{0} - {1}">
+                                            <MultiBinding Converter="{StaticResource TimeToHoursAndMinutesRangeConverter}">
                                                 <Binding Path="ShiftStart" />
                                                 <Binding Path="ShiftEnd" />
                                             </MultiBinding>
@@ -161,7 +163,7 @@
                                     <TextBlock Grid.Row="0" Grid.Column="8" Text="Oběd" Style="{StaticResource LabelText}" HorizontalAlignment="Center" />
                                     <TextBlock Grid.Row="2" Grid.Column="8" HorizontalAlignment="Center">
                                         <TextBlock.Text>
-                                            <MultiBinding StringFormat="{}{0} - {1}">
+                                            <MultiBinding Converter="{StaticResource TimeToHoursAndMinutesRangeConverter}">
                                                 <Binding Path="ShiftLunchStart" />
                                                 <Binding Path="ShiftLunchEnd" />
                                             </MultiBinding>
@@ -170,7 +172,7 @@
 
                                     <!-- Worked hours -->
                                     <TextBlock Grid.Row="0" Grid.Column="10" Text="Odpr. hodiny" Style="{StaticResource LabelText}" />
-                                    <TextBlock Grid.Row="2" Grid.Column="10" Text="{Binding WorkedHours}" />
+                                    <TextBlock Grid.Row="2" Grid.Column="10" Text="{Binding WorkedHours, Converter={StaticResource TimeToHoursAndMinutesConverter}}" HorizontalAlignment="Center" />
                                 </Grid>
                             </Button>
 

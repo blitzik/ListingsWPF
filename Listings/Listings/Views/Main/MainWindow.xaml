@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Listings.Views"
         mc:Ignorable="d"
-        Title="Evidoo - Správa odpracovaných hodin" Height="700" Width="1000" MinWidth="1000" MinHeight="700" Background="#F0F0F0">
+        Title="Evidoo - Správa odpracovaných hodin" Height="700" Width="1200" MinWidth="1200" MinHeight="700" Background="#F0F0F0">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
@@ -88,6 +88,10 @@
                     <!-- New Listing -->
                     <DataTemplate DataType="{x:Type local:ListingViewModel}">
                         <local:ListingView />
+                    </DataTemplate>
+                    <!-- ListingItem Detail -->
+                    <DataTemplate DataType="{x:Type local:ListingItemViewModel}">
+                        <local:ListingItemView />
                     </DataTemplate>
                 </ContentControl.Resources>
             </ContentControl>

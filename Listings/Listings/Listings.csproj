@@ -81,9 +81,16 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\DelegateCommand.cs" />
+    <Compile Include="Converters\IntToTimeConverter.cs" />
     <Compile Include="Converters\MonthNameToIntConverter.cs" />
+    <Compile Include="Converters\TimeToHoursAndMinutesConverter.cs" />
+    <Compile Include="Converters\TimeToHoursAndMinutesRangeConverter.cs" />
+    <Compile Include="Converters\TimeToIntConverter.cs" />
+    <Compile Include="Domain\BindableObject.cs" />
     <Compile Include="Domain\DayItem.cs" />
+    <Compile Include="EventArguments\SelectedDayItemArgs.cs" />
     <Compile Include="EventArguments\SelectedListingArgs.cs" />
+    <Compile Include="EventArguments\SelectedListingItemArgs.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Exceptions\ListingItemAlreadyExistsException.cs" />
     <Compile Include="Exceptions\LunchHoursOutOfWorkedHoursRangeException.cs" />
@@ -99,6 +106,10 @@
       <DependentUpon>ListingDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ListingDetail\ListingDetailViewModel.cs" />
+    <Compile Include="Views\ListingItem\ListingItemView.xaml.cs">
+      <DependentUpon>ListingItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ListingItem\ListingItemViewModel.cs" />
     <Compile Include="Views\ListingsOverview\ListingsOverviewViewModel.cs" />
     <Compile Include="Views\Main\ViewModel.cs" />
     <Compile Include="Views\ListingsOverview\ListingsOverviewView.xaml.cs">
@@ -109,6 +120,10 @@
     </Compile>
     <Compile Include="Views\Listing\ListingViewModel.cs" />
     <Page Include="Views\ListingDetail\ListingDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ListingItem\ListingItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

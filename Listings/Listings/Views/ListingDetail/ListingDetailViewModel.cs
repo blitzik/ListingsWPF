@@ -1,5 +1,6 @@
 ﻿using Listings.Commands;
 using Listings.Domain;
+using Listings.EventArguments;
 using Listings.Exceptions;
 using Listings.Facades;
 using System;
@@ -43,7 +44,7 @@ namespace Listings.Views
                         ListingItem listingItem = Listing.GetItemByDay(day + 1);
                         DayItem dayItem;
                         if (listingItem == null) {
-                            dayItem = new DayItem(Listing.Year, Listing.Month, day + 1);
+                            dayItem = new DayItem(Listing, day + 1);
                         } else {
                             dayItem = new DayItem(listingItem);
                         }
@@ -57,12 +58,36 @@ namespace Listings.Views
         }
 
 
+        private DelegateCommand _openListingItemDetailCommand;
+        public DelegateCommand OpenListingItemDetailCommand
+        {
+            get
+            {
+                if (_openListingItemDetailCommand == null) {
+                    _openListingItemDetailCommand = new DelegateCommand(p => OpenListingItemDetail((int)p));
+                }
+
+                return _openListingItemDetailCommand;
+            }
+        }
+
+
         public ListingDetailViewModel(ListingFacade listingFacade, string windowTitle)
         {
             _listingFacade = listingFacade;
             WindowTitle = windowTitle;
         }
 
+
+        public delegate void OpenListingItemDetailHandler(object sender, SelectedDayItemArgs args);
+        public event OpenListingItemDetailHandler OnListingItemClicked;
+        private void OpenListingItemDetail(int day)
+        {
+            OpenListingItemDetailHandler handler = OnListingItemClicked;
+            if (handler != null) {
+                handler(this, new SelectedDayItemArgs(_dayItems[day - 1]));
+            }
+        }
 
     }
 }

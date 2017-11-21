@@ -21,6 +21,14 @@ namespace Listings.Utils
         }
 
 
+        private string _hoursAndMinutes;
+        public string HoursAndMinutes
+        {
+            get { return _hoursAndMinutes; }
+            private set { _hoursAndMinutes = value; }
+        }
+
+
         public bool IsNegative
         {
             get { return Seconds < 0; }
@@ -31,6 +39,7 @@ namespace Listings.Utils
         {
             Seconds = 0;
             Text = "00:00:00";
+            HoursAndMinutes = "00:00";
         }
 
 
@@ -38,13 +47,21 @@ namespace Listings.Utils
         {
             Seconds = seconds;
             Text = Seconds2Time(seconds);
+            HoursAndMinutes = GetHoursAndMinutes(this);
         }
 
 
         public Time(string time)
         {
-            Text = time;
             Seconds = Time2Seconds(time);
+            Text = Seconds2Time(Seconds);
+            HoursAndMinutes = GetHoursAndMinutes(this);
+        }
+
+
+        private string GetHoursAndMinutes(Time time)
+        {
+            return time.Text.Substring(0, time.Text.LastIndexOf(":"));
         }
 
 

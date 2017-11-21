@@ -8,13 +8,13 @@ using Listings.Exceptions;
 
 namespace Listings.Domain
 {
-    public class ListingItem
+    public class ListingItem : BindableObject
     {
         private Listing _listing;
-        private Listing Listing
+        public Listing Listing
         {
             get { return _listing; }
-            set { _listing = value; }
+            private set { _listing = value; }
         }
 
 
@@ -37,7 +37,7 @@ namespace Listings.Domain
         public Time ShiftStart
         {
             get { return _shiftStart; }
-            set { ChangeHours(value, ShiftEnd, ShiftLunchStart, ShiftLunchEnd); }
+            private set { ChangeHours(value, ShiftEnd, ShiftLunchStart, ShiftLunchEnd); }
         }
 
 
@@ -45,7 +45,7 @@ namespace Listings.Domain
         public Time ShiftEnd
         {
             get { return _shiftEnd; }
-            set { ChangeHours(ShiftStart, value, ShiftLunchStart, ShiftLunchEnd); }
+            private set { ChangeHours(ShiftStart, value, ShiftLunchStart, ShiftLunchEnd); }
         }
 
 
@@ -53,7 +53,7 @@ namespace Listings.Domain
         public Time ShiftLunchStart
         {
             get { return _shiftLunchStart; }
-            set { ChangeHours(ShiftStart, ShiftEnd, value, ShiftLunchEnd); }
+            private set { ChangeHours(ShiftStart, ShiftEnd, value, ShiftLunchEnd); }
         }
 
 
@@ -61,7 +61,7 @@ namespace Listings.Domain
         public Time ShiftLunchEnd
         {
             get { return _shiftLunchEnd; }
-            set { ChangeHours(ShiftStart, ShiftEnd, ShiftLunchStart, value); }
+            private set { ChangeHours(ShiftStart, ShiftEnd, ShiftLunchStart, value); }
         }
 
 
@@ -87,16 +87,14 @@ namespace Listings.Domain
 
         public ListingItem(Listing listing, int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd)
         {
-            _day = day;
-            Date = new DateTime(listing.Year, listing.Month, day);
-
             Listing = listing;
 
-            Locality = locality;
-            ShiftStart = start;
-            ShiftEnd = end;
-            ShiftLunchStart = lunchStart;
-            ShiftLunchEnd = lunchEnd;
+            Date = new DateTime(listing.Year, listing.Month, day);
+
+            _day = day;
+            _locality = locality;
+
+            ChangeHours(start, end, lunchStart, lunchEnd);
         }
 
 

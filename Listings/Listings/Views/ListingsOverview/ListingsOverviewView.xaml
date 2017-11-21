@@ -8,6 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <converters:MonthNameToIntConverter x:Key="MonthNameToIntConverter" />
+        <converters:TimeToHoursAndMinutesConverter x:Key="TimeToHoursAndMinutesConverter" />
     </UserControl.Resources>
        
     <Grid x:Name="TopElement">
@@ -83,7 +84,7 @@
 
                                         <!-- Worked hours -->
                                         <TextBlock Grid.Row="0" Grid.Column="2" Text="Odpracované hodiny" Style="{StaticResource LabelText}" />
-                                        <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding WorkedHours}" HorizontalAlignment="Center" />
+                                        <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding WorkedHours, Converter={StaticResource TimeToHoursAndMinutesConverter}}" HorizontalAlignment="Center" />
 
                                         <!-- Worked days -->
                                         <TextBlock Grid.Row="0" Grid.Column="4" Text="Odpracované dny" Style="{StaticResource LabelText}" />
