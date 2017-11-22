@@ -285,7 +285,6 @@ namespace Listings.Views
             Time ls = new Time(_lunchStart);
             Time le = new Time(_lunchEnd);
 
-            ListingItem li = new ListingItem(_dayItem.Listing, _dayItem.Day, _locality, s, e, ls, le);
             _dayItem.Listing.ReplaceItem(_dayItem.Day, _locality, s, e, ls, le);
 
             _listingFacade.Save(_dayItem.Listing);

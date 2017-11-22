@@ -14,7 +14,10 @@ namespace Listings.Domain
         public string Name
         {
             get { return string.IsNullOrEmpty(_name) ? "Bez názvu" : _name; }
-            set { _name = value; }
+            set {
+                _name = value;
+                RaisePropertyChanged();
+            }
         }
 
 
@@ -79,7 +82,10 @@ namespace Listings.Domain
         public int WorkedDays
         {
             get { return _workedDays; }
-            private set { _workedDays = value; }
+            private set {
+                _workedDays = value;
+                RaisePropertyChanged();
+            }
         }
 
 
@@ -87,7 +93,10 @@ namespace Listings.Domain
         public Time WorkedHours
         {
             get { return _workedHours; }
-            private set { _workedHours = value; }
+            private set {
+                _workedHours = value;
+                RaisePropertyChanged();
+            }
         }
 
 
@@ -127,6 +136,21 @@ namespace Listings.Domain
             }
 
             AddItem(day, locality, start, end, lunchStart, lunchEnd);
+        }
+
+
+        public void RemoveItemByDay(int day)
+        {
+            int index = _items.FindIndex(i => i.Day == day);
+            if (index == -1) { // there is no listing item for that day
+                return;
+            }
+
+            ListingItem item = _items[index];
+            WorkedDays--;
+            WorkedHours -= item.WorkedHours;
+
+            _items.RemoveAt(index);
         }
 
 

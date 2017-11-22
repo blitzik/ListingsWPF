@@ -69,5 +69,11 @@ namespace Listings.Facades
             return l2.Month.CompareTo(l1.Month);
         }
 
+
+        public void Activate(Listing listing, int depth)
+        {
+            _db.Activate(listing, depth);
+        }
+
     }
 }

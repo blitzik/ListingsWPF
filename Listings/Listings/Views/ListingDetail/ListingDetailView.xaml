@@ -35,7 +35,7 @@
             <Button Content="Odstranit" Width="125" Style="{StaticResource CriticalButton}" />
         </StackPanel>
 
-        <Border DataContext="{Binding Listing}" Grid.Row="2" Padding="10" Margin="0 0 17 0" Background="#FFF" BorderBrush="#CCC" BorderThickness="1">
+        <Border DataContext="{Binding Listing, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Padding="10" Margin="0 0 17 0" Background="#FFF" BorderBrush="#CCC" BorderThickness="1">
             <Border.Resources>
                 <Style x:Key="LabelText" TargetType="{x:Type TextBlock}">
                     <Setter Property="FontWeight" Value="Bold" />
@@ -74,13 +74,13 @@
 
                 <!-- Worked hours -->
                 <TextBlock Grid.Row="2" Grid.Column="2" Text="Odpracované hodiny" Style="{StaticResource LabelText}" />
-                <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding WorkedHours, Converter={StaticResource TimeToHoursAndMinutesConverter}}" HorizontalAlignment="Center" />
+                <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding WorkedHours, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeToHoursAndMinutesConverter}}" HorizontalAlignment="Center" />
 
                 <!-- Worked days -->
                 <TextBlock Grid.Row="2" Grid.Column="4" Text="Odpracované dny" Style="{StaticResource LabelText}" />
                 <TextBlock Grid.Row="4" Grid.Column="4" HorizontalAlignment="Center">
                     <TextBlock.Text>
-                        <MultiBinding StringFormat="{}{0} / {1}">
+                        <MultiBinding UpdateSourceTrigger="PropertyChanged" StringFormat="{}{0} / {1}">
                             <Binding Path="WorkedDays" />
                             <Binding Path="DaysInMonth" />
                         </MultiBinding>
@@ -91,7 +91,7 @@
 
 
         <ScrollViewer x:Name="ScrollViewer" Grid.Row="4" Padding="0 0 10 0" VerticalScrollBarVisibility="Auto" Template="{StaticResource ScrollViewerControlTemplate}">
-            <ItemsControl ItemsSource="{Binding DayItems}">
+            <ItemsControl ItemsSource="{Binding DayItems, UpdateSourceTrigger=PropertyChanged}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="0 0 0 10">
@@ -177,7 +177,7 @@
                             </Button>
 
                             <!-- Delete button -->
-                            <Button Grid.Column="2" Content="X" Style="{StaticResource CriticalButton}" />
+                            <Button Grid.Column="2" Content="X" Command="{Binding ElementName=ScrollViewer, Path=DataContext.RemoveItemCommand}" CommandParameter="{Binding Day}" Style="{StaticResource CriticalButton}" />
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

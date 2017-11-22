@@ -5,6 +5,7 @@ using Listings.Exceptions;
 using Listings.Facades;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,13 +25,14 @@ namespace Listings.Views
             {
                 _listing = value;
                 _dayItems = null;
+                _listingFacade.Activate(_listing, 4);
                 RaisePropertyChanged();
             }
         }
 
 
-        private List<DayItem> _dayItems;
-        public List<DayItem> DayItems
+        private ObservableCollection<DayItem> _dayItems;
+        public ObservableCollection<DayItem> DayItems
         {
             get
             {
@@ -39,7 +41,7 @@ namespace Listings.Views
                 }
 
                 if (_dayItems == null) {
-                    _dayItems = new List<DayItem>();
+                    _dayItems = new ObservableCollection<DayItem>();
                     for (int day = 0; day < DateTime.DaysInMonth(Listing.Year, Listing.Month); day++) {
                         ListingItem listingItem = Listing.GetItemByDay(day + 1);
                         DayItem dayItem;
@@ -72,6 +74,20 @@ namespace Listings.Views
         }
 
 
+        private DelegateCommand _removeItemCommand;
+        public DelegateCommand RemoveItemCommand
+        {
+            get
+            {
+                if (_removeItemCommand == null) {
+                    _removeItemCommand = new DelegateCommand(p => RemoveItemByDay((int)p));
+                }
+
+                return _removeItemCommand;
+            }
+        }
+
+
         public ListingDetailViewModel(ListingFacade listingFacade, string windowTitle)
         {
             _listingFacade = listingFacade;
@@ -87,6 +103,15 @@ namespace Listings.Views
             if (handler != null) {
                 handler(this, new SelectedDayItemArgs(_dayItems[day - 1]));
             }
+        }
+
+
+        private void RemoveItemByDay(int day)
+        {
+            Listing.RemoveItemByDay(day);
+            _dayItems[day - 1] = new DayItem(Listing, day);
+
+            _listingFacade.Save(Listing);
         }
 
     }
