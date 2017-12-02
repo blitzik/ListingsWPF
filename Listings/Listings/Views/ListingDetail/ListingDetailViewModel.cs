@@ -3,6 +3,7 @@ using Listings.Domain;
 using Listings.EventArguments;
 using Listings.Exceptions;
 using Listings.Facades;
+using Listings.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,6 +17,8 @@ namespace Listings.Views
     {
         private readonly ListingFacade _listingFacade;
 
+        private string _basicWindowTitle;
+
 
         private Listing _listing;
         public Listing Listing
@@ -26,6 +29,7 @@ namespace Listings.Views
                 _listing = value;
                 _dayItems = null;
                 _listingFacade.Activate(_listing, 4);
+                WindowTitle = string.Format("{0} [{1} {2} {3}]", _basicWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));
                 RaisePropertyChanged();
             }
         }
@@ -88,10 +92,25 @@ namespace Listings.Views
         }
 
 
+        private DelegateCommand _copyItemDownCommand;
+        public DelegateCommand CopyItemDownCommand
+        {
+            get
+            {
+                if (_copyItemDownCommand == null) {
+                    _copyItemDownCommand = new DelegateCommand(p => CopyItemDown((int)p));
+                }
+
+                return _copyItemDownCommand;
+            }
+        }
+
+
         public ListingDetailViewModel(ListingFacade listingFacade, string windowTitle)
         {
             _listingFacade = listingFacade;
             WindowTitle = windowTitle;
+            _basicWindowTitle = windowTitle;
         }
 
 
@@ -110,6 +129,24 @@ namespace Listings.Views
         {
             Listing.RemoveItemByDay(day);
             _dayItems[day - 1] = new DayItem(Listing, day);
+
+            _listingFacade.Save(Listing);
+        }
+
+
+        private void CopyItemDown(int day)
+        {
+            DayItem dayItem = _dayItems[day - 1];
+            ListingItem newItem = Listing.ReplaceItem(
+                day + 1,
+                dayItem.Locality,
+                dayItem.ShiftStart,
+                dayItem.ShiftEnd,
+                dayItem.ShiftLunchStart,
+                dayItem.ShiftLunchEnd
+                );
+
+            _dayItems[day] = new DayItem(newItem);
 
             _listingFacade.Save(Listing);
         }

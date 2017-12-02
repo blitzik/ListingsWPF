@@ -20,7 +20,7 @@ namespace Listings.Utils
 
 
         private static readonly List<string> _daysOfWeek = new List<string>() {
-            "Neděle", "Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek"
+            "Neděle", "Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "Sobota"
         };
         public static List<string> DaysOfWeek
         {

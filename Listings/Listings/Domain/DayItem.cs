@@ -1,6 +1,7 @@
 ﻿using Listings.Utils;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,17 +31,19 @@ namespace Listings.Domain
         }
 
 
-        private DateTime _date;
-        public DateTime Date
+        public string ShortDayName
         {
             get
             {
-                if (_date == null) {
-                    _date = new DateTime(_year, _month, _day);
-                }
-
-                return _date;
+                return Utils.Date.DaysOfWeek[(int)Date.DayOfWeek].Substring(0, 2);
             }
+        }
+
+
+        private DateTime _date;
+        public DateTime Date
+        {
+            get { return _date; }
         }
 
 
@@ -79,6 +82,13 @@ namespace Listings.Domain
         }
 
 
+        private Time _otherHours;
+        public Time OtherHours
+        {
+            get { return _otherHours; }
+        }
+
+
         public Time LunchHours
         {
             get { return _listingItem == null ? null : ShiftLunchEnd - ShiftLunchStart; }
@@ -98,6 +108,18 @@ namespace Listings.Domain
         }
 
 
+        public bool CanBeRemoved
+        {
+            get { return _listingItem != null; }
+        }
+
+
+        public bool CanBeCopiedDown
+        {
+            get { return _listingItem != null && Day < Listing.DaysInMonth; }
+        }
+
+
         private Listing _listing;
         public Listing Listing
         {
@@ -111,6 +133,7 @@ namespace Listings.Domain
             _year = listing.Year;
             _month = listing.Month;
             _day = day;
+            _date = new DateTime(_year, _month, day);
         }
 
 
@@ -122,12 +145,14 @@ namespace Listings.Domain
             _year = item.Date.Year;
             _month = item.Date.Month;
             _day = item.Day;
+            _date = new DateTime(_year, _month, _day);
 
             _locality = item.Locality;
             _shiftStart = item.ShiftStart;
             _shiftEnd = item.ShiftEnd;
             _shiftLunchStart = item.ShiftLunchStart;
             _shiftLunchEnd = item.ShiftLunchEnd;
+            _otherHours = item.OtherHours;
         }
 
 
