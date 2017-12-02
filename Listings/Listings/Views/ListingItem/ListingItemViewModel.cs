@@ -1,5 +1,6 @@
 ﻿using Listings.Commands;
 using Listings.Domain;
+using Listings.EventArguments;
 using Listings.Exceptions;
 using Listings.Facades;
 using Listings.Utils;
@@ -84,7 +85,7 @@ namespace Listings.Views
         }
 
 
-        private int HoursTick = (new Time("00:30:00")).Seconds;
+        private int HoursTick = (new Time("00:15:00")).TotalSeconds;
 
 
         private DelegateCommand _shiftStartAddCommand;
@@ -264,20 +265,22 @@ namespace Listings.Views
             _dayItem = dayItem;
             if (dayItem.ListingItem != null) {
                 ListingItem l = dayItem.ListingItem;
-                _startTime = l.ShiftStart.Seconds;
-                _endTime = l.ShiftEnd.Seconds;
-                _lunchStart = l.ShiftLunchStart.Seconds;
-                _lunchEnd = l.ShiftLunchEnd.Seconds;
+                _startTime = l.ShiftStart.TotalSeconds;
+                _endTime = l.ShiftEnd.TotalSeconds;
+                _lunchStart = l.ShiftLunchStart.TotalSeconds;
+                _lunchEnd = l.ShiftLunchEnd.TotalSeconds;
                 _locality = l.Locality;
             } else {
-                _startTime = (new Time("06:00").Seconds);
-                _endTime = (new Time("16:00").Seconds);
-                _lunchStart = (new Time("11:00").Seconds);
-                _lunchEnd = (new Time("12:00").Seconds);
+                _startTime = (new Time("06:00").TotalSeconds);
+                _endTime = (new Time("16:00").TotalSeconds);
+                _lunchStart = (new Time("11:00").TotalSeconds);
+                _lunchEnd = (new Time("12:00").TotalSeconds);
             }
         }
 
 
+        public delegate void SaveListingItemHandler(object sender, ListingItemArgs args);
+        public event SaveListingItemHandler OnListingItemSaving;
         private void SaveListingItem()
         {
             Time s = new Time(_startTime);
@@ -285,9 +288,14 @@ namespace Listings.Views
             Time ls = new Time(_lunchStart);
             Time le = new Time(_lunchEnd);
 
-            _dayItem.Listing.ReplaceItem(_dayItem.Day, _locality, s, e, ls, le);
+            ListingItem newItem = _dayItem.Listing.ReplaceItem(_dayItem.Day, _locality, s, e, ls, le);
 
             _listingFacade.Save(_dayItem.Listing);
+
+            SaveListingItemHandler handler = OnListingItemSaving;
+            if (handler != null) {
+                handler(this, new ListingItemArgs(newItem));
+            }
         }
 
         

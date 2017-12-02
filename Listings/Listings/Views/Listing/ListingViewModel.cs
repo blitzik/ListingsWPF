@@ -1,5 +1,6 @@
 ﻿using Listings.Commands;
 using Listings.Domain;
+using Listings.EventArguments;
 using Listings.Facades;
 using Listings.Utils;
 using System;
@@ -94,6 +95,8 @@ namespace Listings.Views
         }
 
 
+        public delegate void NewListingSaveHandler(object sender, ListingArgs args);
+        public event NewListingSaveHandler OnListingCreation;
         private void SaveListing()
         {
             Listing newListing = new Listing(SelectedYear, SelectedMonth);
@@ -102,6 +105,11 @@ namespace Listings.Views
             }
 
             _listingFacade.Save(newListing);
+
+            NewListingSaveHandler handler = OnListingCreation;
+            if (handler != null) {
+                handler(this, new ListingArgs(newListing));
+            }
         }
 
     }

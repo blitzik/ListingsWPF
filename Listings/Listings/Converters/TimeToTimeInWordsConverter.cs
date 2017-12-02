@@ -13,8 +13,21 @@ namespace Listings.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null) {
+                return "";
+            }
+
             Time t = (Time)value;
-            
+            string result = "";
+            if (t.Hours > 0) {
+                result = string.Format("{0} {1} ", t.Hours, t.Hours == 1 ? " hodina" : ((t.Hours > 1 && t.Hours < 5) ? " hodiny" : " hodin"));
+            }
+
+            if (t.Minutes > 0) {
+                result = string.Format("{0}{1}{2}{3}", result, t.Hours > 0 ? "a " : "", t.Minutes, t.Minutes == 1 ? " minuta" : ((t.Minutes > 1 && t.Minutes < 5) ? " minuty" : " minut"));
+            }
+
+            return string.IsNullOrEmpty(result) ? "-" : result;
         }
 
 

@@ -92,13 +92,19 @@ namespace Listings.Views
         }
 
 
-        public delegate void ListingSelectionHandler(object sender, SelectedListingArgs args);
+        public void RefreshList()
+        {
+            LoadListings(SelectedYear);
+        }
+
+
+        public delegate void ListingSelectionHandler(object sender, ListingArgs args);
         public event ListingSelectionHandler OnListingSelected;
         private void OpenListing(Listing listing)
         {
             ListingSelectionHandler handler = OnListingSelected;
             if (handler != null) {
-                handler(this, new SelectedListingArgs(listing));
+                handler(this, new ListingArgs(listing));
             }
         }
 

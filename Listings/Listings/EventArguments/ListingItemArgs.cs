@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Listings.EventArguments
 {
-    public class SelectedListingItemArgs : EventArgs
+    public class ListingItemArgs : EventArgs
     {
         public ListingItem ListingItem { get; private set; }
 
-        public SelectedListingItemArgs(ListingItem listingItem)
+        public ListingItemArgs(ListingItem listingItem)
         {
             ListingItem = listingItem;
         }

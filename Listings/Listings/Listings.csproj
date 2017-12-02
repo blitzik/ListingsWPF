@@ -91,8 +91,8 @@
     <Compile Include="Domain\BindableObject.cs" />
     <Compile Include="Domain\DayItem.cs" />
     <Compile Include="EventArguments\SelectedDayItemArgs.cs" />
-    <Compile Include="EventArguments\SelectedListingArgs.cs" />
-    <Compile Include="EventArguments\SelectedListingItemArgs.cs" />
+    <Compile Include="EventArguments\ListingArgs.cs" />
+    <Compile Include="EventArguments\ListingItemArgs.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Exceptions\ListingItemAlreadyExistsException.cs" />
     <Compile Include="Exceptions\LunchHoursOutOfWorkedHoursRangeException.cs" />

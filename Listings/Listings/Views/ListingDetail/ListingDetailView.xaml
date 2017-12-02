@@ -13,6 +13,7 @@
         <converters:TimeToHoursAndMinutesRangeConverter x:Key="TimeToHoursAndMinutesRangeConverter" />
         <converters:TimeToHoursAndMinutesConverter x:Key="TimeToHoursAndMinutesConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:TimeToTimeInWordsConverter x:Key="TimeToTimeInWordsConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -57,7 +58,7 @@
 
                 <!-- Worked hours -->
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Odpracované hodiny" Style="{StaticResource LabelText}" />
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding WorkedHours, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeToHoursAndMinutesConverter}}" HorizontalAlignment="Center" />
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding WorkedHours, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeToTimeInWordsConverter}}" HorizontalAlignment="Center" />
 
                 <!-- Worked days -->
                 <TextBlock Grid.Row="0" Grid.Column="2" Text="Odpracované dny" Style="{StaticResource LabelText}" />
@@ -159,7 +160,7 @@
 
                                     <!-- Worked hours -->
                                     <TextBlock Grid.Row="0" Grid.Column="8" Text="Odpracované hodiny celkem" HorizontalAlignment="Center" Style="{StaticResource LabelText}" />
-                                    <TextBlock Grid.Row="2" Grid.Column="8" Grid.RowSpan="4" FontSize="32" HorizontalAlignment="Center" Text="{Binding WorkedHours, Converter={StaticResource TimeToHoursAndMinutesConverter}}" />
+                                    <TextBlock Grid.Row="2" Grid.Column="8" Grid.RowSpan="4" FontSize="22" HorizontalAlignment="Center" Text="{Binding WorkedHours, Converter={StaticResource TimeToTimeInWordsConverter}}" />
 
                                     <!-- Job description - locality -->
                                     <TextBlock Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3" Text="Popis práce - místo" Style="{StaticResource LabelText}" HorizontalAlignment="Left" />

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Listings.EventArguments
 {
-    public class SelectedListingArgs : EventArgs
+    public class ListingArgs : EventArgs
     {
-        public Listing SelectedListing { private set; get; }
+        public Listing Listing { private set; get; }
 
 
-        public SelectedListingArgs(Listing listing)
+        public ListingArgs(Listing listing)
         {
-            SelectedListing = listing;
+            Listing = listing;
         }
     }
 }

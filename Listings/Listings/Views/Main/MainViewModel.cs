@@ -51,8 +51,8 @@ namespace Listings.Views
             {
                 if (_listingsOverviewViewModel == null) {
                     _listingsOverviewViewModel = new ListingsOverviewViewModel(_listingFacade, "Přehled výčetek");
-                    _listingsOverviewViewModel.OnListingSelected += (object sender, SelectedListingArgs args) => {
-                        ListingDetailViewModel.Listing = args.SelectedListing;
+                    _listingsOverviewViewModel.OnListingSelected += (object sender, ListingArgs args) => {
+                        ListingDetailViewModel.Listing = args.Listing;
                         ChangeView(nameof(ListingDetailViewModel));
 
                         /*IObjectContainer db = _listingFacade._db;
@@ -74,6 +74,10 @@ namespace Listings.Views
             {
                 if (_listingViewModel == null) {
                     _listingViewModel = new ListingViewModel(_listingFacade, "Nová výčetka");
+                    _listingViewModel.OnListingCreation += (object sender, ListingArgs args) => {
+                        ListingDetailViewModel.Listing = args.Listing;
+                        ChangeView(nameof(ListingDetailViewModel));
+                    };
                 }
 
                 return _listingViewModel;
@@ -90,6 +94,10 @@ namespace Listings.Views
                     _listingDetailViewModel = new ListingDetailViewModel(_listingFacade, "Detail výčetky");
                     _listingDetailViewModel.OnListingItemClicked += (object sender, SelectedDayItemArgs args) => {
                         _listingItemViewModel = new ListingItemViewModel(_listingFacade, args.DayItem, "Detail položky");
+                        _listingItemViewModel.OnListingItemSaving += (object s, ListingItemArgs a) => {
+                            _listingDetailViewModel.ReplaceDayInListBy(a.ListingItem);
+                            ChangeView(nameof(ListingDetailViewModel));
+                        };
                         ChangeView(nameof(ListingItemViewModel));
                     };
                 }
@@ -122,8 +130,14 @@ namespace Listings.Views
 
         private void ChangeView(string viewCode)
         {
+            // we dont want the same menu item to be clicked more than once
+            if (CurrentViewModel != null && CurrentViewModel.GetType().Name == viewCode) {
+                return;
+            }
+
             switch (viewCode) {
                 case nameof(ListingsOverviewViewModel):
+                    ListingsOverviewViewModel.RefreshList();
                     CurrentViewModel = ListingsOverviewViewModel;
                     break;
 

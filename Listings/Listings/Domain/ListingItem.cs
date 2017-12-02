@@ -69,7 +69,7 @@ namespace Listings.Domain
         public Time OtherHours
         {
             get { return _otherHours; }
-            set
+            private set
             {
                 if ((ShiftEnd - ShiftStart - LunchHours + value) < (new Time("00:00"))) {
                     throw new Exception("Other hours makes worked hours lower than 0");
@@ -84,7 +84,7 @@ namespace Listings.Domain
         public string Locality
         {
             get { return _locality; }
-            set { _locality = value; }
+            private set { _locality = value; }
         }
 
 
@@ -96,7 +96,7 @@ namespace Listings.Domain
 
         public Time WorkedHours
         {
-            get { return ShiftEnd - ShiftStart - LunchHours + OtherHours; }
+            get { return ShiftEnd - ShiftStart - LunchHours/* + OtherHours*/; }
         }
 
 
@@ -109,12 +109,12 @@ namespace Listings.Domain
             _day = day;
             _locality = locality;
 
+            //OtherHours = new Time("00:00");
             ChangeHours(start, end, lunchStart, lunchEnd);
-            OtherHours = new Time("00:00");
         }
 
 
-        public void ChangeHours(Time start, Time end, Time lunchStart, Time lunchEnd)
+        private void ChangeHours(Time start, Time end, Time lunchStart, Time lunchEnd)
         {
             if (start >= end) {
                 throw new WorkedHoursRangeException();

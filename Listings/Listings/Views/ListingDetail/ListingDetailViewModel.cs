@@ -114,6 +114,12 @@ namespace Listings.Views
         }
 
 
+        public void ReplaceDayInListBy(ListingItem item)
+        {
+            _dayItems[item.Day - 1] = new DayItem(item);
+        }
+
+
         public delegate void OpenListingItemDetailHandler(object sender, SelectedDayItemArgs args);
         public event OpenListingItemDetailHandler OnListingItemClicked;
         private void OpenListingItemDetail(int day)
