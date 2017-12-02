@@ -87,6 +87,7 @@
     <Compile Include="Converters\TimeToHoursAndMinutesConverter.cs" />
     <Compile Include="Converters\TimeToHoursAndMinutesRangeConverter.cs" />
     <Compile Include="Converters\TimeToIntConverter.cs" />
+    <Compile Include="Converters\TimeToTimeInWordsConverter.cs" />
     <Compile Include="Domain\BindableObject.cs" />
     <Compile Include="Domain\DayItem.cs" />
     <Compile Include="EventArguments\SelectedDayItemArgs.cs" />
