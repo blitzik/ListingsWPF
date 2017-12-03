@@ -120,6 +120,34 @@ namespace Listings.Domain
         }
 
 
+        public bool IsWeekendDay
+        {
+            get { return (Date.DayOfWeek == DayOfWeek.Sunday || Date.DayOfWeek == DayOfWeek.Saturday); }
+        }
+
+
+        public bool IsCurrentDay
+        {
+            get
+            {
+                DateTime now = DateTime.Now;
+                if (now.Year != Date.Year) {
+                    return false;
+                }
+
+                if (now.Month != Date.Month) {
+                    return false;
+                }
+
+                if (now.Day != Date.Day) {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+
         private Listing _listing;
         public Listing Listing
         {

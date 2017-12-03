@@ -1,7 +1,7 @@
 ﻿using Db4objects.Db4o;
 using Listings.Commands;
-using Listings.Domain;
 using Listings.EventArguments;
+using Listings.Domain;
 using Listings.Facades;
 using Listings.Services;
 using Listings.Utils;
