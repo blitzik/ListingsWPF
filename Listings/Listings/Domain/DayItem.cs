@@ -1,14 +1,9 @@
 ﻿using Listings.Utils;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Listings.Domain
 {
-    public class DayItem
+    public class DayItem : BindableObject
     {
         private int _year;
         public int Year
@@ -28,6 +23,13 @@ namespace Listings.Domain
         public int Day
         {
             get { return _day; }
+        }
+
+
+        private int _week;
+        public int Week
+        {
+            get { return _week; }
         }
 
 
@@ -51,6 +53,11 @@ namespace Listings.Domain
         public string Locality
         {
             get { return _locality; }
+            private set
+            {
+                _locality = value;
+                RaisePropertyChanged();
+            }
         }
 
 
@@ -58,6 +65,11 @@ namespace Listings.Domain
         public Time ShiftStart
         {
             get { return _shiftStart; }
+            private set
+            {
+                _shiftStart = value;
+                RaisePropertyChanged();
+            }
         }
 
 
@@ -65,6 +77,11 @@ namespace Listings.Domain
         public Time ShiftEnd
         {
             get { return _shiftEnd; }
+            private set
+            {
+                _shiftEnd = value;
+                RaisePropertyChanged();
+            }
         }
 
 
@@ -72,6 +89,11 @@ namespace Listings.Domain
         public Time ShiftLunchStart
         {
             get { return _shiftLunchStart; }
+            private set
+            {
+                _shiftLunchStart = value;
+                RaisePropertyChanged();
+            }
         }
 
 
@@ -79,6 +101,11 @@ namespace Listings.Domain
         public Time ShiftLunchEnd
         {
             get { return _shiftLunchEnd; }
+            private set
+            {
+                _shiftLunchEnd = value;
+                RaisePropertyChanged();
+            }
         }
 
 
@@ -86,6 +113,11 @@ namespace Listings.Domain
         public Time OtherHours
         {
             get { return _otherHours; }
+            private set
+            {
+                _otherHours = value;
+                RaisePropertyChanged();
+            }
         }
 
 
@@ -105,6 +137,7 @@ namespace Listings.Domain
         public ListingItem ListingItem
         {
             get { return _listingItem; }
+            private set { _listingItem = value; }
         }
 
 
@@ -131,7 +164,7 @@ namespace Listings.Domain
             get
             {
                 DateTime now = DateTime.Now;
-                if (now.Year != Date.Year) {
+                if (now.Day != Date.Day) {
                     return false;
                 }
 
@@ -139,7 +172,7 @@ namespace Listings.Domain
                     return false;
                 }
 
-                if (now.Day != Date.Day) {
+                if (now.Year != Date.Year) {
                     return false;
                 }
 
@@ -162,6 +195,7 @@ namespace Listings.Domain
             _month = listing.Month;
             _day = day;
             _date = new DateTime(_year, _month, day);
+            _week = PrepareWeek(_year, _month, _day);
         }
 
 
@@ -174,15 +208,71 @@ namespace Listings.Domain
             _month = item.Date.Month;
             _day = item.Day;
             _date = new DateTime(_year, _month, _day);
+            _week = PrepareWeek(_year, _month, _day);
 
-            _locality = item.Locality;
-            _shiftStart = item.ShiftStart;
-            _shiftEnd = item.ShiftEnd;
-            _shiftLunchStart = item.ShiftLunchStart;
-            _shiftLunchEnd = item.ShiftLunchEnd;
-            _otherHours = item.OtherHours;
+            Locality = item.Locality;
+            ShiftStart = item.ShiftStart;
+            ShiftEnd = item.ShiftEnd;
+            ShiftLunchStart = item.ShiftLunchStart;
+            ShiftLunchEnd = item.ShiftLunchEnd;
+            OtherHours = item.OtherHours;            
         }
 
+
+        public void Update(ListingItem item)
+        {
+            ArgumentException e = new ArgumentException();
+            if (item.Listing != Listing) {
+                throw e;
+            }
+
+            if (item.Date.Day != Day) {
+                throw e;
+            }
+
+            ListingItem = item;
+
+            Locality = item.Locality;
+            ShiftStart = item.ShiftStart;
+            ShiftEnd = item.ShiftEnd;
+            ShiftLunchStart = item.ShiftLunchStart;
+            ShiftLunchEnd = item.ShiftLunchEnd;
+            OtherHours = item.OtherHours;
+
+            NotifyPropertiesChanged();
+        }
+
+
+        public void Reset()
+        {
+            ListingItem = null;
+
+            Locality = null;
+            ShiftStart = null;
+            ShiftEnd = null;
+            ShiftLunchStart = null;
+            ShiftLunchEnd = null;
+            OtherHours = null;
+
+            NotifyPropertiesChanged();
+        }
+
+
+        private void NotifyPropertiesChanged()
+        {
+            RaisePropertyChanged(nameof(LunchHours));
+            RaisePropertyChanged(nameof(WorkedHours));
+            RaisePropertyChanged(nameof(CanBeCopiedDown));
+            RaisePropertyChanged(nameof(CanBeRemoved));
+        }
+
+
+        private int PrepareWeek(int year, int month, int day)
+        {
+            int weekNumber = Listings.Utils.Date.GetWeekNumber(year, month, day);
+            //DateTime now = DateTime.Now;
+            return weekNumber;
+        }
 
     }
 }

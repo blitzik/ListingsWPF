@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,13 @@ namespace Listings.Utils
         public static List<string> DaysOfWeek
         {
             get { return _daysOfWeek; }
+        }
+
+
+        public static int GetWeekNumber(int year, int month, int day, string cultureInfoName = "cs-CZ")
+        {
+            CultureInfo ci = new CultureInfo(cultureInfoName);
+            return ci.Calendar.GetWeekOfYear(new DateTime(year, month, day), ci.DateTimeFormat.CalendarWeekRule, ci.DateTimeFormat.FirstDayOfWeek);
         }
 
 

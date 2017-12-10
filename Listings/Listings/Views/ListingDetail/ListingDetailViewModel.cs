@@ -7,9 +7,6 @@ using Listings.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Listings.Views
 {
@@ -18,8 +15,7 @@ namespace Listings.Views
         private readonly ListingFacade _listingFacade;
 
         private string _basicWindowTitle;
-
-
+        
         private Listing _listing;
         public Listing Listing
         {
@@ -27,39 +23,48 @@ namespace Listings.Views
             set
             {
                 _listing = value;
-                _dayItems = null;
-                _listingFacade.Activate(_listing, 4);
+                InitializeData();
                 WindowTitle = string.Format("{0} [{1} {2} {3}]", _basicWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));
                 RaisePropertyChanged();
             }
         }
 
 
-        private ObservableCollection<DayItem> _dayItems;
-        public ObservableCollection<DayItem> DayItems
+        private Week _selectedWeek;
+        public Week SelectedWeek
         {
-            get
+            get { return _selectedWeek; }
+            set {
+                _selectedWeek = value;
+                if (value == null) {
+                    DisplayableItems = new ObservableCollection<DayItem>(_dayItems);
+                } else {
+                    Week w = _weeksInMonth.Find(we => we.WeekNumber == SelectedWeek.WeekNumber);
+                    DisplayableItems = new ObservableCollection<DayItem>(w.DayItems);
+                }
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private List<Week> _weeksInMonth;
+        public List<Week> WeeksInMonth
+        {
+            get { return _weeksInMonth; }
+        }
+
+
+        private List<DayItem> _dayItems;
+
+
+        private ObservableCollection<DayItem> _displayableItems;
+        public ObservableCollection<DayItem> DisplayableItems
+        {
+            get { return _displayableItems; }
+            set
             {
-                if (Listing == null) {
-                    throw new InvalidStateException("Listing cannot be null!");
-                }
-
-                if (_dayItems == null) {
-                    _dayItems = new ObservableCollection<DayItem>();
-                    for (int day = 0; day < DateTime.DaysInMonth(Listing.Year, Listing.Month); day++) {
-                        ListingItem listingItem = Listing.GetItemByDay(day + 1);
-                        DayItem dayItem;
-                        if (listingItem == null) {
-                            dayItem = new DayItem(Listing, day + 1);
-                        } else {
-                            dayItem = new DayItem(listingItem);
-                        }
-
-                        _dayItems.Add(dayItem);
-                    }
-                }
-
-                return _dayItems;
+                _displayableItems = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -111,12 +116,15 @@ namespace Listings.Views
             _listingFacade = listingFacade;
             WindowTitle = windowTitle;
             _basicWindowTitle = windowTitle;
+
+            _dayItems = new List<DayItem>();
+            DisplayableItems = new ObservableCollection<DayItem>();
         }
 
 
         public void ReplaceDayInListBy(ListingItem item)
         {
-            _dayItems[item.Day - 1] = new DayItem(item);
+            _dayItems[item.Day - 1].Update(item);
         }
 
 
@@ -134,7 +142,7 @@ namespace Listings.Views
         private void RemoveItemByDay(int day)
         {
             Listing.RemoveItemByDay(day);
-            _dayItems[day - 1] = new DayItem(Listing, day);
+            _dayItems[day - 1].Reset();
 
             _listingFacade.Save(Listing);
         }
@@ -151,10 +159,56 @@ namespace Listings.Views
                 dayItem.ShiftLunchStart,
                 dayItem.ShiftLunchEnd
                 );
-
-            _dayItems[day] = new DayItem(newItem);
+            
+            _dayItems[day].Update(newItem);
 
             _listingFacade.Save(Listing);
+        }
+
+
+        private void InitializeData()
+        {
+            if (Listing == null) {
+                throw new InvalidStateException("Listing cannot be null!");
+            }
+            _listingFacade.Activate(_listing, 4);
+
+            SelectedWeek = null;
+
+            DateTime now = DateTime.Now;
+            int currentWeekNumber = Date.GetWeekNumber(now.Year, now.Month, now.Day);
+
+            _weeksInMonth = new List<Week>();
+            _dayItems = new List<DayItem>();
+            for (int day = 0; day < DateTime.DaysInMonth(Listing.Year, Listing.Month); day++) {
+                ListingItem listingItem = Listing.GetItemByDay(day + 1);
+                DayItem dayItem;
+                if (listingItem == null) {
+                    dayItem = new DayItem(Listing, day + 1);
+                } else {
+                    dayItem = new DayItem(listingItem);
+                }
+
+                _dayItems.Add(dayItem);
+
+                Week week = _weeksInMonth.Find(w => w.WeekNumber == dayItem.Week);
+                if (week == null) {
+                    week = new Week(dayItem.Week, currentWeekNumber == dayItem.Week);
+                    _weeksInMonth.Add(week);
+
+                    if (currentWeekNumber == dayItem.Week) {
+                        SelectedWeek = week;
+                    }
+                }
+                week.AddDayItem(dayItem);
+            }
+
+            if (SelectedWeek == null) {
+                DisplayableItems = new ObservableCollection<DayItem>(_dayItems);
+            } else {
+                Week w = _weeksInMonth.Find(we => we.WeekNumber == SelectedWeek.WeekNumber);
+                DisplayableItems = new ObservableCollection<DayItem>(w.DayItems);
+            }
         }
 
     }

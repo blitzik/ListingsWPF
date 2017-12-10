@@ -14,13 +14,14 @@
         <converters:TimeToHoursAndMinutesConverter x:Key="TimeToHoursAndMinutesConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:TimeToTimeInWordsConverter x:Key="TimeToTimeInWordsConverter" />
+        <converters:NegateBoolConverter x:Key="NegateBoolConverter" />
     </UserControl.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="10" />
-            <RowDefinition Height="65" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="10" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -37,45 +38,57 @@
             <Button Content="Odstranit" Width="125" Style="{StaticResource CriticalButton}" />
         </StackPanel>
 
-        <Border DataContext="{Binding Listing, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Padding="10" Margin="0 0 17 0" Background="#FFF" BorderBrush="#CCC" BorderThickness="1">
-            <Border.Resources>
-                <Style x:Key="LabelText" TargetType="{x:Type TextBlock}">
-                    <Setter Property="FontWeight" Value="Bold" />
-                    <Setter Property="HorizontalAlignment" Value="Center" />
-                </Style>
-            </Border.Resources>
+        <Border Grid.Row="2">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="20" />
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="20" />
+                    <RowDefinition Height="50" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="10" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="0.5*" />
                 </Grid.ColumnDefinitions>
+                
+                <ListBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding WeeksInMonth}" SelectedValue="{Binding SelectedWeek}">
+                    <ListBox.Resources>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </ListBox.Resources>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="1" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding WeekNumber, StringFormat={}{0}. týden}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
-                <!-- Worked hours -->
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Odpracované hodiny" Style="{StaticResource LabelText}" />
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding WorkedHours, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeToTimeInWordsConverter}}" HorizontalAlignment="Center" />
+                <Border Grid.Row="0" Grid.Column="2" Background="#FFF" BorderBrush="#FFABADB3" BorderThickness="1">
+                    <TextBlock Text="{Binding Listing.WorkedHours, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeToTimeInWordsConverter}}" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
 
-                <!-- Worked days -->
-                <TextBlock Grid.Row="0" Grid.Column="2" Text="Odpracované dny" Style="{StaticResource LabelText}" />
-                <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center">
-                    <TextBlock.Text>
-                        <MultiBinding UpdateSourceTrigger="PropertyChanged" StringFormat="{}{0} / {1}">
-                            <Binding Path="WorkedDays" />
-                            <Binding Path="DaysInMonth" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
+                <Border Grid.Row="0" Grid.Column="4" Background="#FFF" BorderBrush="#FFABADB3" BorderThickness="1">
+                    <TextBlock FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock.Text>
+                            <MultiBinding UpdateSourceTrigger="PropertyChanged" StringFormat="{}{0} / {1} dní">
+                                <Binding Path="Listing.WorkedDays" />
+                                <Binding Path="Listing.DaysInMonth" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Border>
             </Grid>
         </Border>
-
-
+        
+        
         <ScrollViewer x:Name="ScrollViewer" Grid.Row="4" Padding="0 0 10 0" VerticalScrollBarVisibility="Auto" Template="{StaticResource ScrollViewerControlTemplate}">
-            <ItemsControl ItemsSource="{Binding DayItems, UpdateSourceTrigger=PropertyChanged}">
+            <ItemsControl ItemsSource="{Binding DisplayableItems, UpdateSourceTrigger=PropertyChanged}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="0 0 0 10">

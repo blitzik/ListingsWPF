@@ -84,12 +84,15 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\IntToTimeConverter.cs" />
     <Compile Include="Converters\MonthNameToIntConverter.cs" />
+    <Compile Include="Converters\NegateBoolConverter.cs" />
     <Compile Include="Converters\TimeToHoursAndMinutesConverter.cs" />
     <Compile Include="Converters\TimeToHoursAndMinutesRangeConverter.cs" />
     <Compile Include="Converters\TimeToIntConverter.cs" />
     <Compile Include="Converters\TimeToTimeInWordsConverter.cs" />
+    <Compile Include="CustomPanels\ProportionallyStretchingPanel.cs" />
     <Compile Include="Domain\BindableObject.cs" />
     <Compile Include="Domain\DayItem.cs" />
+    <Compile Include="Domain\Week.cs" />
     <Compile Include="EventArguments\SelectedDayItemArgs.cs" />
     <Compile Include="EventArguments\ListingArgs.cs" />
     <Compile Include="EventArguments\ListingItemArgs.cs" />
