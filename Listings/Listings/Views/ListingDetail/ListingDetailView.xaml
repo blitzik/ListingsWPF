@@ -173,11 +173,11 @@
 
                                     <!-- Worked hours -->
                                     <TextBlock Grid.Row="0" Grid.Column="8" Text="Odpracované hodiny celkem" HorizontalAlignment="Center" Style="{StaticResource LabelText}" />
-                                    <TextBlock Grid.Row="2" Grid.Column="8" Grid.RowSpan="4" FontSize="22" HorizontalAlignment="Center" Text="{Binding WorkedHours, Converter={StaticResource TimeToTimeInWordsConverter}}" />
+                                    <TextBlock Grid.Row="2" Grid.Column="8" Grid.RowSpan="5" FontSize="22" HorizontalAlignment="Center" Text="{Binding WorkedHours, Converter={StaticResource TimeToTimeInWordsConverter}}" />
 
                                     <!-- Job description - locality -->
-                                    <TextBlock Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3" Text="Popis práce - místo" Style="{StaticResource LabelText}" HorizontalAlignment="Left" />
-                                    <TextBlock Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="3" Text="{Binding Locality}" TextWrapping="Wrap" />
+                                    <TextBlock Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="5" Text="Popis práce - místo" Style="{StaticResource LabelText}" HorizontalAlignment="Left" />
+                                    <TextBlock Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="5" Text="{Binding Locality}" TextWrapping="Wrap" />
                                 </Grid>
                             </Button>
 

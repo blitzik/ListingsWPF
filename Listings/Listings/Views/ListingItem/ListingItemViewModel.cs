@@ -85,7 +85,7 @@ namespace Listings.Views
         }
 
 
-        private int HoursTick = (new Time("00:15:00")).TotalSeconds;
+        private int HoursTick = (new Time("00:05:00")).TotalSeconds;
 
 
         private DelegateCommand _shiftStartAddCommand;
@@ -99,7 +99,7 @@ namespace Listings.Views
                             StartTime += HoursTick;
                         }, 
                         p => {
-                            return StartTime < LunchStart;
+                            return StartTime >= 0 && StartTime < LunchStart;
                         });
                 }
                 return _shiftStartAddCommand;
@@ -175,7 +175,7 @@ namespace Listings.Views
                             LunchStart += HoursTick;
                         },
                         p => {
-                            return LunchStart < LunchEnd;
+                            return (LunchStart) < LunchEnd;
                         });
                 }
                 return _lunchStartAddCommand;
@@ -232,7 +232,7 @@ namespace Listings.Views
                             LunchEnd -= HoursTick;
                         },
                         p => {
-                            return LunchEnd > LunchStart;
+                            return LunchEnd > (LunchStart);
                         });
                 }
                 return _lunchEndSubCommand;

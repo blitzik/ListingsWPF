@@ -89,6 +89,7 @@
     <Compile Include="Converters\TimeToHoursAndMinutesRangeConverter.cs" />
     <Compile Include="Converters\TimeToIntConverter.cs" />
     <Compile Include="Converters\TimeToTimeInWordsConverter.cs" />
+    <Compile Include="Converters\ViewModelToBooleanConverter.cs" />
     <Compile Include="CustomPanels\ProportionallyStretchingPanel.cs" />
     <Compile Include="Domain\BindableObject.cs" />
     <Compile Include="Domain\DayItem.cs" />

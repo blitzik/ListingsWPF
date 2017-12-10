@@ -4,8 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Listings.Views"
+        xmlns:converters="clr-namespace:Listings.Converters"
         mc:Ignorable="d"
         Title="Evidoo - Správa odpracovaných hodin" Height="700" Width="1200" MinWidth="1200" MinHeight="700" Background="#F0F0F0">
+
+    <Window.Resources>
+        <converters:ViewModelToBooleanConverter x:Key="ViewModelToBooleanConverter" />
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
@@ -63,8 +69,8 @@
                 </Style>
             </StackPanel.Resources>
 
-            <RadioButton Grid.Row="0" Content="Přehled výčetek" Command="{Binding NavigationCommand}" CommandParameter="ListingsOverviewViewModel" IsChecked="True" />
-            <RadioButton Grid.Row="1" Content="Nová výčetka" Command="{Binding NavigationCommand}" CommandParameter="ListingViewModel" />
+            <RadioButton Grid.Row="0" Content="Přehled výčetek" Command="{Binding NavigationCommand}" CommandParameter="ListingsOverviewViewModel" IsChecked="{Binding CurrentViewModel, Converter={StaticResource ViewModelToBooleanConverter}, ConverterParameter=ListingsOverviewViewModel}" />
+            <RadioButton Grid.Row="1" Content="Nová výčetka" Command="{Binding NavigationCommand}" CommandParameter="ListingViewModel" IsChecked="{Binding CurrentViewModel, Converter={StaticResource ViewModelToBooleanConverter}, ConverterParameter=ListingViewModel}" />
             <RadioButton Grid.Row="2" Content="Správa zaměstnavatelů" />
             <RadioButton Grid.Row="3" Content="Nastavení" />
         </StackPanel>
