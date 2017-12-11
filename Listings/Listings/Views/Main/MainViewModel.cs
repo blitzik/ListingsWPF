@@ -100,9 +100,34 @@ namespace Listings.Views
                         };
                         ChangeView(nameof(ListingItemViewModel));
                     };
+
+                    _listingDetailViewModel.OnListingDeletionClicked += (object sender, ListingArgs args) => {
+                        ListingDeletionViewModel.Listing = args.Listing;
+                        ChangeView(nameof(ListingDeletionViewModel));
+                    };
                 }
 
                 return _listingDetailViewModel;
+            }
+        }
+
+
+        private ListingDeletionViewModel _listingDeletionViewModel;
+        public ListingDeletionViewModel ListingDeletionViewModel
+        {
+            get
+            {
+                if (_listingDeletionViewModel == null) {
+                    _listingDeletionViewModel = new ListingDeletionViewModel(_listingFacade, "Odstranění výčetky");
+                    _listingDeletionViewModel.OnDeletedListing += (object sender, EventArgs args) => {
+                        ChangeView(nameof(ListingsOverviewViewModel));
+                    };
+                    _listingDeletionViewModel.OnReturnBackClicked += (object sender, EventArgs args) => {
+                        ChangeView(nameof(ListingDetailViewModel));
+                    };
+                }
+
+                return _listingDeletionViewModel;
             }
         }
 
@@ -151,6 +176,10 @@ namespace Listings.Views
 
                 case nameof(ListingItemViewModel):
                     CurrentViewModel = ListingItemViewModel;
+                    break;
+
+                case nameof(ListingDeletionViewModel):
+                    CurrentViewModel = ListingDeletionViewModel;
                     break;
             }
 

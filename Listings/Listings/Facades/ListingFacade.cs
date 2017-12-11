@@ -58,6 +58,12 @@ namespace Listings.Facades
         }
 
 
+        public void DeleteListing(Listing listing)
+        {
+            _db.Delete(listing);
+        }
+
+
         private int LoadInASC(Listing l1, Listing l2)
         {
             return l1.Month.CompareTo(l2.Month);

@@ -99,6 +99,10 @@
                     <DataTemplate DataType="{x:Type local:ListingItemViewModel}">
                         <local:ListingItemView />
                     </DataTemplate>
+                    <!-- ListingItem Detion -->
+                    <DataTemplate DataType="{x:Type local:ListingDeletionViewModel}">
+                        <local:ListingDeletionView />
+                    </DataTemplate>
                 </ContentControl.Resources>
             </ContentControl>
         </Border>

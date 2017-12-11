@@ -69,6 +69,20 @@ namespace Listings.Views
         }
 
 
+        private DelegateCommand _listingDeletionCommand;
+        public DelegateCommand ListingDeletionCommand
+        {
+            get
+            {
+                if (_listingDeletionCommand == null) {
+                    _listingDeletionCommand = new DelegateCommand(p => DeleteListing());
+                }
+
+                return _listingDeletionCommand;
+            }
+        }
+
+
         private DelegateCommand _openListingItemDetailCommand;
         public DelegateCommand OpenListingItemDetailCommand
         {
@@ -135,6 +149,17 @@ namespace Listings.Views
             OpenListingItemDetailHandler handler = OnListingItemClicked;
             if (handler != null) {
                 handler(this, new SelectedDayItemArgs(_dayItems[day - 1]));
+            }
+        }
+
+
+        public delegate void RemoveListingHandler(object sender, ListingArgs args);
+        public event RemoveListingHandler OnListingDeletionClicked;
+        private void DeleteListing()
+        {
+            RemoveListingHandler handler = OnListingDeletionClicked;
+            if (handler != null) {
+                handler(this, new ListingArgs(Listing));
             }
         }
 

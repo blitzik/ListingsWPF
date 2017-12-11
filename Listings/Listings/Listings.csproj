@@ -108,6 +108,10 @@
     <Compile Include="Services\Navigation\NavigationItem.cs" />
     <Compile Include="Utils\Date.cs" />
     <Compile Include="Utils\Time.cs" />
+    <Compile Include="Views\ListingDeletion\ListingDeletionView.xaml.cs">
+      <DependentUpon>ListingDeletionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ListingDeletion\ListingDeletionViewModel.cs" />
     <Compile Include="Views\ListingDetail\ListingDetailView.xaml.cs">
       <DependentUpon>ListingDetailView.xaml</DependentUpon>
     </Compile>
@@ -125,6 +129,10 @@
       <DependentUpon>ListingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Listing\ListingViewModel.cs" />
+    <Page Include="Views\ListingDeletion\ListingDeletionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ListingDetail\ListingDetailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
