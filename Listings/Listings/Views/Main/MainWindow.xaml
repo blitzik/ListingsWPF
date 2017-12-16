@@ -49,8 +49,8 @@
                                         <Setter Property="BorderBrush" TargetName="radioButtonBorder" Value="#1F26A0DA" />
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="false">
-                                        <Setter Property="Background" TargetName="radioButtonBorder" Value="Red" />
-                                        <Setter Property="BorderBrush" TargetName="radioButtonBorder" Value="Red" />
+                                        <Setter Property="Background" TargetName="radioButtonBorder" Value="#1ABC9C" />
+                                        <Setter Property="BorderBrush" TargetName="radioButtonBorder" Value="#1ABC9C" />
                                     </Trigger>
                                     <Trigger Property="IsPressed" Value="true">
                                         <Setter Property="Background" TargetName="radioButtonBorder" Value="#1F26A0DA" />

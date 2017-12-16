@@ -182,7 +182,8 @@ namespace Listings.Views
                 dayItem.ShiftStart,
                 dayItem.ShiftEnd,
                 dayItem.ShiftLunchStart,
-                dayItem.ShiftLunchEnd
+                dayItem.ShiftLunchEnd,
+                dayItem.OtherHours
                 );
             
             _dayItems[day].Update(newItem);

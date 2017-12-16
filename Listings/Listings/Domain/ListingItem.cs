@@ -37,7 +37,7 @@ namespace Listings.Domain
         public Time ShiftStart
         {
             get { return _shiftStart; }
-            private set { ChangeHours(value, ShiftEnd, ShiftLunchStart, ShiftLunchEnd); }
+            private set { ChangeHours(value, ShiftEnd, ShiftLunchStart, ShiftLunchEnd, OtherHours); }
         }
 
 
@@ -45,7 +45,7 @@ namespace Listings.Domain
         public Time ShiftEnd
         {
             get { return _shiftEnd; }
-            private set { ChangeHours(ShiftStart, value, ShiftLunchStart, ShiftLunchEnd); }
+            private set { ChangeHours(ShiftStart, value, ShiftLunchStart, ShiftLunchEnd, OtherHours); }
         }
 
 
@@ -53,7 +53,7 @@ namespace Listings.Domain
         public Time ShiftLunchStart
         {
             get { return _shiftLunchStart; }
-            private set { ChangeHours(ShiftStart, ShiftEnd, value, ShiftLunchEnd); }
+            private set { ChangeHours(ShiftStart, ShiftEnd, value, ShiftLunchEnd, OtherHours); }
         }
 
 
@@ -61,7 +61,7 @@ namespace Listings.Domain
         public Time ShiftLunchEnd
         {
             get { return _shiftLunchEnd; }
-            private set { ChangeHours(ShiftStart, ShiftEnd, ShiftLunchStart, value); }
+            private set { ChangeHours(ShiftStart, ShiftEnd, ShiftLunchStart, value, OtherHours); }
         }
 
 
@@ -71,11 +71,11 @@ namespace Listings.Domain
             get { return _otherHours; }
             private set
             {
-                if ((ShiftEnd - ShiftStart - LunchHours + value) < (new Time("00:00"))) {
+                if ((ShiftEnd - ShiftStart - LunchHours + value) < 0) {
                     throw new Exception("Other hours makes worked hours lower than 0");
                 }
 
-                _otherHours = value;
+                ChangeHours(ShiftStart, ShiftEnd, ShiftLunchStart, ShiftLunchEnd, value);
             }
         }
 
@@ -96,11 +96,11 @@ namespace Listings.Domain
 
         public Time WorkedHours
         {
-            get { return ShiftEnd - ShiftStart - LunchHours/* + OtherHours*/; }
+            get { return ShiftEnd - ShiftStart - LunchHours + OtherHours; }
         }
 
 
-        public ListingItem(Listing listing, int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd)
+        public ListingItem(Listing listing, int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
         {
             Listing = listing;
 
@@ -109,29 +109,31 @@ namespace Listings.Domain
             _day = day;
             _locality = locality;
 
-            //OtherHours = new Time("00:00");
-            ChangeHours(start, end, lunchStart, lunchEnd);
+            ChangeHours(start, end, lunchStart, lunchEnd, otherHours);
         }
 
 
-        private void ChangeHours(Time start, Time end, Time lunchStart, Time lunchEnd)
+        private void ChangeHours(Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
         {
             if (start >= end) {
                 throw new WorkedHoursRangeException();
             }
 
-            if (lunchStart >= lunchEnd) {
-                throw new LunchHoursRangeException();
-            }
+            if (!(lunchStart == 0 && lunchEnd == 0)) {
+                if (lunchStart >= lunchEnd) {
+                    throw new LunchHoursRangeException();
+                }
 
-            if (lunchStart <= start || lunchEnd >= end) {
-                throw new LunchHoursOutOfWorkedHoursRangeException();
+                if (lunchStart < start || lunchEnd > end) {
+                    throw new LunchHoursOutOfWorkedHoursRangeException();
+                }
             }
 
             _shiftStart = start;
             _shiftEnd = end;
             _shiftLunchStart = lunchStart;
             _shiftLunchEnd = lunchEnd;
+            _otherHours = otherHours;
         }
 
     }

@@ -110,13 +110,13 @@ namespace Listings.Domain
         }
 
 
-        public ListingItem AddItem(int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd)
+        public ListingItem AddItem(int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
         {
             if (_items.Exists(i => i.Day == day)) {
                 throw new ListingItemAlreadyExistsException();
             }
 
-            ListingItem newItem = new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd);
+            ListingItem newItem = new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd, otherHours);
             _items.Add(newItem);
             WorkedDays++;
             WorkedHours += newItem.WorkedHours;
@@ -125,11 +125,11 @@ namespace Listings.Domain
         }
 
 
-        public ListingItem ReplaceItem(int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd)
+        public ListingItem ReplaceItem(int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
         {
             if (_items.Exists(i => i.Day == day)) {
                 ListingItem currentItem = GetItemByDay(day);
-                ListingItem newItem = new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd);
+                ListingItem newItem = new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd, otherHours);
 
                 WorkedHours += newItem.WorkedHours - currentItem.WorkedHours;
 
@@ -137,7 +137,7 @@ namespace Listings.Domain
                 return newItem;
             }
 
-            return AddItem(day, locality, start, end, lunchStart, lunchEnd);
+            return AddItem(day, locality, start, end, lunchStart, lunchEnd, otherHours);
         }
 
 

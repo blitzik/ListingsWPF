@@ -23,6 +23,7 @@ namespace Listings.Views
                 _startTime = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(WorkedHours));
+                UpdateCommandsCanExecute();
             }
         }
 
@@ -36,6 +37,7 @@ namespace Listings.Views
                 _endTime = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(WorkedHours));
+                UpdateCommandsCanExecute();
             }
         }
 
@@ -49,6 +51,7 @@ namespace Listings.Views
                 _lunchStart = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(WorkedHours));
+                UpdateCommandsCanExecute();
             }
         }
 
@@ -62,14 +65,48 @@ namespace Listings.Views
                 _lunchEnd = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(WorkedHours));
+                UpdateCommandsCanExecute();
             }
         }
 
 
-        private int _workedHours;
-        public int WorkedHours
+        private int _otherHours;
+        public int OtherHours
         {
-            get { return _endTime - _startTime - (_lunchEnd - _lunchStart); }
+            get { return _otherHours; }
+            set
+            {
+                _otherHours = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(WorkedHours));
+                UpdateCommandsCanExecute();
+            }
+        }
+
+
+        private bool _noLunch;
+        public bool NoLunch
+        {
+            get { return _noLunch; }
+            set
+            {
+                _noLunch = value;
+                RaisePropertyChanged();
+                if (value == true) {
+                    LunchStart = 0;
+                    LunchEnd = 0;
+
+                } else {
+                    LunchStart = StartTime;
+                    LunchEnd = EndTime;
+                }
+            }
+        }
+
+
+        public Time WorkedHours
+        {
+            get { return new Time(_endTime - _startTime - (_lunchEnd - _lunchStart) + _otherHours); }
         }
 
 
@@ -85,7 +122,7 @@ namespace Listings.Views
         }
 
 
-        private int HoursTick = (new Time("00:05:00")).TotalSeconds;
+        private int HoursTick = (new Time("00:15:00")).TotalSeconds;
 
 
         private DelegateCommand _shiftStartAddCommand;
@@ -95,12 +132,9 @@ namespace Listings.Views
             {
                 if (_shiftStartAddCommand == null) {
                     _shiftStartAddCommand = new DelegateCommand(
-                        p => {
-                            StartTime += HoursTick;
-                        }, 
-                        p => {
-                            return StartTime >= 0 && StartTime < LunchStart;
-                        });
+                        p => StartTime += HoursTick,
+                        p => (NoLunch == false && StartTime < LunchStart) || (NoLunch == true && (StartTime + HoursTick) < EndTime)
+                    );
                 }
                 return _shiftStartAddCommand;
             }
@@ -114,12 +148,9 @@ namespace Listings.Views
             {
                 if (_shiftStartSubCommand == null) {
                     _shiftStartSubCommand = new DelegateCommand(
-                        p => {
-                            StartTime -= HoursTick;
-                        },
-                        p => {
-                            return StartTime > 0;
-                        });
+                        p => StartTime -= HoursTick,
+                        p => StartTime > 0
+                    );
                 }
                 return _shiftStartSubCommand;
             }
@@ -133,12 +164,9 @@ namespace Listings.Views
             {
                 if (_shiftEndAddCommand == null) {
                     _shiftEndAddCommand = new DelegateCommand(
-                        p => {
-                            EndTime += HoursTick;
-                        },
-                        p => {
-                            return EndTime < 84600;
-                        });
+                        p => EndTime += HoursTick,
+                        p => EndTime < 86400 // EndTime < 24:00
+                    );
                 }
                 return _shiftEndAddCommand;
             }
@@ -152,12 +180,9 @@ namespace Listings.Views
             {
                 if (_shiftEndSubCommand == null) {
                     _shiftEndSubCommand = new DelegateCommand(
-                        p => {
-                            EndTime -= HoursTick;
-                        },
-                        p => {
-                            return EndTime > LunchEnd;
-                        });
+                        p => EndTime -= HoursTick,
+                        p => (NoLunch == false && EndTime > LunchEnd) || (NoLunch == true && EndTime > (StartTime + HoursTick))
+                    );
                 }
                 return _shiftEndSubCommand;
             }
@@ -171,12 +196,9 @@ namespace Listings.Views
             {
                 if (_lunchStartAddCommand == null) {
                     _lunchStartAddCommand = new DelegateCommand(
-                        p => {
-                            LunchStart += HoursTick;
-                        },
-                        p => {
-                            return (LunchStart) < LunchEnd;
-                        });
+                        p => LunchStart += HoursTick,
+                        p => NoLunch == false && (LunchStart + HoursTick) < LunchEnd
+                    );
                 }
                 return _lunchStartAddCommand;
             }
@@ -190,12 +212,9 @@ namespace Listings.Views
             {
                 if (_lunchStartSubCommand == null) {
                     _lunchStartSubCommand = new DelegateCommand(
-                        p => {
-                            LunchStart -= HoursTick;
-                        },
-                        p => {
-                            return LunchStart > StartTime;
-                        });
+                        p => LunchStart -= HoursTick,
+                        p => NoLunch == false && LunchStart > StartTime
+                    );
                 }
                 return _lunchStartSubCommand;
             }
@@ -209,12 +228,9 @@ namespace Listings.Views
             {
                 if (_lunchEndAddCommand == null) {
                     _lunchEndAddCommand = new DelegateCommand(
-                        p => {
-                            LunchEnd += HoursTick;
-                        },
-                        p => {
-                            return LunchEnd < EndTime;
-                        });
+                        p => LunchEnd += HoursTick,
+                        p => NoLunch == false && LunchEnd < EndTime
+                    );
                 }
                 return _lunchEndAddCommand;
             }
@@ -228,14 +244,43 @@ namespace Listings.Views
             {
                 if (_lunchEndSubCommand == null) {
                     _lunchEndSubCommand = new DelegateCommand(
-                        p => {
-                            LunchEnd -= HoursTick;
-                        },
-                        p => {
-                            return LunchEnd > (LunchStart);
-                        });
+                        p => LunchEnd -= HoursTick,
+                        p => NoLunch == false && LunchEnd > (LunchStart + HoursTick)
+                    );
                 }
                 return _lunchEndSubCommand;
+            }
+        }
+
+
+        private DelegateCommand _otherHoursAddCommand;
+        public DelegateCommand OtherHoursAddCommand
+        {
+            get
+            {
+                if (_otherHoursAddCommand == null) {
+                    _otherHoursAddCommand = new DelegateCommand(
+                        p => OtherHours += HoursTick,
+                        p => WorkedHours >= 0
+                    );
+                }
+                return _otherHoursAddCommand;
+            }
+        }
+
+
+        private DelegateCommand _otherHoursSubCommand;
+        public DelegateCommand OtherHoursSubCommand
+        {
+            get
+            {
+                if (_otherHoursSubCommand == null) {
+                    _otherHoursSubCommand = new DelegateCommand(
+                        p => OtherHours -= HoursTick,
+                        p => OtherHours > 0
+                    );
+                }
+                return _otherHoursSubCommand;
             }
         }
 
@@ -269,12 +314,19 @@ namespace Listings.Views
                 _endTime = l.ShiftEnd.TotalSeconds;
                 _lunchStart = l.ShiftLunchStart.TotalSeconds;
                 _lunchEnd = l.ShiftLunchEnd.TotalSeconds;
+                _otherHours = l.OtherHours.TotalSeconds;
                 _locality = l.Locality;
             } else {
                 _startTime = (new Time("06:00").TotalSeconds);
                 _endTime = (new Time("16:00").TotalSeconds);
                 _lunchStart = (new Time("11:00").TotalSeconds);
                 _lunchEnd = (new Time("12:00").TotalSeconds);
+                _otherHours = (new Time().TotalSeconds);
+            }
+
+            _noLunch = false;
+            if (_lunchStart == 0 && _lunchEnd == 0) {
+                _noLunch = true;
             }
         }
 
@@ -287,8 +339,9 @@ namespace Listings.Views
             Time e = new Time(_endTime);
             Time ls = new Time(_lunchStart);
             Time le = new Time(_lunchEnd);
+            Time oh = new Time(_otherHours);
 
-            ListingItem newItem = _dayItem.Listing.ReplaceItem(_dayItem.Day, _locality, s, e, ls, le);
+            ListingItem newItem = _dayItem.Listing.ReplaceItem(_dayItem.Day, _locality, s, e, ls, le, oh);
 
             _listingFacade.Save(_dayItem.Listing);
 
@@ -296,6 +349,23 @@ namespace Listings.Views
             if (handler != null) {
                 handler(this, new ListingItemArgs(newItem));
             }
+        }
+
+
+        private void UpdateCommandsCanExecute()
+        {
+            _shiftStartAddCommand.RaiseCanExecuteChanged();
+            _shiftStartSubCommand.RaiseCanExecuteChanged();
+            _shiftEndAddCommand.RaiseCanExecuteChanged();
+            _shiftEndSubCommand.RaiseCanExecuteChanged();
+
+            _lunchStartAddCommand.RaiseCanExecuteChanged();
+            _lunchStartSubCommand.RaiseCanExecuteChanged();
+            _lunchEndAddCommand.RaiseCanExecuteChanged();
+            _lunchEndSubCommand.RaiseCanExecuteChanged();
+
+            _otherHoursAddCommand.RaiseCanExecuteChanged();
+            _otherHoursSubCommand.RaiseCanExecuteChanged();
         }
 
         

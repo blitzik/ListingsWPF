@@ -17,7 +17,7 @@ namespace Listings.Converters
             if (string.IsNullOrEmpty(v)) {
                 v = "00:00";
             }
-            return (new Time(v).Seconds);
+            return (new Time(v).TotalSeconds);
         }
 
 

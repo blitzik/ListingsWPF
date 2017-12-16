@@ -169,7 +169,7 @@
 
                                     <!-- Other hours -->
                                     <TextBlock Grid.Row="0" Grid.Column="6" Text="Ostatní hodiny" Style="{StaticResource LabelText}" />
-                                    <TextBlock Grid.Row="2" Grid.Column="6" Text="{Binding OtherHours, Converter={StaticResource TimeToHoursAndMinutesConverter}}" HorizontalAlignment="Left" />
+                                    <TextBlock Grid.Row="2" Grid.Column="6" Text="{Binding OtherHours, Converter={StaticResource TimeToTimeInWordsConverter}}" HorizontalAlignment="Left" />
 
                                     <!-- Worked hours -->
                                     <TextBlock Grid.Row="0" Grid.Column="8" Text="Odpracované hodiny celkem" HorizontalAlignment="Center" Style="{StaticResource LabelText}" />

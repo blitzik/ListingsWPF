@@ -20,7 +20,7 @@ namespace Listings.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return ((new Time((string)value)).Seconds);
+            return ((new Time((string)value)).TotalSeconds);
         }
     }
 }

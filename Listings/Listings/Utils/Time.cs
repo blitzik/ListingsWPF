@@ -116,7 +116,7 @@ namespace Listings.Utils
         {
             MatchCollection matches = Regex.Matches(time, @"^(?<hours>-?[0-9]+):(?<minutes>[0-5][0-9])(:(?<seconds>[0-5][0-9]))?$");
             if (matches.Count == 0) {
-
+                // todo
             }
 
             int.TryParse(matches[0].Groups["hours"].Value, out int hours);
@@ -142,15 +142,32 @@ namespace Listings.Utils
         }
 
 
+        public static Time operator +(Time a, int b)
+        {
+            return new Time(a.TotalSeconds + b);
+        }
+
+
         public static Time operator -(Time a, Time b)
         {
             return new Time(a.TotalSeconds - b.TotalSeconds);
         }
 
 
+        public static Time operator -(Time a, int b)
+        {
+            return new Time(a.TotalSeconds - b);
+        }
+
+
         public static bool operator >(Time a, Time b)
         {
             return a.TotalSeconds > b.TotalSeconds;
+        }
+
+        public static bool operator >(Time a, int b)
+        {
+            return a.TotalSeconds > b;
         }
 
 
@@ -160,9 +177,20 @@ namespace Listings.Utils
         }
 
 
+        public static bool operator <(Time a, int b)
+        {
+            return a.TotalSeconds < b;
+        }
+
+
         public static bool operator <=(Time a, Time b)
         {
             return a.TotalSeconds <= b.TotalSeconds;
+        }
+
+        public static bool operator <=(Time a, int b)
+        {
+            return a.TotalSeconds <= b;
         }
 
 
@@ -172,15 +200,32 @@ namespace Listings.Utils
         }
 
 
+        public static bool operator >=(Time a, int b)
+        {
+            return a.TotalSeconds >= b;
+        }
+
+
         public static bool operator ==(Time a, Time b)
         {
             return a.TotalSeconds == b.TotalSeconds;
         }
 
 
+        public static bool operator ==(Time a, int b)
+        {
+            return a.TotalSeconds == b;
+        }
+
+
         public static bool operator !=(Time a, Time b)
         {
             return a.TotalSeconds != b.TotalSeconds;
+        }
+
+        public static bool operator !=(Time a, int b)
+        {
+            return a.TotalSeconds != b;
         }
 
 

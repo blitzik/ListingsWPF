@@ -129,7 +129,7 @@ namespace Listings.Domain
 
         public Time WorkedHours
         {
-            get { return _listingItem == null ? null : ShiftEnd - ShiftStart - LunchHours; }
+            get { return _listingItem == null ? null : ShiftEnd - ShiftStart - LunchHours + OtherHours; }
         }
 
 
