@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Listings.Views"
         xmlns:converters="clr-namespace:Listings.Converters"
         mc:Ignorable="d"
-        Title="Evidoo - Správa odpracovaných hodin" Height="700" Width="1200" MinWidth="1200" MinHeight="700" Background="#F0F0F0">
+        Title="Evidoo - Evidence odpracovaných hodin" Height="700" Width="1200" MinWidth="1200" MinHeight="700" Background="#F0F0F0">
 
     <Window.Resources>
         <converters:ViewModelToBooleanConverter x:Key="ViewModelToBooleanConverter" />

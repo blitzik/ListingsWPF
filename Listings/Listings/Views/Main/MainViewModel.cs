@@ -30,13 +30,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _navigationCommand;
-        public DelegateCommand NavigationCommand
+        private DelegateCommand<string> _navigationCommand;
+        public DelegateCommand<string> NavigationCommand
         {
             get
             {
                 if (_navigationCommand == null) {
-                    _navigationCommand = new DelegateCommand(p => ChangeView((string)p));
+                    _navigationCommand = new DelegateCommand<string>(p => ChangeView(p));
                 }
 
                 return _navigationCommand;
@@ -96,6 +96,9 @@ namespace Listings.Views
                         _listingItemViewModel = new ListingItemViewModel(_listingFacade, args.DayItem, "Detail položky");
                         _listingItemViewModel.OnListingItemSaving += (object s, ListingItemArgs a) => {
                             _listingDetailViewModel.ReplaceDayInListBy(a.ListingItem);
+                            ChangeView(nameof(ListingDetailViewModel));
+                        };
+                        _listingItemViewModel.OnReturnBackToListingDetail += (object s, EventArgs a) => {
                             ChangeView(nameof(ListingDetailViewModel));
                         };
                         ChangeView(nameof(ListingItemViewModel));

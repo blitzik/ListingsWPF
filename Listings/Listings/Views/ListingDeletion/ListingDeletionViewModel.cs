@@ -46,13 +46,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _deleteListingCommand;
-        public DelegateCommand DeleteListingCommand
+        private DelegateCommand<object> _deleteListingCommand;
+        public DelegateCommand<object> DeleteListingCommand
         {
             get
             {
                 if (_deleteListingCommand == null) {
-                    _deleteListingCommand = new DelegateCommand(
+                    _deleteListingCommand = new DelegateCommand<object>(
                         p => DeleteListing(),
                         p => _confirmationText == "odstranit"
                     );
@@ -63,13 +63,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _returnBackCommand;
-        public DelegateCommand ReturnBackCommand
+        private DelegateCommand<object> _returnBackCommand;
+        public DelegateCommand<object> ReturnBackCommand
         {
             get
             {
                 if (_returnBackCommand == null) {
-                    _returnBackCommand = new DelegateCommand(p => ReturnBack());
+                    _returnBackCommand = new DelegateCommand<object>(p => ReturnBack());
                 }
 
                 return _returnBackCommand;

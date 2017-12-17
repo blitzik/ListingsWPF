@@ -66,13 +66,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _saveCommand;
-        public DelegateCommand SaveCommand
+        private DelegateCommand<object> _saveCommand;
+        public DelegateCommand<object> SaveCommand
         {
             get
             {
                 if (_saveCommand == null) {
-                    _saveCommand = new DelegateCommand(p => SaveListing());
+                    _saveCommand = new DelegateCommand<object>(p => SaveListing());
                 }
 
                 return _saveCommand;

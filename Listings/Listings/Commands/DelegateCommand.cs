@@ -7,39 +7,41 @@ using System.Windows.Input;
 
 namespace Listings.Commands
 {
-    public class DelegateCommand : ICommand
+    public class DelegateCommand<T> : ICommand
     {
-        private readonly Action<object> _execute;
-        private readonly Predicate<object> _canExecute;
+        private readonly Action<T> _execute;
+        private readonly Predicate<T> _canExecute;
 
 
-        public event EventHandler CanExecuteChanged;
-
-
-        public DelegateCommand(Action<object> execute) : this(execute, null)
+        public DelegateCommand(Action<T> execute) : this(execute, null)
         {
         }
 
 
-        public DelegateCommand(Action<object> execute, Predicate<object> canExecute)
+        public DelegateCommand(Action<T> execute, Predicate<T> canExecute)
         {
             _execute = execute ?? throw new ArgumentNullException("execute");
             _canExecute = canExecute;
         }
 
 
-        public bool CanExecute(object parameters)
+        public bool CanExecute(object parameter)
         {
-            return _canExecute == null ? true : _canExecute(parameters);
+            if (_canExecute == null) {
+                return true;
+            }
+
+            return _canExecute((parameter == null) ? default(T) : (T)Convert.ChangeType(parameter, typeof(T)));
         }
 
 
-        public void Execute(object parameters)
+        public void Execute(object parameter)
         {
-            _execute(parameters);
+            _execute((parameter == null) ? default(T) : (T)Convert.ChangeType(parameter, typeof(T)));
         }
 
 
+        public event EventHandler CanExecuteChanged;
         public void RaiseCanExecuteChanged()
         {
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);

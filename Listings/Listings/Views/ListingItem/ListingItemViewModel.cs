@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Listings.Views
 {
@@ -125,13 +126,13 @@ namespace Listings.Views
         private int HoursTick = (new Time("00:15:00")).TotalSeconds;
 
 
-        private DelegateCommand _shiftStartAddCommand;
-        public DelegateCommand ShiftStartAddCommand
+        private DelegateCommand<object> _shiftStartAddCommand;
+        public DelegateCommand<object> ShiftStartAddCommand
         {
             get
             {
                 if (_shiftStartAddCommand == null) {
-                    _shiftStartAddCommand = new DelegateCommand(
+                    _shiftStartAddCommand = new DelegateCommand<object>(
                         p => StartTime += HoursTick,
                         p => (NoLunch == false && StartTime < LunchStart) || (NoLunch == true && (StartTime + HoursTick) < EndTime)
                     );
@@ -141,13 +142,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _shiftStartSubCommand;
-        public DelegateCommand ShiftStartSubCommand
+        private DelegateCommand<object> _shiftStartSubCommand;
+        public DelegateCommand<object> ShiftStartSubCommand
         {
             get
             {
                 if (_shiftStartSubCommand == null) {
-                    _shiftStartSubCommand = new DelegateCommand(
+                    _shiftStartSubCommand = new DelegateCommand<object>(
                         p => StartTime -= HoursTick,
                         p => StartTime > 0
                     );
@@ -157,13 +158,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _shiftEndAddCommand;
-        public DelegateCommand ShiftEndAddCommand
+        private DelegateCommand<object> _shiftEndAddCommand;
+        public DelegateCommand<object> ShiftEndAddCommand
         {
             get
             {
                 if (_shiftEndAddCommand == null) {
-                    _shiftEndAddCommand = new DelegateCommand(
+                    _shiftEndAddCommand = new DelegateCommand<object>(
                         p => EndTime += HoursTick,
                         p => EndTime < 86400 // EndTime < 24:00
                     );
@@ -173,13 +174,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _shiftEndSubCommand;
-        public DelegateCommand ShiftEndSubCommand
+        private DelegateCommand<object> _shiftEndSubCommand;
+        public DelegateCommand<object> ShiftEndSubCommand
         {
             get
             {
                 if (_shiftEndSubCommand == null) {
-                    _shiftEndSubCommand = new DelegateCommand(
+                    _shiftEndSubCommand = new DelegateCommand<object>(
                         p => EndTime -= HoursTick,
                         p => (NoLunch == false && EndTime > LunchEnd) || (NoLunch == true && EndTime > (StartTime + HoursTick))
                     );
@@ -189,13 +190,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _lunchStartAddCommand;
-        public DelegateCommand LunchStartAddCommand
+        private DelegateCommand<object> _lunchStartAddCommand;
+        public DelegateCommand<object> LunchStartAddCommand
         {
             get
             {
                 if (_lunchStartAddCommand == null) {
-                    _lunchStartAddCommand = new DelegateCommand(
+                    _lunchStartAddCommand = new DelegateCommand<object>(
                         p => LunchStart += HoursTick,
                         p => NoLunch == false && (LunchStart + HoursTick) < LunchEnd
                     );
@@ -205,13 +206,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _lunchStartSubCommand;
-        public DelegateCommand LunchStartSubCommand
+        private DelegateCommand<object> _lunchStartSubCommand;
+        public DelegateCommand<object> LunchStartSubCommand
         {
             get
             {
                 if (_lunchStartSubCommand == null) {
-                    _lunchStartSubCommand = new DelegateCommand(
+                    _lunchStartSubCommand = new DelegateCommand<object>(
                         p => LunchStart -= HoursTick,
                         p => NoLunch == false && LunchStart > StartTime
                     );
@@ -221,13 +222,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _lunchEndAddCommand;
-        public DelegateCommand LunchEndAddCommand
+        private DelegateCommand<object> _lunchEndAddCommand;
+        public DelegateCommand<object> LunchEndAddCommand
         {
             get
             {
                 if (_lunchEndAddCommand == null) {
-                    _lunchEndAddCommand = new DelegateCommand(
+                    _lunchEndAddCommand = new DelegateCommand<object>(
                         p => LunchEnd += HoursTick,
                         p => NoLunch == false && LunchEnd < EndTime
                     );
@@ -237,13 +238,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _lunchEndSubCommand;
-        public DelegateCommand LunchEndSubCommand
+        private DelegateCommand<object> _lunchEndSubCommand;
+        public DelegateCommand<object> LunchEndSubCommand
         {
             get
             {
                 if (_lunchEndSubCommand == null) {
-                    _lunchEndSubCommand = new DelegateCommand(
+                    _lunchEndSubCommand = new DelegateCommand<object>(
                         p => LunchEnd -= HoursTick,
                         p => NoLunch == false && LunchEnd > (LunchStart + HoursTick)
                     );
@@ -253,13 +254,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _otherHoursAddCommand;
-        public DelegateCommand OtherHoursAddCommand
+        private DelegateCommand<object> _otherHoursAddCommand;
+        public DelegateCommand<object> OtherHoursAddCommand
         {
             get
             {
                 if (_otherHoursAddCommand == null) {
-                    _otherHoursAddCommand = new DelegateCommand(
+                    _otherHoursAddCommand = new DelegateCommand<object>(
                         p => OtherHours += HoursTick,
                         p => WorkedHours >= 0
                     );
@@ -269,13 +270,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _otherHoursSubCommand;
-        public DelegateCommand OtherHoursSubCommand
+        private DelegateCommand<object> _otherHoursSubCommand;
+        public DelegateCommand<object> OtherHoursSubCommand
         {
             get
             {
                 if (_otherHoursSubCommand == null) {
-                    _otherHoursSubCommand = new DelegateCommand(
+                    _otherHoursSubCommand = new DelegateCommand<object>(
                         p => OtherHours -= HoursTick,
                         p => OtherHours > 0
                     );
@@ -285,15 +286,28 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _saveListingItemCommand;
-        public DelegateCommand SaveListingItemCommand
+        private DelegateCommand<object> _saveListingItemCommand;
+        public DelegateCommand<object> SaveListingItemCommand
         {
             get
             {
                 if (_saveListingItemCommand == null) {
-                    _saveListingItemCommand = new DelegateCommand(p => SaveListingItem());
+                    _saveListingItemCommand = new DelegateCommand<object>(p => SaveListingItem());
                 }
                 return _saveListingItemCommand;
+            }
+        }
+
+
+        private DelegateCommand<object> _returnBackToListingDetailCommand;
+        public DelegateCommand<object> ReturnBackToListingDetailCommand
+        {
+            get
+            {
+                if (_returnBackToListingDetailCommand == null) {
+                    _returnBackToListingDetailCommand = new DelegateCommand<object>(p => ReturnBackToListingDetail());
+                }
+                return _returnBackToListingDetailCommand;
             }
         }
 
@@ -348,6 +362,17 @@ namespace Listings.Views
             SaveListingItemHandler handler = OnListingItemSaving;
             if (handler != null) {
                 handler(this, new ListingItemArgs(newItem));
+            }
+        }
+
+
+        public delegate void ReturnBackToListingDetailHandler(object sender, EventArgs args);
+        public event ReturnBackToListingDetailHandler OnReturnBackToListingDetail;
+        private void ReturnBackToListingDetail()
+        {
+            ReturnBackToListingDetailHandler handler = OnReturnBackToListingDetail;
+            if (handler != null) {
+                handler(this, EventArgs.Empty);
             }
         }
 

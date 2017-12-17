@@ -69,13 +69,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _listingDeletionCommand;
-        public DelegateCommand ListingDeletionCommand
+        private DelegateCommand<object> _listingDeletionCommand;
+        public DelegateCommand<object> ListingDeletionCommand
         {
             get
             {
                 if (_listingDeletionCommand == null) {
-                    _listingDeletionCommand = new DelegateCommand(p => DeleteListing());
+                    _listingDeletionCommand = new DelegateCommand<object>(p => DeleteListing());
                 }
 
                 return _listingDeletionCommand;
@@ -83,13 +83,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _openListingItemDetailCommand;
-        public DelegateCommand OpenListingItemDetailCommand
+        private DelegateCommand<int> _openListingItemDetailCommand;
+        public DelegateCommand<int> OpenListingItemDetailCommand
         {
             get
             {
                 if (_openListingItemDetailCommand == null) {
-                    _openListingItemDetailCommand = new DelegateCommand(p => OpenListingItemDetail((int)p));
+                    _openListingItemDetailCommand = new DelegateCommand<int>(p => OpenListingItemDetail(p));
                 }
 
                 return _openListingItemDetailCommand;
@@ -97,13 +97,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _removeItemCommand;
-        public DelegateCommand RemoveItemCommand
+        private DelegateCommand<int> _removeItemCommand;
+        public DelegateCommand<int> RemoveItemCommand
         {
             get
             {
                 if (_removeItemCommand == null) {
-                    _removeItemCommand = new DelegateCommand(p => RemoveItemByDay((int)p));
+                    _removeItemCommand = new DelegateCommand<int>(p => RemoveItemByDay(p));
                 }
 
                 return _removeItemCommand;
@@ -111,13 +111,13 @@ namespace Listings.Views
         }
 
 
-        private DelegateCommand _copyItemDownCommand;
-        public DelegateCommand CopyItemDownCommand
+        private DelegateCommand<int> _copyItemDownCommand;
+        public DelegateCommand<int> CopyItemDownCommand
         {
             get
             {
                 if (_copyItemDownCommand == null) {
-                    _copyItemDownCommand = new DelegateCommand(p => CopyItemDown((int)p));
+                    _copyItemDownCommand = new DelegateCommand<int>(p => CopyItemDown(p));
                 }
 
                 return _copyItemDownCommand;

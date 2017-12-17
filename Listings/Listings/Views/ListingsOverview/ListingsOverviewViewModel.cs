@@ -17,13 +17,13 @@ namespace Listings.Views
         private ListingFacade _listingFacade;
 
 
-        private DelegateCommand _openListingCommand;
-        public DelegateCommand OpenListingCommand
+        private DelegateCommand<Listing> _openListingCommand;
+        public DelegateCommand<Listing> OpenListingCommand
         {
             get
             {
                 if (_openListingCommand == null) {
-                    _openListingCommand = new DelegateCommand(p => OpenListing((Listing)p));
+                    _openListingCommand = new DelegateCommand<Listing>(p => OpenListing(p));
                 }
 
                 return _openListingCommand;
