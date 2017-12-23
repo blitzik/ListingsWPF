@@ -14,16 +14,6 @@
             <Setter Property="FontWeight" Value="Bold" />
         </Style>
 
-        <Style TargetType="{x:Type TextBox}">
-            <Setter Property="FontSize" Value="17" />
-            <Setter Property="Padding" Value="5" />
-        </Style>
-
-        <Style TargetType="{x:Type Button}">
-            <Setter Property="FontSize" Value="17" />
-            <Setter Property="Padding" Value="5" />
-        </Style>
-
         <converters:MonthNameToIntConverter x:Key="MonthNameToIntConverter" />
     </UserControl.Resources>
 
@@ -56,8 +46,8 @@
         </Grid>
 
         <TextBlock Text="Název výčetky" Style="{StaticResource BoldText}" />
-        <TextBox Text="{Binding Name}" MaxLength="60" />
+        <TextBox Text="{Binding Name}" MaxLength="60" Style="{StaticResource DefaultTextBox}" />
 
-        <Button Content="Uložit" Command="{Binding SaveCommand}" Width="150" HorizontalAlignment="Right" Margin="0 15 0 0" />
+        <Button Content="Uložit" Command="{Binding SaveCommand}" Width="150" HorizontalAlignment="Right" Margin="0 15 0 0" Style="{StaticResource DefaultButton}" />
     </StackPanel>
 </UserControl>

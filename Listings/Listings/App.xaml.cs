@@ -28,7 +28,8 @@ namespace Listings
             _db = dbFactory.Create("data.dbs");
 
             ListingFacade listingFacade = new ListingFacade(_db);
-            MainViewModel mainViewModel = new MainViewModel(listingFacade);
+            EmployerFacade employersFacade = new EmployerFacade(_db);
+            MainViewModel mainViewModel = new MainViewModel(listingFacade, employersFacade);
 
             MainWindow mw = new MainWindow
             {

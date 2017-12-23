@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="Listings.Views.EmployerItemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Listings.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <Border Margin="0 0 0 10" Padding="10" Background="#FFF" BorderBrush="#CCC" BorderThickness="1">
+        <ContentControl Content="{Binding CurrentViewModel}">
+            <ContentControl.Resources>
+                <!-- Detail -->
+                <DataTemplate DataType="{x:Type local:EmployerDetailViewModel}">
+                    <local:EmployerDetailView />
+                </DataTemplate>
+                <!-- Deletion -->
+                <DataTemplate DataType="{x:Type local:EmployerDeletionViewModel}">
+                    <local:EmployerDeletionView />
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+    </Border>
+
+</UserControl>

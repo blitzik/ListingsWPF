@@ -145,12 +145,27 @@ namespace Listings.Views
         }
 
 
+        private EmployersViewModel _employersViewModel;
+        public EmployersViewModel EmployersViewModel
+        {
+            get
+            {
+                if (_employersViewModel == null) {
+                    _employersViewModel = new EmployersViewModel(_employersFacade, "Správa zaměstnavatelů");
+                }
+                return _employersViewModel;
+            }
+        }
+
+
         private ListingFacade _listingFacade;
+        private EmployerFacade _employersFacade;
 
 
-        public MainViewModel(ListingFacade listingFacade)
+        public MainViewModel(ListingFacade listingFacade, EmployerFacade employersFacade)
         {
             _listingFacade = listingFacade;
+            _employersFacade = employersFacade;
 
             ChangeView(nameof(ListingsOverviewViewModel));
         }
@@ -183,6 +198,10 @@ namespace Listings.Views
 
                 case nameof(ListingDeletionViewModel):
                     CurrentViewModel = ListingDeletionViewModel;
+                    break;
+
+                case nameof(EmployersViewModel):
+                    CurrentViewModel = EmployersViewModel;
                     break;
             }
 

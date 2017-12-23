@@ -96,6 +96,7 @@
     <Compile Include="CustomPanels\ProportionallyStretchingPanel.cs" />
     <Compile Include="Domain\BindableObject.cs" />
     <Compile Include="Domain\DayItem.cs" />
+    <Compile Include="Domain\Employer.cs" />
     <Compile Include="Domain\Week.cs" />
     <Compile Include="EventArguments\SelectedDayItemArgs.cs" />
     <Compile Include="EventArguments\ListingArgs.cs" />
@@ -106,11 +107,28 @@
     <Compile Include="Exceptions\LunchHoursRangeException.cs" />
     <Compile Include="Exceptions\WorkedHoursRangeException.cs" />
     <Compile Include="Domain\ListingItem.cs" />
+    <Compile Include="Facades\EmployerFacade.cs" />
     <Compile Include="Facades\ListingFacade.cs" />
     <Compile Include="Services\Db4oObjectContainerFactory.cs" />
     <Compile Include="Services\Navigation\NavigationItem.cs" />
     <Compile Include="Utils\Date.cs" />
     <Compile Include="Utils\Time.cs" />
+    <Compile Include="Views\Employers\EmployerDeletion\EmployerDeletionView.xaml.cs">
+      <DependentUpon>EmployerDeletionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Employers\EmployerDeletion\EmployerDeletionViewModel.cs" />
+    <Compile Include="Views\Employers\EmployerDetail\EmployerDetailView.xaml.cs">
+      <DependentUpon>EmployerDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Employers\EmployerDetail\EmployerDetailViewModel.cs" />
+    <Compile Include="Views\Employers\EmployerItem\EmployerItemView.xaml.cs">
+      <DependentUpon>EmployerItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Employers\EmployerItem\EmployerItemViewModel.cs" />
+    <Compile Include="Views\Employers\EmployersView.xaml.cs">
+      <DependentUpon>EmployersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Employers\EmployersViewModel.cs" />
     <Compile Include="Views\ListingDeletion\ListingDeletionView.xaml.cs">
       <DependentUpon>ListingDeletionView.xaml</DependentUpon>
     </Compile>
@@ -132,6 +150,22 @@
       <DependentUpon>ListingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Listing\ListingViewModel.cs" />
+    <Page Include="Views\Employers\EmployerDeletion\EmployerDeletionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Employers\EmployerDetail\EmployerDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Employers\EmployerItem\EmployerItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Employers\EmployersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ListingDeletion\ListingDeletionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

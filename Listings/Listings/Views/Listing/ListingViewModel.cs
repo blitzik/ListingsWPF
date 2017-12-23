@@ -90,11 +90,6 @@ namespace Listings.Views
         }
 
 
-        public ListingViewModel(ListingFacade listingFacade) : this(listingFacade, null)
-        {
-        }
-
-
         public delegate void NewListingSaveHandler(object sender, ListingArgs args);
         public event NewListingSaveHandler OnListingCreation;
         private void SaveListing()

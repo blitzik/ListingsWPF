@@ -87,7 +87,7 @@
         </Border>
         
         
-        <ScrollViewer x:Name="ScrollViewer" Grid.Row="4" Padding="0 0 10 0" VerticalScrollBarVisibility="Auto" Template="{StaticResource ScrollViewerControlTemplate}">
+        <ScrollViewer Name="ScrollViewer" Grid.Row="4" Padding="0 0 10 0" VerticalScrollBarVisibility="Auto" Template="{StaticResource ScrollViewerControlTemplate}">
             <ItemsControl ItemsSource="{Binding DisplayableItems, UpdateSourceTrigger=PropertyChanged}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>

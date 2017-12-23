@@ -61,6 +61,7 @@ namespace Listings.Facades
         public void DeleteListing(Listing listing)
         {
             _db.Delete(listing);
+            _db.Commit();
         }
 
 

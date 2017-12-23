@@ -71,7 +71,7 @@
 
             <RadioButton Grid.Row="0" Content="Přehled výčetek" Command="{Binding NavigationCommand}" CommandParameter="ListingsOverviewViewModel" IsChecked="{Binding CurrentViewModel, Converter={StaticResource ViewModelToBooleanConverter}, ConverterParameter=ListingsOverviewViewModel}" />
             <RadioButton Grid.Row="1" Content="Nová výčetka" Command="{Binding NavigationCommand}" CommandParameter="ListingViewModel" IsChecked="{Binding CurrentViewModel, Converter={StaticResource ViewModelToBooleanConverter}, ConverterParameter=ListingViewModel}" />
-            <RadioButton Grid.Row="2" Content="Správa zaměstnavatelů" />
+            <RadioButton Grid.Row="2" Content="Správa zaměstnavatelů" Command="{Binding NavigationCommand}" CommandParameter="EmployersViewModel" IsChecked="{Binding CurrentViewModel, Converter={StaticResource ViewModelToBooleanConverter}, ConverterParameter=EmployersViewModel}" />
             <RadioButton Grid.Row="3" Content="Nastavení" />
         </StackPanel>
 
@@ -99,9 +99,13 @@
                     <DataTemplate DataType="{x:Type local:ListingItemViewModel}">
                         <local:ListingItemView />
                     </DataTemplate>
-                    <!-- ListingItem Detion -->
+                    <!-- ListingItem Deletion -->
                     <DataTemplate DataType="{x:Type local:ListingDeletionViewModel}">
                         <local:ListingDeletionView />
+                    </DataTemplate>
+                    <!-- Employers -->
+                    <DataTemplate DataType="{x:Type local:EmployersViewModel}">
+                        <local:EmployersView />
                     </DataTemplate>
                 </ContentControl.Resources>
             </ContentControl>
