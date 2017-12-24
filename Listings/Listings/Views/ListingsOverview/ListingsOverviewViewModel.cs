@@ -42,7 +42,7 @@ namespace Listings.Views
         }
 
 
-        private List<int> _years = Date.GetLastYears(5);
+        private List<int> _years = Date.GetYears(2010, "DESC");
         public List<int> Years
         {
             get { return _years; }

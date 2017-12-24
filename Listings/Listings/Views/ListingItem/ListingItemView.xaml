@@ -20,9 +20,6 @@
             <Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBox}">
                 <Setter Property="HorizontalContentAlignment" Value="Center" />
             </Style>
-            <Style x:Key="LabelText" TargetType="{x:Type TextBlock}">
-                <Setter Property="FontWeight" Value="Bold" />
-            </Style>
         </StackPanel.Resources>
         <Grid>
             <Grid.RowDefinitions>

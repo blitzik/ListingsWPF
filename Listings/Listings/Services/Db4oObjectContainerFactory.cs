@@ -30,6 +30,7 @@ namespace Listings.Services
             config.Common.UpdateDepth = 8;
 
             config.Common.ObjectClass(typeof(Listing)).ObjectField("_year").Indexed(true);
+
   
             return config;
         }

@@ -84,8 +84,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\DelegateCommand.cs" />
+    <Compile Include="Comparers\SortIntDescending.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\IntToTimeConverter.cs" />
+    <Compile Include="Converters\InverseBooleansToBooleanConverter.cs" />
     <Compile Include="Converters\MonthNameToIntConverter.cs" />
     <Compile Include="Converters\NegateBoolConverter.cs" />
     <Compile Include="Converters\TimeToHoursAndMinutesConverter.cs" />
@@ -93,7 +95,6 @@
     <Compile Include="Converters\TimeToIntConverter.cs" />
     <Compile Include="Converters\TimeToTimeInWordsConverter.cs" />
     <Compile Include="Converters\ViewModelToBooleanConverter.cs" />
-    <Compile Include="CustomPanels\ProportionallyStretchingPanel.cs" />
     <Compile Include="Domain\BindableObject.cs" />
     <Compile Include="Domain\DayItem.cs" />
     <Compile Include="Domain\Employer.cs" />
@@ -110,7 +111,6 @@
     <Compile Include="Facades\EmployerFacade.cs" />
     <Compile Include="Facades\ListingFacade.cs" />
     <Compile Include="Services\Db4oObjectContainerFactory.cs" />
-    <Compile Include="Services\Navigation\NavigationItem.cs" />
     <Compile Include="Utils\Date.cs" />
     <Compile Include="Utils\Time.cs" />
     <Compile Include="Views\Employers\EmployerDeletion\EmployerDeletionView.xaml.cs">
@@ -137,6 +137,10 @@
       <DependentUpon>ListingDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ListingDetail\ListingDetailViewModel.cs" />
+    <Compile Include="Views\ListingEditing\ListingEditingView.xaml.cs">
+      <DependentUpon>ListingEditingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ListingEditing\ListingEditingViewModel.cs" />
     <Compile Include="Views\ListingItem\ListingItemView.xaml.cs">
       <DependentUpon>ListingItemView.xaml</DependentUpon>
     </Compile>
@@ -171,6 +175,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ListingDetail\ListingDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ListingEditing\ListingEditingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

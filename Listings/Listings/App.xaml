@@ -7,11 +7,30 @@
             <Setter Property="FontSize" Value="15" />
         </Style>
 
+        <ControlTemplate x:Key="ErrorTemplate">
+            <Border BorderBrush="Orange" BorderThickness="1">
+                <AdornedElementPlaceholder />
+            </Border>
+        </ControlTemplate>
+
+        <Style x:Key="TextBoxInError" TargetType="TextBox">
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTemplate}" />
+
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" Value="{Binding (Validation.Errors).CurrentItem.ErrorContent, RelativeSource={x:Static RelativeSource.Self}}" />
+                    <Setter Property="BorderBrush" Value="Orange" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <Style x:Key="DefaultPageTitle" TargetType="{x:Type TextBlock}">
             <Setter Property="FontSize" Value="25" />
         </Style>
         
-        <Style x:Key="DefaultTextBox" TargetType="{x:Type TextBox}">
+        <Style x:Key="DefaultTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxInError}">
             <Setter Property="FontSize" Value="17" />
             <Setter Property="Padding" Value="5" />
         </Style>
@@ -19,6 +38,10 @@
         <Style x:Key="DefaultButton" TargetType="{x:Type Button}">
             <Setter Property="FontSize" Value="17" />
             <Setter Property="Padding" Value="5" />
+        </Style>
+
+        <Style x:Key="LabelText" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontWeight" Value="Bold" />
         </Style>
 
         <Style TargetType="{x:Type UserControl}">

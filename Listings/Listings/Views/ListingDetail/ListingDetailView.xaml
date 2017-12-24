@@ -34,7 +34,7 @@
                 </Style>
             </StackPanel.Resources>
             <Button Content="Generovat PDF" />
-            <Button Content="Upravit" />
+            <Button Content="Upravit" Command="{Binding ListingEditCommand}" />
             <Button Content="Odstranit" Command="{Binding ListingDeletionCommand}" Width="125" Style="{StaticResource CriticalButton}" />
         </StackPanel>
 

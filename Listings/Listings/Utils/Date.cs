@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Listings.Comparers;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -45,6 +46,28 @@ namespace Listings.Utils
             }
 
             return list;
+        }
+
+
+        public static List<int> GetYears(int defaultYear, string order = "ASC")
+        {
+            int stopYear = DateTime.Now.Year;
+            List<int> list = new List<int>();
+            for (int year = defaultYear; year <= stopYear; year++) {
+                list.Add(year);
+            }
+
+            switch (order.ToLower()) {
+                case "asc":
+                    return list;
+
+                case "desc":
+                    list.Sort(new SortIntDescending());
+                    return list;
+
+                default:
+                    throw new Exception("Unknown order type");
+            }
         }
     }
 }

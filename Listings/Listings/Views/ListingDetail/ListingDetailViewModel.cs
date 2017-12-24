@@ -77,7 +77,6 @@ namespace Listings.Views
                 if (_listingDeletionCommand == null) {
                     _listingDeletionCommand = new DelegateCommand<object>(p => DeleteListing());
                 }
-
                 return _listingDeletionCommand;
             }
         }
@@ -91,8 +90,20 @@ namespace Listings.Views
                 if (_openListingItemDetailCommand == null) {
                     _openListingItemDetailCommand = new DelegateCommand<int>(p => OpenListingItemDetail(p));
                 }
-
                 return _openListingItemDetailCommand;
+            }
+        }
+
+
+        private DelegateCommand<object> _listingEditCommand;
+        public DelegateCommand<object> ListingEditCommand
+        {
+            get
+            {
+                if (_listingEditCommand == null) {
+                    _listingEditCommand = new DelegateCommand<object>(p => OpenEditing());
+                }
+                return _listingEditCommand;
             }
         }
 
@@ -105,7 +116,6 @@ namespace Listings.Views
                 if (_removeItemCommand == null) {
                     _removeItemCommand = new DelegateCommand<int>(p => RemoveItemByDay(p));
                 }
-
                 return _removeItemCommand;
             }
         }
@@ -119,7 +129,6 @@ namespace Listings.Views
                 if (_copyItemDownCommand == null) {
                     _copyItemDownCommand = new DelegateCommand<int>(p => CopyItemDown(p));
                 }
-
                 return _copyItemDownCommand;
             }
         }
@@ -139,6 +148,17 @@ namespace Listings.Views
         public void ReplaceDayInListBy(ListingItem item)
         {
             _dayItems[item.Day - 1].Update(item);
+        }
+
+
+        public delegate void OpenListingEditingHandler(object sender, ListingArgs args);
+        public event OpenListingEditingHandler OnListingEditingClicked;
+        private void OpenEditing()
+        {
+            OpenListingEditingHandler handler = OnListingEditingClicked;
+            if (handler != null) {
+                handler(this, new ListingArgs(Listing));
+            }
         }
 
 

@@ -5,26 +5,56 @@ using Listings.Facades;
 using Listings.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class ListingViewModel : ViewModel
+    public class ListingEditingViewModel : ViewModel//, IDataErrorInfo
     {
-        private ListingFacade _listingFacade;
-        private EmployerFacade _employerFacade;
+        private string _basicWindowTitle;
+
+        private Listing _listing;
+        public Listing Listing
+        {
+            get { return _listing; }
+            set
+            {
+                _listing = value;
+                RaisePropertyChanged();
+                RefreshEmployers();
+
+                WindowTitle = string.Format("{0} [{1} {2} {3}]", _basicWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));
+
+                _years.Clear();
+                _years.Add(value.Year);
+                _months.Clear();
+                _months.Add(Date.Months[value.Month - 12]);
+                SelectedYear = 0;
+                SelectedMonth = 0;
+
+                if (value.Employer == null || !_employers.Exists(e => e == value.Employer)) {
+                    SelectedEmployer = _promptEmployer;
+                } else {
+                    SelectedEmployer = value.Employer;
+                }
+
+                HourlyWage = value.HourlyWage == null ? null : value.HourlyWage.ToString();
+                Name = value.Name;
+            }
+        }
 
 
-        private List<int> _years = Date.GetYears(2010, "DESC");
+        private List<int> _years = new List<int>();
         public List<int> Years
         {
             get { return _years; }
         }
 
 
-        private List<string> _months = new List<string>(Date.Months);
+        private List<string> _months = new List<string>();
         public List<string> Months
         {
             get { return _months; }
@@ -129,55 +159,76 @@ namespace Listings.Views
         }
 
 
-        public ListingViewModel(ListingFacade listingFacade, EmployerFacade employerFacade, string windowTitle)
+        private ListingFacade _listingFacade;
+        private EmployerFacade _employerFacade;
+        
+        public ListingEditingViewModel(ListingFacade listingFacade, EmployerFacade employerFacade, string windowTitle)
         {
             _listingFacade = listingFacade;
             _employerFacade = employerFacade;
 
-            SelectedYear = DateTime.Now.Year;
-            SelectedMonth = DateTime.Now.Month;
             WindowTitle = windowTitle;
+            _basicWindowTitle = windowTitle;
 
-            SelectedEmployer = _promptEmployer;
+            _selectedEmployer = _promptEmployer;
         }
 
 
-        public void RefreshEmployers()
+        private void RefreshEmployers()
         {
             _employers = _employerFacade.FindAllEmployers();
             _employers.Insert(0, _promptEmployer);
         }
 
 
-        public delegate void NewListingSaveHandler(object sender, ListingArgs args);
-        public event NewListingSaveHandler OnListingCreation;
+        public delegate void ListingSaveHandler(object sender, ListingArgs args);
+        public event ListingSaveHandler OnListingSuccessfullySaved;
         private void SaveListing()
         {
-            Listing newListing = new Listing(SelectedYear, SelectedMonth);
-            if (!string.IsNullOrEmpty(Name)) {
-                newListing.Name = Name;
+            if (Listing == null) {
+                throw new Exception("No Listing is set!");
             }
 
-            if (_selectedEmployer != _promptEmployer) {
-                newListing.Employer = _selectedEmployer;
-            }
+            Listing.Name = string.IsNullOrEmpty(Name) ? null : Name;
+            Listing.HourlyWage = _hourlyWage;
+            Listing.Employer = _selectedEmployer == _promptEmployer ? null : _selectedEmployer;
 
-            if (_hourlyWage != null && _hourlyWage > 0) {
-                newListing.HourlyWage = _hourlyWage;
-            }
+            _listingFacade.Save(Listing);
 
-            _listingFacade.Save(newListing);
-
-            SelectedEmployer = _promptEmployer;
-            HourlyWage = null;
-            SelectedYear = DateTime.Now.Year;
-            SelectedMonth = DateTime.Now.Month;
-
-            NewListingSaveHandler handler = OnListingCreation;
+            ListingSaveHandler handler = OnListingSuccessfullySaved;
             if (handler != null) {
-                handler(this, new ListingArgs(newListing));
+                handler(this, new ListingArgs(Listing));
             }
         }
 
+
+        // -----
+
+
+        /*public string Error
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                switch (columnName) {
+                    case nameof(HourlyWage):
+                        if (!string.IsNullOrEmpty(HourlyWage)) {
+                            if (int.Parse(HourlyWage) < 0) {
+                                return "Hodinová mzda musí být větší než 0";
+                            }
+                        }
+                        break;
+                }
+
+                return string.Empty;
+            }
+        }*/
     }
 }

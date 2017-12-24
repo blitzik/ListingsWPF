@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Listings.Views.ListingView"
+﻿<UserControl x:Class="Listings.Views.ListingEditingView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,9 +6,10 @@
              xmlns:local="clr-namespace:Listings.Views"
              xmlns:converters="clr-namespace:Listings.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="1000">
+             d:DesignHeight="300" d:DesignWidth="700">
     <UserControl.Resources>
         <converters:MonthNameToIntConverter x:Key="MonthNameToIntConverter" />
+        <converters:InverseBooleansToBooleanConverter x:Key="InverseBooleansToBooleanConverter" />
     </UserControl.Resources>
 
     <StackPanel>
@@ -21,7 +22,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="10" />
@@ -35,14 +36,14 @@
                       Grid.Column="0"
                       Padding="8"
                       ItemsSource="{Binding Years}"
-                      SelectedItem="{Binding SelectedYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                      SelectedIndex="{Binding SelectedYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="0" Grid.Column="2" Text="Měsíc" Style="{StaticResource LabelText}" />
             <ComboBox Grid.Row="1"
                       Grid.Column="2"
                       Padding="8"
                       ItemsSource="{Binding Months}"
-                      SelectedItem="{Binding SelectedMonth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MonthNameToIntConverter}}" />
+                      SelectedIndex="{Binding SelectedMonth, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="2" Grid.Column="0" Margin="0 10 0 0" Text="Zaměstnavatel" Style="{StaticResource LabelText}" />
             <ComboBox Grid.Row="3"
@@ -59,7 +60,7 @@
             </ComboBox>
 
             <TextBlock Grid.Row="4" Grid.Column="2" Margin="0 10 0 0" Text="Hodinová mzda" Style="{StaticResource LabelText}" />
-            <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding HourlyWage, UpdateSourceTrigger=PropertyChanged}" MaxLength="60" Style="{StaticResource DefaultTextBox}" HorizontalContentAlignment="Right" />
+            <TextBox Grid.Row="5" Grid.Column="2" Name="HoursWage" Text="{Binding HourlyWage, UpdateSourceTrigger=PropertyChanged}" MaxLength="60" Style="{StaticResource DefaultTextBox}" HorizontalContentAlignment="Right" />
             <TextBlock Grid.Row="5" Grid.Column="4" Text="Kč/h" FontWeight="Bold" VerticalAlignment="Center" />
         </Grid>
 
@@ -78,7 +79,13 @@
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Název výčetky" Style="{StaticResource LabelText}" />
             <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Name}" MaxLength="60" Style="{StaticResource DefaultTextBox}" />
 
-            <Button Grid.Row="2" Grid.Column="2" Margin="0 10 0 0" Content="Uložit" Command="{Binding SaveCommand}" Style="{StaticResource DefaultButton}" />
+            <Button Grid.Row="2" Grid.Column="2" Margin="0 10 0 0" Content="Uložit" Command="{Binding SaveCommand}" Style="{StaticResource DefaultButton}">
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{StaticResource InverseBooleansToBooleanConverter}" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                        <Binding ElementName="HoursWage" Path="(Validation.HasError)" />
+                    </MultiBinding>
+                </Button.IsEnabled>
+            </Button>
         </Grid>
     </StackPanel>
 </UserControl>

@@ -87,21 +87,25 @@
                     <DataTemplate DataType="{x:Type local:ListingsOverviewViewModel}">
                         <local:ListingsOverviewView />
                     </DataTemplate>
-                    <!-- Listing Detail -->
-                    <DataTemplate DataType="{x:Type local:ListingDetailViewModel}">
-                        <local:ListingDetailView />
-                    </DataTemplate>
                     <!-- New Listing -->
                     <DataTemplate DataType="{x:Type local:ListingViewModel}">
                         <local:ListingView />
                     </DataTemplate>
+                    <!-- Listing Detail -->
+                    <DataTemplate DataType="{x:Type local:ListingDetailViewModel}">
+                        <local:ListingDetailView />
+                    </DataTemplate>
+                    <!-- Listing Deletion -->
+                    <DataTemplate DataType="{x:Type local:ListingDeletionViewModel}">
+                        <local:ListingDeletionView />
+                    </DataTemplate>
+                    <!-- Listing Editing -->
+                    <DataTemplate DataType="{x:Type local:ListingEditingViewModel}">
+                        <local:ListingEditingView />
+                    </DataTemplate>
                     <!-- ListingItem Detail -->
                     <DataTemplate DataType="{x:Type local:ListingItemViewModel}">
                         <local:ListingItemView />
-                    </DataTemplate>
-                    <!-- ListingItem Deletion -->
-                    <DataTemplate DataType="{x:Type local:ListingDeletionViewModel}">
-                        <local:ListingDeletionView />
                     </DataTemplate>
                     <!-- Employers -->
                     <DataTemplate DataType="{x:Type local:EmployersViewModel}">

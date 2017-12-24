@@ -54,11 +54,6 @@ namespace Listings.Views
                     _listingsOverviewViewModel.OnListingSelected += (object sender, ListingArgs args) => {
                         ListingDetailViewModel.Listing = args.Listing;
                         ChangeView(nameof(ListingDetailViewModel));
-
-                        /*IObjectContainer db = _listingFacade._db;
-                        args.SelectedListing.AddItem(3, "Lorem ipsum dolor sit amet consecteteur Lorem ipsum dolor sit amet consecteteur Lorem ipsum dolor sit amet consecteteur", new Time("6:00"), new Time("16:00"), new Time("11:00"), new Time("12:00"));
-                        db.Store(args.SelectedListing);
-                        db.Commit();*/
                     };
                 }
 
@@ -73,7 +68,7 @@ namespace Listings.Views
             get
             {
                 if (_listingViewModel == null) {
-                    _listingViewModel = new ListingViewModel(_listingFacade, "Nová výčetka");
+                    _listingViewModel = new ListingViewModel(_listingFacade, _employerFacade, "Nová výčetka");
                     _listingViewModel.OnListingCreation += (object sender, ListingArgs args) => {
                         ListingDetailViewModel.Listing = args.Listing;
                         ChangeView(nameof(ListingDetailViewModel));
@@ -104,6 +99,11 @@ namespace Listings.Views
                         ChangeView(nameof(ListingItemViewModel));
                     };
 
+                    _listingDetailViewModel.OnListingEditingClicked += (object sender, ListingArgs args) => {
+                        ListingEditingViewModel.Listing = args.Listing;
+                        ChangeView(nameof(ListingEditingViewModel));
+                    };
+
                     _listingDetailViewModel.OnListingDeletionClicked += (object sender, ListingArgs args) => {
                         ListingDeletionViewModel.Listing = args.Listing;
                         ChangeView(nameof(ListingDeletionViewModel));
@@ -111,6 +111,23 @@ namespace Listings.Views
                 }
 
                 return _listingDetailViewModel;
+            }
+        }
+
+
+        private ListingEditingViewModel _listingEditingViewModel;
+        public ListingEditingViewModel ListingEditingViewModel
+        {
+            get
+            {
+                if (_listingEditingViewModel == null) {
+                    _listingEditingViewModel = new ListingEditingViewModel(_listingFacade, _employerFacade, "Úprava výčetky");
+                    _listingEditingViewModel.OnListingSuccessfullySaved += (object sender, ListingArgs args) => {
+                        ListingDetailViewModel.Listing = args.Listing;
+                        ChangeView(nameof(ListingDetailViewModel));
+                    };
+                }
+                return _listingEditingViewModel;
             }
         }
 
@@ -151,7 +168,7 @@ namespace Listings.Views
             get
             {
                 if (_employersViewModel == null) {
-                    _employersViewModel = new EmployersViewModel(_employersFacade, "Správa zaměstnavatelů");
+                    _employersViewModel = new EmployersViewModel(_employerFacade, "Správa zaměstnavatelů");
                 }
                 return _employersViewModel;
             }
@@ -159,13 +176,13 @@ namespace Listings.Views
 
 
         private ListingFacade _listingFacade;
-        private EmployerFacade _employersFacade;
+        private EmployerFacade _employerFacade;
 
 
         public MainViewModel(ListingFacade listingFacade, EmployerFacade employersFacade)
         {
             _listingFacade = listingFacade;
-            _employersFacade = employersFacade;
+            _employerFacade = employersFacade;
 
             ChangeView(nameof(ListingsOverviewViewModel));
         }
@@ -185,7 +202,12 @@ namespace Listings.Views
                     break;
 
                 case nameof(ListingViewModel):
+                    ListingViewModel.RefreshEmployers();
                     CurrentViewModel = ListingViewModel;
+                    break;
+
+                case nameof(ListingEditingViewModel):
+                    CurrentViewModel = ListingEditingViewModel;
                     break;
 
                 case nameof(ListingDetailViewModel):

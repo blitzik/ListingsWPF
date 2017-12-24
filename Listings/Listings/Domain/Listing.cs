@@ -13,9 +13,14 @@ namespace Listings.Domain
         private string _name;
         public string Name
         {
-            get { return string.IsNullOrEmpty(_name) ? "Bez názvu" : _name; }
-            set {
-                _name = value;
+            get { return _name; }
+            set
+            {
+                if (string.IsNullOrEmpty(value)) {
+                    _name = "Bez názvu";
+                } else {
+                    _name = value;
+                }
                 RaisePropertyChanged();
             }
         }
@@ -46,6 +51,30 @@ namespace Listings.Domain
                     throw new OutOfRangeException();
                 }
                 _month = value;
+            }
+        }
+
+
+        private int? _hourlyWage;
+        public int? HourlyWage
+        {
+            get { return _hourlyWage; }
+            set
+            {
+                _hourlyWage = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private Employer _employer;
+        public Employer Employer
+        {
+            get { return _employer; }
+            set
+            {
+                _employer = value;
+                RaisePropertyChanged();
             }
         }
 
