@@ -33,9 +33,36 @@
                     <Setter Property="Width" Value="125" />
                 </Style>
             </StackPanel.Resources>
-            <Button Content="Generovat PDF" />
-            <Button Content="Upravit" Command="{Binding ListingEditCommand}" />
-            <Button Content="Odstranit" Command="{Binding ListingDeletionCommand}" Width="125" Style="{StaticResource CriticalButton}" />
+            <Button Padding="5">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="12" Height="15" Fill="#333">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource PdfIcon}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="10 0 0 0" Text="Generovat PDF" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding ListingEditCommand}" Width="Auto" Padding="5">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="12" Height="15" Fill="#333">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource PencilIcon}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="10 0 0 0" Text="Upravit" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding ListingDeletionCommand}" Padding="5" Width="Auto" Style="{StaticResource CriticalButton}">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="12" Height="15" Fill="White">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource DeleteForeverIcon}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="10 0 0 0" Text="Odstranit" />
+                </StackPanel>
+            </Button>
         </StackPanel>
 
         <Border Grid.Row="2">
@@ -182,10 +209,22 @@
                             </Button>
 
                             <!-- Copy button -->
-                            <Button Grid.Column="2" Content="↓" FontSize="17" Visibility="{Binding CanBeCopiedDown, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=reversed}" Command="{Binding ElementName=ScrollViewer, Path=DataContext.CopyItemDownCommand}" CommandParameter="{Binding Day}" Background="#1abc9c" BorderBrush="#1abc9c" Foreground="#FFF" />
+                            <Button Grid.Column="2" FontSize="17" Visibility="{Binding CanBeCopiedDown, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=reversed}" Command="{Binding ElementName=ScrollViewer, Path=DataContext.CopyItemDownCommand}" CommandParameter="{Binding Day}" Background="#1abc9c" BorderBrush="#1abc9c">
+                                <Rectangle Width="14" Height="17" Fill="White">
+                                    <Rectangle.OpacityMask>
+                                        <VisualBrush Stretch="Fill" Visual="{StaticResource ArrowDownIcon}" />
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Button>
 
                             <!-- Delete button -->
-                            <Button Grid.Column="4" Content="×" FontSize="17" Visibility="{Binding CanBeRemoved, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=reversed}" Command="{Binding ElementName=ScrollViewer, Path=DataContext.RemoveItemCommand}" CommandParameter="{Binding Day}" Style="{StaticResource CriticalButton}" />
+                            <Button Grid.Column="4" FontSize="17" Visibility="{Binding CanBeRemoved, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=reversed}" Command="{Binding ElementName=ScrollViewer, Path=DataContext.RemoveItemCommand}" CommandParameter="{Binding Day}" Style="{StaticResource CriticalButton}">
+                                <Rectangle Width="14" Height="14" Fill="White">
+                                    <Rectangle.OpacityMask>
+                                        <VisualBrush Stretch="Fill" Visual="{StaticResource CloseIcon}" />
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Button>
                         </Grid>
 
                         <DataTemplate.Triggers>

@@ -177,6 +177,19 @@ namespace Listings.Views
         }
 
 
+        private SettingsViewModel _settingsViewModel;
+        public SettingsViewModel SettingsViewModel
+        {
+            get
+            {
+                if (_settingsViewModel == null) {
+                    _settingsViewModel = new SettingsViewModel(_listingFacade, "Nastavení");
+                }
+                return _settingsViewModel;
+            }
+        }
+
+
         private ListingFacade _listingFacade;
         private EmployerFacade _employerFacade;
 
@@ -226,6 +239,10 @@ namespace Listings.Views
 
                 case nameof(EmployersViewModel):
                     CurrentViewModel = EmployersViewModel;
+                    break;
+
+                case nameof(SettingsViewModel):
+                    CurrentViewModel = SettingsViewModel;
                     break;
             }
 

@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Listings.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
-             Width="500" HorizontalAlignment="Left">
+             d:DesignHeight="300" d:DesignWidth="500"
+             HorizontalAlignment="Left">
 
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBlock}">
@@ -15,27 +15,41 @@
     </UserControl.Resources>
     
     <StackPanel>
-        <Border Padding="10" Background="#ffebee" BorderBrush="#ef9a9a" BorderThickness="1">
-            <StackPanel>
-                <TextBlock>
-                    Zvolená výčetka bude <TextBlock Text="nenávratně" FontWeight="Bold" /> odstraněna.
-                </TextBlock>
-                <TextBlock Text="Skutečně si přejete výčetku odstranit?" Margin="0 15 0 0" />
+        <Border Width="600" Padding="10" Background="#ffebee" BorderBrush="#ef9a9a" BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-                <TextBlock Margin="0 10 0 0" Text="Zadejte potvrzovací slovo &quot;odstranit&quot;" />
-                <TextBox Text="{Binding ConfirmationText, UpdateSourceTrigger=PropertyChanged}" Margin="0 10 0 0" Padding="10 5" FontSize="16" />
-                
-                <Grid Margin="0 10 0 0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="10" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    
-                    <Button Grid.Column="0" Command="{Binding ReturnBackCommand}" Content="Zpět na detail výčetky" FontSize="17" />
-                    <Button Grid.Column="2" Command="{Binding DeleteListingCommand}" Content="Odstranit" Style="{StaticResource CriticalButton}" FontSize="17" />
-                </Grid>
-            </StackPanel>
+                <Rectangle Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="100" Fill="Red">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource WarningIcon}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock>
+                        Zvolená výčetka bude <TextBlock Text="nenávratně" FontWeight="Bold" /> odstraněna.
+                    </TextBlock>
+                    <TextBlock Text="Skutečně si přejete výčetku odstranit?" Margin="0 15 0 0" />
+
+                    <TextBlock Margin="0 10 0 0" Text="Zadejte potvrzovací slovo &quot;odstranit&quot;" />
+                    <TextBox Text="{Binding ConfirmationText, UpdateSourceTrigger=PropertyChanged}" Margin="0 10 0 0" Padding="10 5" FontSize="16" />
+
+                    <Grid Margin="0 10 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" Command="{Binding ReturnBackCommand}" Content="Zpět na detail výčetky" FontSize="17" />
+                        <Button Grid.Column="2" Command="{Binding DeleteListingCommand}" Content="Odstranit" Style="{StaticResource CriticalButton}" FontSize="17" />
+                    </Grid>
+                </StackPanel>
+            </Grid>
         </Border>
 
     </StackPanel>
