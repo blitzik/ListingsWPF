@@ -68,6 +68,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="10" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -79,7 +80,8 @@
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Název výčetky" Style="{StaticResource LabelText}" />
             <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Name}" MaxLength="60" Style="{StaticResource DefaultTextBox}" />
 
-            <Button Grid.Row="2" Grid.Column="2" Margin="0 10 0 0" Content="Uložit" Command="{Binding SaveCommand}" Style="{StaticResource DefaultButton}">
+            <Button Grid.Row="3" Grid.Column="0" Width="100" Content="Zpět" Command="{Binding ReturnBackCommand}" Style="{StaticResource DefaultButton}" HorizontalAlignment="Left" />
+            <Button Grid.Row="3" Grid.Column="2" Content="Uložit" Command="{Binding SaveCommand}" Style="{StaticResource DefaultButton}">
                 <Button.IsEnabled>
                     <MultiBinding Converter="{StaticResource InverseBooleansToBooleanConverter}" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding ElementName="HoursWage" Path="(Validation.HasError)" />

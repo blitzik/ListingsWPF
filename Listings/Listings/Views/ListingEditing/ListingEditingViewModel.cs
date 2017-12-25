@@ -159,6 +159,19 @@ namespace Listings.Views
         }
 
 
+        private DelegateCommand<object> _returnBackCommand;
+        public DelegateCommand<object> ReturnBackCommand
+        {
+            get
+            {
+                if (_returnBackCommand == null) {
+                    _returnBackCommand = new DelegateCommand<object>(p => ReturnBack());
+                }
+                return _returnBackCommand;
+            }
+        }
+
+
         private ListingFacade _listingFacade;
         private EmployerFacade _employerFacade;
         
@@ -196,6 +209,17 @@ namespace Listings.Views
             _listingFacade.Save(Listing);
 
             ListingSaveHandler handler = OnListingSuccessfullySaved;
+            if (handler != null) {
+                handler(this, new ListingArgs(Listing));
+            }
+        }
+
+
+        public delegate void ReturnBackHandler(object sender, ListingArgs args);
+        public event ReturnBackHandler OnReturnBackClicked;
+        private void ReturnBack()
+        {
+            ReturnBackHandler handler = OnReturnBackClicked;
             if (handler != null) {
                 handler(this, new ListingArgs(Listing));
             }

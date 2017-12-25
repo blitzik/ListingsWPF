@@ -16,7 +16,7 @@
         <converters:NegateBoolConverter x:Key="NegateBoolConverter" />
     </UserControl.Resources>
     
-    <StackPanel>
+    <StackPanel Width="875" HorizontalAlignment="Left">
         <StackPanel.Resources>
             <Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBox}">
                 <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -136,8 +136,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Content="Zpět na detail výčetky" Command="{Binding ReturnBackToListingDetailCommand}" Width="150" HorizontalAlignment="Left" />
-            <Button Grid.Column="2" Content="Uložit" Command="{Binding SaveListingItemCommand}" Width="150" HorizontalAlignment="Right" />
+            <Button Grid.Column="0" Content="Zpět na detail výčetky" Command="{Binding ReturnBackToListingDetailCommand}" Width="225" Style="{StaticResource DefaultButton}" HorizontalAlignment="Left" />
+            <Button Grid.Column="2" Content="Uložit" Command="{Binding SaveListingItemCommand}" Width="150" Style="{StaticResource DefaultButton}" HorizontalAlignment="Right" />
         </Grid>
 
     </StackPanel>

@@ -145,7 +145,7 @@ namespace Listings.Views
         }
 
 
-        private int HoursTick = (new Time("00:15:00")).TotalSeconds;
+        private int HoursTick = (new Time("00:05:00")).TotalSeconds;
 
 
         private DelegateCommand<object> _shiftStartAddCommand;

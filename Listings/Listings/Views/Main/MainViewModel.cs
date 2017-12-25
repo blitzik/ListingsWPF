@@ -123,7 +123,9 @@ namespace Listings.Views
                 if (_listingEditingViewModel == null) {
                     _listingEditingViewModel = new ListingEditingViewModel(_listingFacade, _employerFacade, "Úprava výčetky");
                     _listingEditingViewModel.OnListingSuccessfullySaved += (object sender, ListingArgs args) => {
-                        ListingDetailViewModel.Listing = args.Listing;
+                        ChangeView(nameof(ListingDetailViewModel));
+                    };
+                    _listingEditingViewModel.OnReturnBackClicked += (object sender, ListingArgs args) => {
                         ChangeView(nameof(ListingDetailViewModel));
                     };
                 }

@@ -154,9 +154,7 @@ namespace Listings.Views
         private void SaveListing()
         {
             Listing newListing = new Listing(SelectedYear, SelectedMonth);
-            if (!string.IsNullOrEmpty(Name)) {
-                newListing.Name = Name;
-            }
+            newListing.Name = Name;
 
             if (_selectedEmployer != _promptEmployer) {
                 newListing.Employer = _selectedEmployer;
