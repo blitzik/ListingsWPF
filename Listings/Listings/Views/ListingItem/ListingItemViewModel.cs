@@ -105,6 +105,28 @@ namespace Listings.Views
         }
 
 
+        private bool _noTime;
+        public bool NoTime
+        {
+            get { return _noTime; }
+            set
+            {
+                _noTime = value;
+                RaisePropertyChanged();
+                if (value == true) {
+                    StartTime = 0;
+                    EndTime = 0;
+                    LunchStart = 0;
+                    LunchEnd = 0;
+                    OtherHours = 0;
+                    NoLunch = false;
+                } else {
+                    SetDefaultTime();
+                }
+            }
+        }
+
+
         public Time WorkedHours
         {
             get { return new Time(_endTime - _startTime - (_lunchEnd - _lunchStart) + _otherHours); }
@@ -134,7 +156,7 @@ namespace Listings.Views
                 if (_shiftStartAddCommand == null) {
                     _shiftStartAddCommand = new DelegateCommand<object>(
                         p => StartTime += HoursTick,
-                        p => (NoLunch == false && StartTime < LunchStart) || (NoLunch == true && (StartTime + HoursTick) < EndTime)
+                        p => ((NoLunch == false && StartTime < LunchStart) || (NoLunch == true && (StartTime + HoursTick) < EndTime)) && NoTime == false
                     );
                 }
                 return _shiftStartAddCommand;
@@ -150,7 +172,7 @@ namespace Listings.Views
                 if (_shiftStartSubCommand == null) {
                     _shiftStartSubCommand = new DelegateCommand<object>(
                         p => StartTime -= HoursTick,
-                        p => StartTime > 0
+                        p => StartTime > 0 && NoTime == false
                     );
                 }
                 return _shiftStartSubCommand;
@@ -166,7 +188,7 @@ namespace Listings.Views
                 if (_shiftEndAddCommand == null) {
                     _shiftEndAddCommand = new DelegateCommand<object>(
                         p => EndTime += HoursTick,
-                        p => EndTime < 86400 // EndTime < 24:00
+                        p => EndTime < 86400 && NoTime == false // EndTime < 24:00
                     );
                 }
                 return _shiftEndAddCommand;
@@ -182,7 +204,7 @@ namespace Listings.Views
                 if (_shiftEndSubCommand == null) {
                     _shiftEndSubCommand = new DelegateCommand<object>(
                         p => EndTime -= HoursTick,
-                        p => (NoLunch == false && EndTime > LunchEnd) || (NoLunch == true && EndTime > (StartTime + HoursTick))
+                        p => ((NoLunch == false && EndTime > LunchEnd) || (NoLunch == true && EndTime > (StartTime + HoursTick))) && NoTime == false
                     );
                 }
                 return _shiftEndSubCommand;
@@ -198,7 +220,7 @@ namespace Listings.Views
                 if (_lunchStartAddCommand == null) {
                     _lunchStartAddCommand = new DelegateCommand<object>(
                         p => LunchStart += HoursTick,
-                        p => NoLunch == false && (LunchStart + HoursTick) < LunchEnd
+                        p => NoLunch == false && (LunchStart + HoursTick) < LunchEnd && NoTime == false
                     );
                 }
                 return _lunchStartAddCommand;
@@ -214,7 +236,7 @@ namespace Listings.Views
                 if (_lunchStartSubCommand == null) {
                     _lunchStartSubCommand = new DelegateCommand<object>(
                         p => LunchStart -= HoursTick,
-                        p => NoLunch == false && LunchStart > StartTime
+                        p => NoLunch == false && LunchStart > StartTime && NoTime == false
                     );
                 }
                 return _lunchStartSubCommand;
@@ -230,7 +252,7 @@ namespace Listings.Views
                 if (_lunchEndAddCommand == null) {
                     _lunchEndAddCommand = new DelegateCommand<object>(
                         p => LunchEnd += HoursTick,
-                        p => NoLunch == false && LunchEnd < EndTime
+                        p => NoLunch == false && LunchEnd < EndTime && NoTime == false
                     );
                 }
                 return _lunchEndAddCommand;
@@ -246,7 +268,7 @@ namespace Listings.Views
                 if (_lunchEndSubCommand == null) {
                     _lunchEndSubCommand = new DelegateCommand<object>(
                         p => LunchEnd -= HoursTick,
-                        p => NoLunch == false && LunchEnd > (LunchStart + HoursTick)
+                        p => NoLunch == false && LunchEnd > (LunchStart + HoursTick) && NoTime == false
                     );
                 }
                 return _lunchEndSubCommand;
@@ -262,7 +284,7 @@ namespace Listings.Views
                 if (_otherHoursAddCommand == null) {
                     _otherHoursAddCommand = new DelegateCommand<object>(
                         p => OtherHours += HoursTick,
-                        p => WorkedHours >= 0
+                        p => WorkedHours >= 0 && NoTime == false
                     );
                 }
                 return _otherHoursAddCommand;
@@ -278,7 +300,7 @@ namespace Listings.Views
                 if (_otherHoursSubCommand == null) {
                     _otherHoursSubCommand = new DelegateCommand<object>(
                         p => OtherHours -= HoursTick,
-                        p => OtherHours > 0
+                        p => OtherHours > 0 && NoTime == false
                     );
                 }
                 return _otherHoursSubCommand;
@@ -331,17 +353,28 @@ namespace Listings.Views
                 _otherHours = l.OtherHours.TotalSeconds;
                 _locality = l.Locality;
             } else {
-                _startTime = (new Time("06:00").TotalSeconds);
-                _endTime = (new Time("16:00").TotalSeconds);
-                _lunchStart = (new Time("11:00").TotalSeconds);
-                _lunchEnd = (new Time("12:00").TotalSeconds);
-                _otherHours = (new Time().TotalSeconds);
+                SetDefaultTime();
             }
 
+            _noTime = false;
             _noLunch = false;
-            if (_lunchStart == 0 && _lunchEnd == 0) {
-                _noLunch = true;
+            if (_startTime == 0 && _endTime == 0 && _lunchStart == 0 && _lunchEnd == 0 && _otherHours == 0) {
+                _noTime = true;
+            } else {
+                if (_lunchStart == 0 && _lunchEnd == 0) {
+                    _noLunch = true;
+                }
             }
+        }
+
+
+        private void SetDefaultTime()
+        {
+            StartTime = (new Time("06:00").TotalSeconds);
+            EndTime = (new Time("16:00").TotalSeconds);
+            LunchStart = (new Time("11:00").TotalSeconds);
+            LunchEnd = (new Time("12:00").TotalSeconds);
+            OtherHours = (new Time().TotalSeconds);
         }
 
 
@@ -379,18 +412,18 @@ namespace Listings.Views
 
         private void UpdateCommandsCanExecute()
         {
-            _shiftStartAddCommand.RaiseCanExecuteChanged();
-            _shiftStartSubCommand.RaiseCanExecuteChanged();
-            _shiftEndAddCommand.RaiseCanExecuteChanged();
-            _shiftEndSubCommand.RaiseCanExecuteChanged();
+            ShiftStartAddCommand.RaiseCanExecuteChanged();
+            ShiftStartSubCommand.RaiseCanExecuteChanged();
+            ShiftEndAddCommand.RaiseCanExecuteChanged();
+            ShiftEndSubCommand.RaiseCanExecuteChanged();
 
-            _lunchStartAddCommand.RaiseCanExecuteChanged();
-            _lunchStartSubCommand.RaiseCanExecuteChanged();
-            _lunchEndAddCommand.RaiseCanExecuteChanged();
-            _lunchEndSubCommand.RaiseCanExecuteChanged();
+            LunchStartAddCommand.RaiseCanExecuteChanged();
+            LunchStartSubCommand.RaiseCanExecuteChanged();
+            LunchEndAddCommand.RaiseCanExecuteChanged();
+            LunchEndSubCommand.RaiseCanExecuteChanged();
 
-            _otherHoursAddCommand.RaiseCanExecuteChanged();
-            _otherHoursSubCommand.RaiseCanExecuteChanged();
+            OtherHoursAddCommand.RaiseCanExecuteChanged();
+            OtherHoursSubCommand.RaiseCanExecuteChanged();
         }
 
         

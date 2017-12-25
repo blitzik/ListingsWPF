@@ -13,6 +13,7 @@
         <converters:TimeToIntConverter x:Key="TimeToIntConverter" />
         <converters:IntToTimeConverter x:Key="IntToTimeConverter" />
         <converters:TimeToTimeInWordsConverter x:Key="TimeToTimeInWordsConverter" />
+        <converters:NegateBoolConverter x:Key="NegateBoolConverter" />
     </UserControl.Resources>
     
     <StackPanel>
@@ -80,13 +81,13 @@
             <Button Grid.Row="6" Grid.Column="10" Content="+" Command="{Binding LunchEndAddCommand}" />
 
             <!-- Lunch checkbox -->
-            <StackPanel Name="StackPanel1" HorizontalAlignment="Left" Height="27" Grid.Row="6" Grid.Column="13" Grid.ColumnSpan="5">
+            <!--<StackPanel Name="StackPanel1" HorizontalAlignment="Left" Height="27" Grid.Row="6" Grid.Column="13" Grid.ColumnSpan="5">
                 <Viewbox Height="{Binding Path=ActualHeight, ElementName=StackPanel1}">
                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding NoLunch, UpdateSourceTrigger=PropertyChanged}">
                         <TextBlock Text="bez oběda" Margin="0 -2 0 0" FontSize="15" />
                     </CheckBox>
                 </Viewbox>
-            </StackPanel>
+            </StackPanel>-->
 
             <!-- Other Hours -->
             <TextBlock Grid.Row="0" Grid.Column="13" Grid.ColumnSpan="5" Text="Ostatní hodiny" Style="{StaticResource LabelText}" />
@@ -97,8 +98,21 @@
             <!-- Worked Hours -->
             <TextBlock Grid.Row="0" Grid.Column="21" Text="Odpr. hodin" Style="{StaticResource LabelText}" />
             <TextBox Grid.Row="2" Grid.RowSpan="5" Grid.Column="25" FontSize="28" VerticalContentAlignment="Center" IsReadOnly="True" Text="{Binding WorkedHours, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeToTimeInWordsConverter}}" />
-
         </Grid>
+
+
+        <StackPanel Margin="0 25 0 10" Orientation="Horizontal">
+            <!-- Total time checkbox -->
+            <CheckBox VerticalAlignment="Center" Margin="0 0 30 0" IsChecked="{Binding NoTime, UpdateSourceTrigger=PropertyChanged}">
+                <TextBlock Text="žádný čas" Margin="0 -2 0 0" FontSize="15" />
+            </CheckBox>
+
+            <!-- Lunch checkbox -->
+            <CheckBox VerticalAlignment="Center" IsChecked="{Binding NoLunch, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NoTime, Converter={StaticResource NegateBoolConverter}}">
+                <TextBlock Text="bez oběda" Margin="0 -2 0 0" FontSize="15" />
+            </CheckBox>
+        </StackPanel>
+        
 
         <Grid Margin="0 15 0 15">
             <Grid.RowDefinitions>

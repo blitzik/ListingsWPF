@@ -100,6 +100,19 @@ namespace Listings.Domain
         }
 
 
+        public bool HasNoTime
+        {
+            get
+            {
+                if (_shiftStart == 0 && _shiftEnd == 0 && _shiftLunchStart == 0 && _shiftLunchEnd == 0 && _otherHours == 0) {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+
         public ListingItem(Listing listing, int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
         {
             Listing = listing;
@@ -115,17 +128,19 @@ namespace Listings.Domain
 
         private void ChangeHours(Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
         {
-            if (start >= end) {
-                throw new WorkedHoursRangeException();
-            }
-
-            if (!(lunchStart == 0 && lunchEnd == 0)) {
-                if (lunchStart >= lunchEnd) {
-                    throw new LunchHoursRangeException();
+            if (!(start == 0 && end == 0 && lunchStart == 0 && lunchEnd == 0 && otherHours == 0)) {
+                if (start >= end) {
+                    throw new WorkedHoursRangeException();
                 }
 
-                if (lunchStart < start || lunchEnd > end) {
-                    throw new LunchHoursOutOfWorkedHoursRangeException();
+                if (!(lunchStart == 0 && lunchEnd == 0)) {
+                    if (lunchStart >= lunchEnd) {
+                        throw new LunchHoursRangeException();
+                    }
+
+                    if (lunchStart < start || lunchEnd > end) {
+                        throw new LunchHoursOutOfWorkedHoursRangeException();
+                    }
                 }
             }
 

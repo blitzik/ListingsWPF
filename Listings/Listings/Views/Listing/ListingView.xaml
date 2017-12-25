@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Listings.Views"
              xmlns:converters="clr-namespace:Listings.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="1000">
+             d:DesignHeight="500" d:DesignWidth="600">
     <UserControl.Resources>
         <converters:MonthNameToIntConverter x:Key="MonthNameToIntConverter" />
     </UserControl.Resources>

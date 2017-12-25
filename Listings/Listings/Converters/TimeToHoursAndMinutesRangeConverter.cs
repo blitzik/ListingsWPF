@@ -19,7 +19,7 @@ namespace Listings.Converters
             Time start = (Time)values[0];
             Time end = (Time)values[1];
 
-            return string.Format("{0} - {1}", start.HoursAndMinutes, end.HoursAndMinutes);
+            return string.Format("{0} - {1}", start != 0 ? start.HoursAndMinutes : "", end != 0 ? end.HoursAndMinutes : "");
         }
 
 
