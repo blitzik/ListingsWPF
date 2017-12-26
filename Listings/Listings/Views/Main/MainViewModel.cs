@@ -89,7 +89,7 @@ namespace Listings.Views
                     _listingDetailViewModel = new ListingDetailViewModel(_listingFacade, "Detail výčetky");
                     _listingDetailViewModel.OnListingItemClicked += (object sender, SelectedDayItemArgs args) => {
                         _listingItemViewModel = new ListingItemViewModel(_listingFacade, args.DayItem, "Detail položky");
-                        _listingItemViewModel.OnListingItemSaving += (object s, ListingItemArgs a) => {
+                        _listingItemViewModel.OnListingItemSaved += (object s, ListingItemArgs a) => {
                             _listingDetailViewModel.ReplaceDayInListBy(a.ListingItem);
                             ChangeView(nameof(ListingDetailViewModel));
                         };
@@ -226,6 +226,7 @@ namespace Listings.Views
                     break;
 
                 case nameof(ListingDetailViewModel):
+                    ListingDetailViewModel.RefreshWindowTitle();
                     CurrentViewModel = ListingDetailViewModel;
                     break;
 

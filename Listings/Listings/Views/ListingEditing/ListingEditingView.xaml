@@ -78,7 +78,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Název výčetky" Style="{StaticResource LabelText}" />
-            <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Name}" MaxLength="60" Style="{StaticResource DefaultTextBox}" />
+            <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Name}" MaxLength="50" Style="{StaticResource DefaultTextBox}" />
 
             <Button Grid.Row="3" Grid.Column="0" Width="100" Content="Zpět" Command="{Binding ReturnBackCommand}" Style="{StaticResource DefaultButton}" HorizontalAlignment="Left" />
             <Button Grid.Row="3" Grid.Column="2" Content="Uložit" Command="{Binding SaveCommand}" Style="{StaticResource DefaultButton}">

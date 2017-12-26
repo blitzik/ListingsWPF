@@ -98,10 +98,13 @@
     <Compile Include="Domain\BindableObject.cs" />
     <Compile Include="Domain\DayItem.cs" />
     <Compile Include="Domain\Employer.cs" />
+    <Compile Include="Domain\ListingSetting.cs" />
+    <Compile Include="Domain\TimeSetting.cs" />
     <Compile Include="Domain\Week.cs" />
     <Compile Include="EventArguments\SelectedDayItemArgs.cs" />
     <Compile Include="EventArguments\ListingArgs.cs" />
     <Compile Include="EventArguments\ListingItemArgs.cs" />
+    <Compile Include="EventArguments\WorkedTimeEventArgs.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Exceptions\ListingItemAlreadyExistsException.cs" />
     <Compile Include="Exceptions\LunchHoursOutOfWorkedHoursRangeException.cs" />
@@ -111,6 +114,7 @@
     <Compile Include="Facades\EmployerFacade.cs" />
     <Compile Include="Facades\ListingFacade.cs" />
     <Compile Include="Services\Db4oObjectContainerFactory.cs" />
+    <Compile Include="Services\WorkedTimeViewModel.cs" />
     <Compile Include="Utils\Date.cs" />
     <Compile Include="Utils\Time.cs" />
     <Compile Include="Views\Employers\EmployerDeletion\EmployerDeletionView.xaml.cs">

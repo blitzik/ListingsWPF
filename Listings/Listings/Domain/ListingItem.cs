@@ -128,27 +128,13 @@ namespace Listings.Domain
 
         private void ChangeHours(Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
         {
-            if (!(start == 0 && end == 0 && lunchStart == 0 && lunchEnd == 0 && otherHours == 0)) {
-                if (start >= end) {
-                    throw new WorkedHoursRangeException();
-                }
+            TimeSetting ts = new TimeSetting(start, end, lunchStart, lunchEnd, otherHours);
 
-                if (!(lunchStart == 0 && lunchEnd == 0)) {
-                    if (lunchStart >= lunchEnd) {
-                        throw new LunchHoursRangeException();
-                    }
-
-                    if (lunchStart < start || lunchEnd > end) {
-                        throw new LunchHoursOutOfWorkedHoursRangeException();
-                    }
-                }
-            }
-
-            _shiftStart = start;
-            _shiftEnd = end;
-            _shiftLunchStart = lunchStart;
-            _shiftLunchEnd = lunchEnd;
-            _otherHours = otherHours;
+            _shiftStart = ts.Start;
+            _shiftEnd = ts.End;
+            _shiftLunchStart = ts.LunchStart;
+            _shiftLunchEnd = ts.LunchEnd;
+            _otherHours = ts.OtherHours;
         }
 
     }

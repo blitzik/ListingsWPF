@@ -20,7 +20,7 @@
             <ColumnDefinition Width="400" />
         </Grid.ColumnDefinitions>
         
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Přehled zaměstnavatelů" Margin="0 0 0 10" Style="{StaticResource DefaultPageTitle}" />
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Přehled zaměstnavatelů" Margin="0 0 0 10" Style="{StaticResource DefaultHeader}" />
         <Grid Grid.Row="2" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20" />
@@ -43,7 +43,7 @@
             </ScrollViewer>
         </Grid>
 
-        <TextBlock Grid.Row="0" Grid.Column="2" Text="Nový zaměstnavatel" Style="{StaticResource DefaultPageTitle}" />
+        <TextBlock Grid.Row="0" Grid.Column="2" Text="Nový zaměstnavatel" Style="{StaticResource DefaultHeader}" />
         <StackPanel Grid.Row="2" Grid.Column="2">
             <TextBlock Text="Název zaměstnavatele" Margin="0 0 0 5" />
             <TextBox Text="{Binding NewEmployerName, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 0 10" Style="{StaticResource DefaultTextBox}" />

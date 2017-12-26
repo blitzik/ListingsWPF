@@ -23,8 +23,8 @@ namespace Listings.Views
             set
             {
                 _listing = value;
+                RefreshWindowTitle();
                 InitializeData();
-                WindowTitle = string.Format("{0} [{1} {2} {3}]", _basicWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));
                 RaisePropertyChanged();
             }
         }
@@ -209,6 +209,12 @@ namespace Listings.Views
             _dayItems[day].Update(newItem);
 
             _listingFacade.Save(Listing);
+        }
+
+
+        public void RefreshWindowTitle()
+        {
+            WindowTitle = string.Format("{0} [{1} {2} {3}]", _basicWindowTitle, Date.Months[12 - Listing.Month], Listing.Year, string.Format("- {0}", Listing.Name));
         }
 
 
