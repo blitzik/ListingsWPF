@@ -1,4 +1,5 @@
 ﻿using Listings.Commands;
+using Listings.Domain;
 using Listings.EventArguments;
 using Listings.Utils;
 using System;
@@ -17,10 +18,14 @@ namespace Listings.Views
             get { return _startTime; }
             set
             {
+                TimeSetting.CheckTime(value, EndTime, LunchStart, LunchEnd, OtherHours);
+
                 _startTime = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(WorkedHours));
+                SetFlags();
                 UpdateCommandsCanExecute();
+                ProcessEventOnTimeChanged();
             }
         }
 
@@ -31,10 +36,14 @@ namespace Listings.Views
             get { return _endTime; }
             set
             {
+                TimeSetting.CheckTime(StartTime, value, LunchStart, LunchEnd, OtherHours);
+
                 _endTime = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(WorkedHours));
+                SetFlags();
                 UpdateCommandsCanExecute();
+                ProcessEventOnTimeChanged();
             }
         }
 
@@ -45,10 +54,14 @@ namespace Listings.Views
             get { return _lunchStart; }
             set
             {
+                TimeSetting.CheckTime(StartTime, EndTime, value, LunchEnd, OtherHours);
+
                 _lunchStart = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(WorkedHours));
+                SetFlags();
                 UpdateCommandsCanExecute();
+                ProcessEventOnTimeChanged();
             }
         }
 
@@ -59,10 +72,14 @@ namespace Listings.Views
             get { return _lunchEnd; }
             set
             {
+                TimeSetting.CheckTime(StartTime, EndTime, LunchStart, value, OtherHours);
+
                 _lunchEnd = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(WorkedHours));
+                SetFlags();
                 UpdateCommandsCanExecute();
+                ProcessEventOnTimeChanged();
             }
         }
 
@@ -73,10 +90,14 @@ namespace Listings.Views
             get { return _otherHours; }
             set
             {
+                TimeSetting.CheckTime(StartTime, EndTime, LunchStart, LunchEnd, value);
+
                 _otherHours = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(WorkedHours));
+                SetFlags();
                 UpdateCommandsCanExecute();
+                ProcessEventOnTimeChanged();
             }
         }
 
@@ -89,14 +110,21 @@ namespace Listings.Views
             {
                 _noLunch = value;
                 RaisePropertyChanged();
+
                 if (value == true) {
-                    LunchStart = 0;
-                    LunchEnd = 0;
+                    _lunchStart = 0;
+                    _lunchEnd = 0;
 
                 } else {
-                    LunchStart = StartTime;
-                    LunchEnd = EndTime;
+                    _lunchStart = StartTime;
+                    _lunchEnd = EndTime;
                 }
+
+                RaisePropertyChanged(nameof(LunchStart));
+                RaisePropertyChanged(nameof(LunchEnd));
+                RaisePropertyChanged(nameof(WorkedHours));
+
+                ProcessEventOnTimeChanged();
             }
         }
 
@@ -110,15 +138,27 @@ namespace Listings.Views
                 _noTime = value;
                 RaisePropertyChanged();
                 if (value == true) {
-                    StartTime = 0;
-                    EndTime = 0;
-                    LunchStart = 0;
-                    LunchEnd = 0;
-                    OtherHours = 0;
-                    NoLunch = false;
+                    _startTime = 0;
+                    _endTime = 0;
+                    _lunchStart = 0;
+                    _lunchEnd = 0;
+                    _otherHours = 0;
+                    _noLunch = false;
+
+                    RaisePropertyChanged(nameof(StartTime));
+                    RaisePropertyChanged(nameof(EndTime));
+                    RaisePropertyChanged(nameof(LunchStart));
+                    RaisePropertyChanged(nameof(LunchEnd));
+                    RaisePropertyChanged(nameof(OtherHours));
+                    RaisePropertyChanged(nameof(WorkedHours));
+                    RaisePropertyChanged(nameof(NoLunch));
+                    UpdateCommandsCanExecute();
+
                 } else {
                     SetDefaultTimes();
                 }
+
+                ProcessEventOnTimeChanged();
             }
         }
 
@@ -292,40 +332,83 @@ namespace Listings.Views
         }
 
 
-        // Default Times
-        public WorkedTimeSettingViewModel()
+        public delegate void TimeChangedHandler(object sender, WorkedTimeEventArgs args);
+        public event TimeChangedHandler OnTimeChanged;
+        
+
+        private TimeSetting _defaultTimeSettings;
+
+
+        public WorkedTimeSettingViewModel(TimeSetting defaultTimeSettings, TimeSetting timeSetting)
         {
-            SetDefaultTimes();
-        }
+            _defaultTimeSettings = defaultTimeSettings;
 
+            _startTime = timeSetting.Start.TotalSeconds;
+            _endTime = timeSetting.End.TotalSeconds;
+            _lunchStart = timeSetting.LunchStart.TotalSeconds;
+            _lunchEnd = timeSetting.LunchEnd.TotalSeconds;
+            _otherHours = timeSetting.OtherHours.TotalSeconds;
 
-        public WorkedTimeSettingViewModel(Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
-        {
-            StartTime = start.TotalSeconds;
-            EndTime = end.TotalSeconds;
-            LunchStart = lunchStart.TotalSeconds;
-            LunchEnd = lunchEnd.TotalSeconds;
-            OtherHours = otherHours.TotalSeconds;
-
-            _noTime = false;
-            _noLunch = false;
-            if (start == 0 && end == 0 && lunchStart == 0 && lunchEnd == 0 && otherHours == 0) {
-                _noTime = true;
-            } else {
-                if (lunchStart == 0 && lunchEnd == 0) {
-                    _noLunch = true;
-                }
-            }
+            SetFlags();
         }
 
 
         private void SetDefaultTimes()
         {
-            StartTime = (new Time("06:00").TotalSeconds);
-            EndTime = (new Time("16:00").TotalSeconds);
-            LunchStart = (new Time("11:00").TotalSeconds);
-            LunchEnd = (new Time("12:00").TotalSeconds);
-            OtherHours = (new Time().TotalSeconds);
+            TimeSetting setting;
+            if (_defaultTimeSettings.HasNoTime) {
+                // if default time has no time, we have to set some time otherwise there is no way of setting different time from default "HasNoTime"
+                setting = new TimeSetting(
+                    new Time("06:00"),
+                    new Time("14:30"),
+                    new Time("10:30"),
+                    new Time("11:00"),
+                    new Time("00:00")
+                );
+
+            } else {
+                setting = _defaultTimeSettings;
+            }
+
+            _startTime = (setting.Start.TotalSeconds);
+            RaisePropertyChanged(nameof(StartTime));
+
+            _endTime = (setting.End.TotalSeconds);
+            RaisePropertyChanged(nameof(EndTime));
+
+            _lunchStart = (setting.LunchStart.TotalSeconds);
+            RaisePropertyChanged(nameof(LunchStart));
+
+            _lunchEnd = (setting.LunchEnd.TotalSeconds);
+            RaisePropertyChanged(nameof(LunchEnd));
+
+            _otherHours = (setting.OtherHours.TotalSeconds);
+            RaisePropertyChanged(nameof(OtherHours));
+
+            RaisePropertyChanged(nameof(WorkedHours));
+
+            SetFlags();
+            UpdateCommandsCanExecute();
+        }
+
+
+        private void SetFlags()
+        {
+            if (_startTime == 0 && _endTime == 0 && _lunchStart == 0 && _lunchEnd == 0 && _otherHours == 0) {
+                _noTime = true;
+                _noLunch = false;
+
+            } else {
+                _noTime = false;
+                if (_lunchStart == 0 && _lunchEnd == 0) {
+                    _noLunch = true;
+                } else {
+                    _noLunch = false;
+                }
+            }
+
+            RaisePropertyChanged(nameof(NoTime));
+            RaisePropertyChanged(nameof(NoLunch));
         }
 
 
@@ -343,6 +426,14 @@ namespace Listings.Views
 
             OtherHoursAddCommand.RaiseCanExecuteChanged();
             OtherHoursSubCommand.RaiseCanExecuteChanged();
+        }
+
+
+        private void ProcessEventOnTimeChanged()
+        {
+            if (OnTimeChanged != null) {
+                OnTimeChanged(this, new WorkedTimeEventArgs(new Time(StartTime), new Time(EndTime), new Time(LunchStart), new Time(LunchEnd), new Time(OtherHours)));
+            }
         }
     }
 

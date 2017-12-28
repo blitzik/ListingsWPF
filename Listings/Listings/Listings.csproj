@@ -97,8 +97,8 @@
     <Compile Include="Converters\ViewModelToBooleanConverter.cs" />
     <Compile Include="Domain\BindableObject.cs" />
     <Compile Include="Domain\DayItem.cs" />
+    <Compile Include="Domain\DefaultSettings.cs" />
     <Compile Include="Domain\Employer.cs" />
-    <Compile Include="Domain\ListingSetting.cs" />
     <Compile Include="Domain\TimeSetting.cs" />
     <Compile Include="Domain\Week.cs" />
     <Compile Include="EventArguments\SelectedDayItemArgs.cs" />

@@ -62,12 +62,15 @@ namespace Listings.Views
 
 
         private ListingFacade _listingFacade;
+        
         private DayItem _dayItem;
+        private DefaultSettings _defaultSettings;
 
 
-        public ListingItemViewModel(ListingFacade listingFacade, DayItem dayItem, string windowTitle)
+        public ListingItemViewModel(ListingFacade listingFacade, DayItem dayItem, DefaultSettings defaultSettings, string windowTitle)
         {
             _listingFacade = listingFacade;
+            _defaultSettings = defaultSettings;
             WindowTitle = windowTitle;
 
             _dayItem = dayItem;
@@ -75,16 +78,10 @@ namespace Listings.Views
                 ListingItem l = dayItem.ListingItem;
                 _locality = l.Locality;
 
-                _workedTimeViewModel = new WorkedTimeSettingViewModel(
-                    l.TimeSetting.Start,
-                    l.TimeSetting.End,
-                    l.TimeSetting.LunchStart,
-                    l.TimeSetting.LunchEnd,
-                    l.TimeSetting.OtherHours
-                );
+                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSettings.Time, l.TimeSetting);
 
             } else {
-                _workedTimeViewModel = new WorkedTimeSettingViewModel();
+                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSettings.Time, _defaultSettings.Time);
             }
         }
 

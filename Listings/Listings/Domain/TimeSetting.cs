@@ -87,7 +87,31 @@ namespace Listings.Domain
         }
 
 
-        private void CheckTime(Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
+        public static void CheckTime(Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
+        {
+            if (!(start == 0 && end == 0 && lunchStart == 0 && lunchEnd == 0 && otherHours == 0)) {
+                if (start >= end) {
+                    throw new WorkedHoursRangeException();
+                }
+
+                if (!(lunchStart == 0 && lunchEnd == 0)) {
+                    if (lunchStart >= lunchEnd) {
+                        throw new LunchHoursRangeException();
+                    }
+
+                    if (lunchStart < start || lunchEnd > end) {
+                        throw new LunchHoursOutOfWorkedHoursRangeException();
+                    }
+                }
+
+                if ((end - start - (lunchEnd - lunchStart) + otherHours) < 0) {
+                    throw new OtherHoursException();
+                }
+            }
+        }
+
+
+        public static void CheckTime(int start, int end, int lunchStart, int lunchEnd, int otherHours)
         {
             if (!(start == 0 && end == 0 && lunchStart == 0 && lunchEnd == 0 && otherHours == 0)) {
                 if (start >= end) {

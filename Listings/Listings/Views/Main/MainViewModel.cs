@@ -88,7 +88,7 @@ namespace Listings.Views
                 if (_listingDetailViewModel == null) {
                     _listingDetailViewModel = new ListingDetailViewModel(_listingFacade, "Detail výčetky");
                     _listingDetailViewModel.OnListingItemClicked += (object sender, SelectedDayItemArgs args) => {
-                        _listingItemViewModel = new ListingItemViewModel(_listingFacade, args.DayItem, "Detail položky");
+                        _listingItemViewModel = new ListingItemViewModel(_listingFacade, args.DayItem, _defaultSettings, "Detail položky");
                         _listingItemViewModel.OnListingItemSaved += (object s, ListingItemArgs a) => {
                             _listingDetailViewModel.ReplaceDayInListBy(a.ListingItem);
                             ChangeView(nameof(ListingDetailViewModel));
@@ -197,12 +197,15 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
         private SettingFacade _settingFacade;
 
+        private DefaultSettings _defaultSettings;
 
         public MainViewModel(ListingFacade listingFacade, EmployerFacade employersFacade, SettingFacade settingFacade)
         {
             _listingFacade = listingFacade;
             _employerFacade = employersFacade;
             _settingFacade = settingFacade;
+
+            _defaultSettings = _settingFacade.GetDefaultSettings();
 
             ChangeView(nameof(ListingsOverviewViewModel));
         }

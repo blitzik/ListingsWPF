@@ -41,7 +41,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Content="Zrušit změny" Width="125" Style="{StaticResource DefaultButton}" HorizontalAlignment="Left" />
+            <Button Grid.Column="0" Content="Zrušit změny" Command="{Binding CancelChangesCommand}" Width="125" Style="{StaticResource DefaultButton}" HorizontalAlignment="Left" />
             <Button Grid.Column="2" Content="Uložit změny" Command="{Binding SaveSettingsCommand}" Width="225" Style="{StaticResource DefaultButton}" HorizontalAlignment="Right" />
         </Grid>
         
