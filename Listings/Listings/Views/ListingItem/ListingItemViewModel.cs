@@ -16,6 +16,13 @@ namespace Listings.Views
 {
     public class ListingItemViewModel : ViewModel
     {
+        private WorkedTimeSettingViewModel _workedTimeViewModel;
+        public WorkedTimeSettingViewModel WorkedTimeViewModel
+        {
+            get { return _workedTimeViewModel; }
+        }
+
+
         private string _locality;
         public string Locality
         {
@@ -54,13 +61,6 @@ namespace Listings.Views
         }
 
 
-        private WorkedTimeViewModel _workedTimeViewModel;
-        public WorkedTimeViewModel WorkedTimeViewModel
-        {
-            get { return _workedTimeViewModel; }
-        }
-
-
         private ListingFacade _listingFacade;
         private DayItem _dayItem;
 
@@ -75,16 +75,16 @@ namespace Listings.Views
                 ListingItem l = dayItem.ListingItem;
                 _locality = l.Locality;
 
-                _workedTimeViewModel = new WorkedTimeViewModel(
-                    l.ShiftStart,
-                    l.ShiftEnd,
-                    l.ShiftLunchStart,
-                    l.ShiftLunchEnd,
-                    l.OtherHours
+                _workedTimeViewModel = new WorkedTimeSettingViewModel(
+                    l.TimeSetting.Start,
+                    l.TimeSetting.End,
+                    l.TimeSetting.LunchStart,
+                    l.TimeSetting.LunchEnd,
+                    l.TimeSetting.OtherHours
                 );
 
             } else {
-                _workedTimeViewModel = new WorkedTimeViewModel();
+                _workedTimeViewModel = new WorkedTimeSettingViewModel();
             }
         }
 

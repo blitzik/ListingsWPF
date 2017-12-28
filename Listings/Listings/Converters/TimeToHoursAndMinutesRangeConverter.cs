@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 
 namespace Listings.Converters
@@ -13,9 +14,10 @@ namespace Listings.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values[0] == null || values[1] == null) {
-                return "";
+            if ((values[0] == null || values[0] == DependencyProperty.UnsetValue) || (values[1] == null || values[1] == DependencyProperty.UnsetValue)) {
+                return string.Empty;
             }
+
             Time start = (Time)values[0];
             Time end = (Time)values[1];
 

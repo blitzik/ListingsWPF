@@ -196,15 +196,7 @@ namespace Listings.Views
         private void CopyItemDown(int day)
         {
             DayItem dayItem = _dayItems[day - 1];
-            ListingItem newItem = Listing.ReplaceItem(
-                day + 1,
-                dayItem.Locality,
-                dayItem.ShiftStart,
-                dayItem.ShiftEnd,
-                dayItem.ShiftLunchStart,
-                dayItem.ShiftLunchEnd,
-                dayItem.OtherHours
-                );
+            ListingItem newItem = Listing.ReplaceItem(day + 1, dayItem.Locality, dayItem.TimeSetting);
             
             _dayItems[day].Update(newItem);
 
@@ -223,7 +215,7 @@ namespace Listings.Views
             if (Listing == null) {
                 throw new InvalidStateException("Listing cannot be null!");
             }
-            _listingFacade.Activate(_listing, 4);
+            _listingFacade.Activate(_listing, 5);
 
             SelectedWeek = null;
 

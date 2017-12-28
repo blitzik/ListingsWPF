@@ -183,7 +183,10 @@ namespace Listings.Views
             get
             {
                 if (_settingsViewModel == null) {
-                    _settingsViewModel = new SettingsViewModel(_listingFacade, "Nastavení");
+                    _settingsViewModel = new SettingsViewModel(_listingFacade, _settingFacade, "Nastavení");
+                    /*_settingsViewModel.OnCanceledChanges += (object sender, EventArgs args) => {
+                        ChangeView();
+                    };*/
                 }
                 return _settingsViewModel;
             }
@@ -192,12 +195,14 @@ namespace Listings.Views
 
         private ListingFacade _listingFacade;
         private EmployerFacade _employerFacade;
+        private SettingFacade _settingFacade;
 
 
-        public MainViewModel(ListingFacade listingFacade, EmployerFacade employersFacade)
+        public MainViewModel(ListingFacade listingFacade, EmployerFacade employersFacade, SettingFacade settingFacade)
         {
             _listingFacade = listingFacade;
             _employerFacade = employersFacade;
+            _settingFacade = settingFacade;
 
             ChangeView(nameof(ListingsOverviewViewModel));
         }
@@ -239,6 +244,7 @@ namespace Listings.Views
                     break;
 
                 case nameof(EmployersViewModel):
+                    EmployersViewModel.RestoreDefaultStates();
                     CurrentViewModel = EmployersViewModel;
                     break;
 

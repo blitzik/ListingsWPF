@@ -81,6 +81,12 @@ namespace Listings.Views
         }
 
 
+        public void ResetName()
+        {
+            Name = Employer.Name;
+        }
+
+
         public delegate void DisplayEmployerDeletionHandler(object sender, EventArgs args);
         public event DisplayEmployerDeletionHandler OnDeletionClicked;
         private void DisplayDeletion()

@@ -99,6 +99,13 @@ namespace Listings.Views
         }
 
 
+        public void RestoreDefaultState()
+        {
+            ChangeView(nameof(EmployerDetailViewModel));
+            _employerDetailViewModel.ResetName();
+        }
+
+
         private void ChangeView(string viewCode)
         {
             // we dont want the same menu item to be clicked more than once

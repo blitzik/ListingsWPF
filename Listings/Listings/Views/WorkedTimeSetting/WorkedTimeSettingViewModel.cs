@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Listings.Services
+namespace Listings.Views
 {
-    public class WorkedTimeViewModel : Views.ViewModel
+    public class WorkedTimeSettingViewModel : Views.ViewModel
     {
         private int _startTime;
         public int StartTime
@@ -293,13 +293,13 @@ namespace Listings.Services
 
 
         // Default Times
-        public WorkedTimeViewModel()
+        public WorkedTimeSettingViewModel()
         {
             SetDefaultTimes();
         }
 
 
-        public WorkedTimeViewModel(Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
+        public WorkedTimeSettingViewModel(Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
         {
             StartTime = start.TotalSeconds;
             EndTime = end.TotalSeconds;

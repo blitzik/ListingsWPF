@@ -29,7 +29,9 @@ namespace Listings
 
             ListingFacade listingFacade = new ListingFacade(_db);
             EmployerFacade employersFacade = new EmployerFacade(_db);
-            MainViewModel mainViewModel = new MainViewModel(listingFacade, employersFacade);
+            SettingFacade settingFacade = new SettingFacade(_db);
+
+            MainViewModel mainViewModel = new MainViewModel(listingFacade, employersFacade, settingFacade);
 
             MainWindow mw = new MainWindow
             {

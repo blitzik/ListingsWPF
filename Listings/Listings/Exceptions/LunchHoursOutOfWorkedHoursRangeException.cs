@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Exceptions
 {
-    public class LunchHoursOutOfWorkedHoursRangeException : Exception
+    public class LunchHoursOutOfWorkedHoursRangeException : WrongTimeException
     {
         public LunchHoursOutOfWorkedHoursRangeException()
         {

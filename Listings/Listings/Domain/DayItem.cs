@@ -61,75 +61,15 @@ namespace Listings.Domain
         }
 
 
-        private Time _shiftStart;
-        public Time ShiftStart
+        private TimeSetting _timeSetting;
+        public TimeSetting TimeSetting
         {
-            get { return _shiftStart; }
+            get { return _timeSetting; }
             private set
             {
-                _shiftStart = value;
+                _timeSetting = value;
                 RaisePropertyChanged();
             }
-        }
-
-
-        private Time _shiftEnd;
-        public Time ShiftEnd
-        {
-            get { return _shiftEnd; }
-            private set
-            {
-                _shiftEnd = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-        private Time _shiftLunchStart;
-        public Time ShiftLunchStart
-        {
-            get { return _shiftLunchStart; }
-            private set
-            {
-                _shiftLunchStart = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-        private Time _shiftLunchEnd;
-        public Time ShiftLunchEnd
-        {
-            get { return _shiftLunchEnd; }
-            private set
-            {
-                _shiftLunchEnd = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-        private Time _otherHours;
-        public Time OtherHours
-        {
-            get { return _otherHours; }
-            private set
-            {
-                _otherHours = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-        public Time LunchHours
-        {
-            get { return _listingItem == null ? null : ShiftLunchEnd - ShiftLunchStart; }
-        }
-
-
-        public Time WorkedHours
-        {
-            get { return _listingItem == null ? null : ShiftEnd - ShiftStart - LunchHours + OtherHours; }
         }
 
 
@@ -211,11 +151,7 @@ namespace Listings.Domain
             _week = PrepareWeek(_year, _month, _day);
 
             Locality = item.Locality;
-            ShiftStart = item.ShiftStart;
-            ShiftEnd = item.ShiftEnd;
-            ShiftLunchStart = item.ShiftLunchStart;
-            ShiftLunchEnd = item.ShiftLunchEnd;
-            OtherHours = item.OtherHours;            
+            _timeSetting = item.TimeSetting;
         }
 
 
@@ -233,11 +169,7 @@ namespace Listings.Domain
             ListingItem = item;
 
             Locality = item.Locality;
-            ShiftStart = item.ShiftStart;
-            ShiftEnd = item.ShiftEnd;
-            ShiftLunchStart = item.ShiftLunchStart;
-            ShiftLunchEnd = item.ShiftLunchEnd;
-            OtherHours = item.OtherHours;
+            TimeSetting = item.TimeSetting;
 
             NotifyPropertiesChanged();
         }
@@ -248,11 +180,7 @@ namespace Listings.Domain
             ListingItem = null;
 
             Locality = null;
-            ShiftStart = null;
-            ShiftEnd = null;
-            ShiftLunchStart = null;
-            ShiftLunchEnd = null;
-            OtherHours = null;
+            TimeSetting = null;
 
             NotifyPropertiesChanged();
         }
@@ -260,8 +188,6 @@ namespace Listings.Domain
 
         private void NotifyPropertiesChanged()
         {
-            RaisePropertyChanged(nameof(LunchHours));
-            RaisePropertyChanged(nameof(WorkedHours));
             RaisePropertyChanged(nameof(CanBeCopiedDown));
             RaisePropertyChanged(nameof(CanBeRemoved));
         }

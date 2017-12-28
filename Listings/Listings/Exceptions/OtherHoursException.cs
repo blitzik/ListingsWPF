@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 
 namespace Listings.Exceptions
 {
-    public class WorkedHoursRangeException : WrongTimeException
+    class OtherHoursException : WrongTimeException
     {
-        public WorkedHoursRangeException()
+        public OtherHoursException()
         {
         }
 
 
-        public WorkedHoursRangeException(string message) : base(message)
+        public OtherHoursException(string message) : base(message)
         {
+
         }
     }
 }

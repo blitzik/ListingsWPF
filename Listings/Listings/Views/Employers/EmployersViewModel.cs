@@ -67,6 +67,14 @@ namespace Listings.Views
         }
 
 
+        public void RestoreDefaultStates()
+        {
+            foreach (EmployerItemViewModel i in _employers) {
+                i.RestoreDefaultState();
+            }
+        }
+
+
         private void SaveNewEmployer()
         {
             Employer e = new Employer(NewEmployerName);

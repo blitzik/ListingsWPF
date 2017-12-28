@@ -17,12 +17,14 @@ namespace Listings.Domain
             private set { _start = value; }
         }
 
+
         private Time _end;
         public Time End
         {
             get { return _end; }
             private set { _end = value; }
         }
+
 
         private Time _lunchStart;
         public Time LunchStart
@@ -31,6 +33,7 @@ namespace Listings.Domain
             private set { _lunchStart = value; }
         }
 
+
         private Time _lunchEnd;
         public Time LunchEnd
         {
@@ -38,11 +41,37 @@ namespace Listings.Domain
             private set { _lunchEnd = value; }
         }
 
+
         private Time _otherHours;
         public Time OtherHours
         {
             get { return _otherHours; }
             private set { _otherHours = value; }
+        }
+
+
+        public Time LunchHours
+        {
+            get { return LunchEnd - LunchStart; }
+        }
+
+
+        public Time WorkedHours
+        {
+            get { return End - Start - LunchHours + OtherHours; }
+        }
+
+
+        public bool HasNoTime
+        {
+            get
+            {
+                if (Start == 0 && End == 0 && LunchStart == 0 && LunchEnd == 0 && OtherHours == 0) {
+                    return true;
+                }
+
+                return false;
+            }
         }
 
 
@@ -73,6 +102,10 @@ namespace Listings.Domain
                     if (lunchStart < start || lunchEnd > end) {
                         throw new LunchHoursOutOfWorkedHoursRangeException();
                     }
+                }
+
+                if ((end - start - (lunchEnd - lunchStart) + otherHours) < 0) {
+                    throw new OtherHoursException();
                 }
             }
         }

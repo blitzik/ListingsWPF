@@ -148,9 +148,15 @@ namespace Listings.Domain
             ListingItem newItem = new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd, otherHours);
             _items.Add(newItem);
             WorkedDays++;
-            WorkedHours += newItem.WorkedHours;
+            WorkedHours += newItem.TimeSetting.WorkedHours;
 
             return newItem;
+        }
+
+
+        public ListingItem AddItem(int day, string locality, TimeSetting timeSetting)
+        {
+            return AddItem(day, locality, timeSetting.Start, timeSetting.End, timeSetting.LunchStart, timeSetting.LunchEnd, timeSetting.OtherHours);
         }
 
 
@@ -160,13 +166,19 @@ namespace Listings.Domain
                 ListingItem currentItem = GetItemByDay(day);
                 ListingItem newItem = new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd, otherHours);
 
-                WorkedHours += newItem.WorkedHours - currentItem.WorkedHours;
+                WorkedHours += newItem.TimeSetting.WorkedHours - currentItem.TimeSetting.WorkedHours;
 
                 _items[_items.IndexOf(currentItem)] = newItem;
                 return newItem;
             }
 
             return AddItem(day, locality, start, end, lunchStart, lunchEnd, otherHours);
+        }
+
+
+        public ListingItem ReplaceItem(int day, string locality, TimeSetting timeSetting)
+        {
+            return ReplaceItem(day, locality, timeSetting.Start, timeSetting.End, timeSetting.LunchStart, timeSetting.LunchEnd, timeSetting.OtherHours);
         }
 
 
@@ -179,7 +191,7 @@ namespace Listings.Domain
 
             ListingItem item = _items[index];
             WorkedDays--;
-            WorkedHours -= item.WorkedHours;
+            WorkedHours -= item.TimeSetting.WorkedHours;
 
             _items.RemoveAt(index);
         }

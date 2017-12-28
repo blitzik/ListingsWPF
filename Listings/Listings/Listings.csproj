@@ -109,12 +109,18 @@
     <Compile Include="Exceptions\ListingItemAlreadyExistsException.cs" />
     <Compile Include="Exceptions\LunchHoursOutOfWorkedHoursRangeException.cs" />
     <Compile Include="Exceptions\LunchHoursRangeException.cs" />
+    <Compile Include="Exceptions\OtherHoursException.cs" />
     <Compile Include="Exceptions\WorkedHoursRangeException.cs" />
     <Compile Include="Domain\ListingItem.cs" />
+    <Compile Include="Exceptions\WrongTimeException.cs" />
     <Compile Include="Facades\EmployerFacade.cs" />
     <Compile Include="Facades\ListingFacade.cs" />
+    <Compile Include="Facades\SettingFacade.cs" />
     <Compile Include="Services\Db4oObjectContainerFactory.cs" />
-    <Compile Include="Services\WorkedTimeViewModel.cs" />
+    <Compile Include="Views\WorkedTimeSetting\WorkedTimeSettingView.xaml.cs">
+      <DependentUpon>WorkedTimeSettingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WorkedTimeSetting\WorkedTimeSettingViewModel.cs" />
     <Compile Include="Utils\Date.cs" />
     <Compile Include="Utils\Time.cs" />
     <Compile Include="Views\Employers\EmployerDeletion\EmployerDeletionView.xaml.cs">
@@ -217,6 +223,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Settings\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WorkedTimeSetting\WorkedTimeSettingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
