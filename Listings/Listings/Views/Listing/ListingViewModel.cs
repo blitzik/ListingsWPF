@@ -153,6 +153,8 @@ namespace Listings.Views
         public event NewListingSaveHandler OnListingCreation;
         private void SaveListing()
         {
+            Name = string.IsNullOrEmpty(Name) ? null : Name.Trim();
+
             Listing newListing = new Listing(SelectedYear, SelectedMonth);
             newListing.Name = Name;
 

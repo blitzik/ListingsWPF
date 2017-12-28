@@ -20,9 +20,18 @@ namespace Listings.Domain
         }
 
 
+        private DateTime _createdAt;
+        public DateTime CreatedAt
+        {
+            get { return _createdAt; }
+            private set { _createdAt = value; }
+        }
+
+
         public Employer(string name)
         {
             Name = name;
+            CreatedAt = DateTime.Now;
         }
     }
 }

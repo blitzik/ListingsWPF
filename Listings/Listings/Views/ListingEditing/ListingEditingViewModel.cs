@@ -202,7 +202,7 @@ namespace Listings.Views
                 throw new Exception("No Listing is set!");
             }
 
-            Listing.Name = string.IsNullOrEmpty(Name) ? null : Name;
+            Listing.Name = string.IsNullOrEmpty(Name) ? null : Name.Trim();
             Listing.HourlyWage = _hourlyWage;
             Listing.Employer = _selectedEmployer == _promptEmployer ? null : _selectedEmployer;
 

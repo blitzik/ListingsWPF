@@ -34,10 +34,19 @@ namespace Listings.Facades
         }
 
 
-        public List<Employer> FindAllEmployers()
+        public List<Employer> FindAllEmployers(string order = "DESC")
         {
-            IEnumerable<Employer> employers = from Employer e in _db select e;
+            IEnumerable<Employer> employers;
+            switch (order.ToLower()) {
+                case "ASC":
+                    employers = from Employer e in _db orderby e.CreatedAt ascending select e;
+                    break;
 
+                default:
+                    employers = from Employer e in _db orderby e.CreatedAt descending select e;
+                    break;
+            }
+            
             return employers.ToList<Employer>();
         }
     }

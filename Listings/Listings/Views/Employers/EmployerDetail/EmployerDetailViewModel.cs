@@ -74,6 +74,8 @@ namespace Listings.Views
 
         private void SaveEmployerChanges()
         {
+            Name = Name.Trim();
+
             _employer.Name = Name;
             _employerFacade.Save(_employer);
 

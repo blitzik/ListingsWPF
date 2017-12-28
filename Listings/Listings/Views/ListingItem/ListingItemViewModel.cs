@@ -95,7 +95,7 @@ namespace Listings.Views
         {
             ListingItem newItem = _dayItem.Listing.ReplaceItem(
                 _dayItem.Day,
-                _locality,
+                string.IsNullOrEmpty(_locality) ? null : _locality.Trim(),
                 new Time(WorkedTimeViewModel.StartTime),
                 new Time(WorkedTimeViewModel.EndTime),
                 new Time(WorkedTimeViewModel.LunchStart),

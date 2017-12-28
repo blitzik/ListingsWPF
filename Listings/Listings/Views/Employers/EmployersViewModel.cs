@@ -77,10 +77,10 @@ namespace Listings.Views
 
         private void SaveNewEmployer()
         {
-            Employer e = new Employer(NewEmployerName);
+            Employer e = new Employer(NewEmployerName.Trim());
             _employerFacade.Save(e);
 
-            Employers.Add(CreateEmployerItemViewModel(e));
+            Employers.Insert(0, CreateEmployerItemViewModel(e));
 
             NewEmployerName = null;
         }
