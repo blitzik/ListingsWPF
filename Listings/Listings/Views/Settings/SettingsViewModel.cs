@@ -14,14 +14,6 @@ namespace Listings.Views
 {
     public class SettingsViewModel : ViewModel
     {
-        // default times
-        private Time _start;
-        private Time _end;
-        private Time _lunchStart;
-        private Time _lunchEnd;
-        private Time _otherHours;
-
-
         private WorkedTimeSettingViewModel _workedTimeViewModel;
         public WorkedTimeSettingViewModel WorkedTimeViewModel
         {
@@ -35,7 +27,10 @@ namespace Listings.Views
             get
             {
                 if (_saveSettingsCommand == null) {
-                    _saveSettingsCommand = new DelegateCommand<object>(p => SaveSettings());
+                    _saveSettingsCommand = new DelegateCommand<object>(
+                        p => SaveSettings(),
+                        p => HasTimeChanged()
+                    );
                 }
                 return _saveSettingsCommand;
             }
@@ -50,11 +45,7 @@ namespace Listings.Views
                 if (_cancelChangesCommand == null) {
                     _cancelChangesCommand = new DelegateCommand<object>(
                         p => CancelChanges(),
-                        p => _defaultSetting.Time.Start != _workedTimeViewModel.StartTime ||
-                             _defaultSetting.Time.End != _workedTimeViewModel.EndTime ||
-                             _defaultSetting.Time.LunchStart != _workedTimeViewModel.LunchStart ||
-                             _defaultSetting.Time.LunchEnd != _workedTimeViewModel.LunchEnd ||
-                             _defaultSetting.Time.OtherHours != _workedTimeViewModel.OtherHours
+                        p => HasTimeChanged()
                     );
                 }
                 return _cancelChangesCommand;
@@ -79,13 +70,18 @@ namespace Listings.Views
             _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSetting.Time, _defaultSetting.Time);
             _workedTimeViewModel.OnTimeChanged += (object sender, WorkedTimeEventArgs args) => {
                 CancelChangesCommand.RaiseCanExecuteChanged();
+                SaveSettingsCommand.RaiseCanExecuteChanged();
             };
+        }
 
-            _start = new Time(_workedTimeViewModel.StartTime);
-            _end = new Time(_workedTimeViewModel.EndTime);
-            _lunchStart = new Time(_workedTimeViewModel.LunchStart);
-            _lunchEnd = new Time(_workedTimeViewModel.LunchEnd);
-            _otherHours = new Time(_workedTimeViewModel.OtherHours);
+
+        private bool HasTimeChanged()
+        {
+            return _defaultSetting.Time.Start != _workedTimeViewModel.StartTime ||
+                   _defaultSetting.Time.End != _workedTimeViewModel.EndTime ||
+                   _defaultSetting.Time.LunchStart != _workedTimeViewModel.LunchStart ||
+                   _defaultSetting.Time.LunchEnd != _workedTimeViewModel.LunchEnd ||
+                   _defaultSetting.Time.OtherHours != _workedTimeViewModel.OtherHours;
         }
 
 
@@ -102,6 +98,9 @@ namespace Listings.Views
             );
             _settingFacade.SaveDefaultSetting(_defaultSetting);
 
+            CancelChangesCommand.RaiseCanExecuteChanged();
+            SaveSettingsCommand.RaiseCanExecuteChanged();
+
             SaveSettingsHandler handler = OnSavedSettings;
             if (handler != null) {
                 handler(this, EventArgs.Empty);
@@ -113,11 +112,7 @@ namespace Listings.Views
         public event CancelChangesHandler OnCanceledChanges;
         private void CancelChanges()
         {
-            WorkedTimeViewModel.StartTime = _start.TotalSeconds;
-            WorkedTimeViewModel.EndTime = _end.TotalSeconds;
-            WorkedTimeViewModel.LunchStart = _lunchStart.TotalSeconds;
-            WorkedTimeViewModel.LunchEnd = _lunchEnd.TotalSeconds;
-            WorkedTimeViewModel.OtherHours = _otherHours.TotalSeconds;
+            WorkedTimeViewModel.SetTime(_defaultSetting.Time);
 
             CancelChangesHandler handler = OnCanceledChanges;
             if (handler != null) {

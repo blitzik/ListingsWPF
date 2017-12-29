@@ -75,6 +75,16 @@ namespace Listings.Domain
         }
 
 
+        public TimeSetting()
+        {
+            Start = new Time();
+            End = new Time();
+            LunchStart = new Time();
+            LunchEnd = new Time();
+            OtherHours = new Time();
+        }
+
+
         public TimeSetting(Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
         {
             CheckTime(start, end, lunchStart, lunchEnd, otherHours);
@@ -84,6 +94,18 @@ namespace Listings.Domain
             LunchStart = lunchStart;
             LunchEnd = lunchEnd;
             OtherHours = otherHours;
+        }
+
+
+        public TimeSetting(int start, int end, int lunchStart, int lunchEnd, int otherHours)
+        {
+            CheckTime(start, end, lunchStart, lunchEnd, otherHours);
+
+            Start = new Time(start);
+            End = new Time(end);
+            LunchStart = new Time(lunchStart);
+            LunchEnd = new Time(lunchEnd);
+            OtherHours = new Time(otherHours);
         }
 
 
