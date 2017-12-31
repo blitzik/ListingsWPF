@@ -33,7 +33,7 @@
                     <Setter Property="Width" Value="125" />
                 </Style>
             </StackPanel.Resources>
-            <Button Padding="5">
+            <Button Padding="5" Command="{Binding GeneratePdfCommand}">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="12" Height="15" Fill="#333">
                         <Rectangle.OpacityMask>

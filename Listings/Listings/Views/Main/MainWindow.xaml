@@ -151,6 +151,10 @@
                     <DataTemplate DataType="{x:Type local:SettingsViewModel}">
                         <local:SettingsView />
                     </DataTemplate>
+                    <!-- Listing PDF generation -->
+                    <DataTemplate DataType="{x:Type local:ListingPdfGenerationViewModel}">
+                        <local:ListingPdfGenerationView />
+                    </DataTemplate>
                 </ContentControl.Resources>
             </ContentControl>
         </Border>

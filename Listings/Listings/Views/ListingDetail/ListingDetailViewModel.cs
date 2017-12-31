@@ -95,6 +95,19 @@ namespace Listings.Views
         }
 
 
+        private DelegateCommand<object> _generatePdfCommand;
+        public DelegateCommand<object> GeneratePdfCommand
+        {
+            get
+            {
+                if (_generatePdfCommand == null) {
+                    _generatePdfCommand = new DelegateCommand<object>(p => DisplayPdfGenerationPage());
+                }
+                return _generatePdfCommand;
+            }
+        }
+
+
         private DelegateCommand<object> _listingEditCommand;
         public DelegateCommand<object> ListingEditCommand
         {
@@ -184,6 +197,17 @@ namespace Listings.Views
         }
 
 
+        public delegate void DisplayListingPdfGenerationHandler(object sender, ListingArgs args);
+        public event DisplayListingPdfGenerationHandler OnListingPdfGenerationClicked;
+        private void DisplayPdfGenerationPage()
+        {
+            DisplayListingPdfGenerationHandler handler = OnListingPdfGenerationClicked;
+            if (handler != null) {
+                handler(this, new ListingArgs(Listing));
+            }
+        }
+
+
         private void RemoveItemByDay(int day)
         {
             Listing.RemoveItemByDay(day);
@@ -196,7 +220,7 @@ namespace Listings.Views
         private void CopyItemDown(int day)
         {
             DayItem dayItem = _dayItems[day - 1];
-            ListingItem newItem = Listing.ReplaceItem(day + 1, dayItem.Locality, dayItem.TimeSetting);
+            ListingItem newItem = Listing.ReplaceItem(day + 1, dayItem.Locality, dayItem.ListingItem.TimeSetting);
             
             _dayItems[day].Update(newItem);
 

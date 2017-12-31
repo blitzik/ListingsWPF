@@ -99,6 +99,11 @@ namespace Listings.Views
                         ChangeView(nameof(ListingItemViewModel));
                     };
 
+                    _listingDetailViewModel.OnListingPdfGenerationClicked += (object sender, ListingArgs args) => {
+                        ListingPdfGenerationViewModel.Listing = args.Listing;
+                        ChangeView(nameof(ListingPdfGenerationViewModel));
+                    };
+
                     _listingDetailViewModel.OnListingEditingClicked += (object sender, ListingArgs args) => {
                         ListingEditingViewModel.Listing = args.Listing;
                         ChangeView(nameof(ListingEditingViewModel));
@@ -193,11 +198,25 @@ namespace Listings.Views
         }
 
 
+        private ListingPdfGenerationViewModel _listingPdfGenerationViewModel;
+        public ListingPdfGenerationViewModel ListingPdfGenerationViewModel
+        {
+            get
+            {
+                if (_listingPdfGenerationViewModel == null) {
+                    _listingPdfGenerationViewModel = new ListingPdfGenerationViewModel("Generování PDF dokumentu");
+                }
+                return _listingPdfGenerationViewModel;
+            }
+        }
+        
+
         private ListingFacade _listingFacade;
         private EmployerFacade _employerFacade;
         private SettingFacade _settingFacade;
 
         private DefaultSettings _defaultSettings;
+
 
         public MainViewModel(ListingFacade listingFacade, EmployerFacade employersFacade, SettingFacade settingFacade)
         {
@@ -253,6 +272,10 @@ namespace Listings.Views
 
                 case nameof(SettingsViewModel):
                     CurrentViewModel = SettingsViewModel;
+                    break;
+
+                case nameof(ListingPdfGenerationViewModel):
+                    CurrentViewModel = ListingPdfGenerationViewModel;
                     break;
             }
 
