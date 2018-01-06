@@ -33,5 +33,11 @@ namespace Listings.Domain
             Name = name;
             CreatedAt = DateTime.Now;
         }
+
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

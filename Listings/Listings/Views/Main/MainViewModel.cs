@@ -204,7 +204,7 @@ namespace Listings.Views
             get
             {
                 if (_listingPdfGenerationViewModel == null) {
-                    _listingPdfGenerationViewModel = new ListingPdfGenerationViewModel("Generování PDF dokumentu");
+                    _listingPdfGenerationViewModel = new ListingPdfGenerationViewModel(_settingFacade, "Generování PDF dokumentu");
                 }
                 return _listingPdfGenerationViewModel;
             }

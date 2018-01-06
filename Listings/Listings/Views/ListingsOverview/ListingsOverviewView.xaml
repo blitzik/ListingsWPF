@@ -85,7 +85,7 @@
 
                                         <!-- Worked hours -->
                                         <TextBlock Grid.Row="0" Grid.Column="2" Text="Odpracované hodiny" Style="{StaticResource LabelText}" />
-                                        <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding WorkedHours, Converter={StaticResource TimeToTimeInWordsConverter}}" HorizontalAlignment="Center" />
+                                        <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding TotalWorkedHours, Converter={StaticResource TimeToTimeInWordsConverter}}" HorizontalAlignment="Center" />
 
                                         <!-- Worked days -->
                                         <TextBlock Grid.Row="0" Grid.Column="4" Text="Odpracované dny" Style="{StaticResource LabelText}" />

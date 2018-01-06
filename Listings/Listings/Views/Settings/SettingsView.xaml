@@ -22,8 +22,13 @@
             </Style>
         </StackPanel.Resources>
 
-        <TextBlock Text="Výchozí čas položky výčetky" Style="{StaticResource DefaultHeader}" />
+        <TextBlock Text="Vlastník výčetky" Style="{StaticResource DefaultHeader}" />
+        <Border Padding="0 10 0 10" Margin="0 5 0 0" BorderBrush="#CCC" BorderThickness="0 1 0 3">
+            <TextBox Text="{Binding OwnerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="30" Width="400" HorizontalAlignment="Left" Style="{StaticResource DefaultTextBox}" />
+        </Border>
 
+
+        <TextBlock Margin="0 25 0 0" Text="Výchozí čas položky výčetky" Style="{StaticResource DefaultHeader}" />
         <Border Padding="0 10 0 10" Margin="0 5 0 0" BorderBrush="#CCC" BorderThickness="0 1 0 3">
             <ContentControl Content="{Binding WorkedTimeViewModel}">
                 <ContentControl.Resources>

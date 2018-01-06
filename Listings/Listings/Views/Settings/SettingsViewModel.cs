@@ -21,6 +21,19 @@ namespace Listings.Views
         }
 
 
+        private string _ownerName;
+        public string OwnerName
+        {
+            get { return _ownerName; }
+            set {
+                _ownerName = value;
+                RaisePropertyChanged();
+                CancelChangesCommand.RaiseCanExecuteChanged();
+                SaveSettingsCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+
         private DelegateCommand<object> _saveSettingsCommand;
         public DelegateCommand<object> SaveSettingsCommand
         {
@@ -29,7 +42,7 @@ namespace Listings.Views
                 if (_saveSettingsCommand == null) {
                     _saveSettingsCommand = new DelegateCommand<object>(
                         p => SaveSettings(),
-                        p => HasTimeChanged()
+                        p => HasSettingsChanged()
                     );
                 }
                 return _saveSettingsCommand;
@@ -45,7 +58,7 @@ namespace Listings.Views
                 if (_cancelChangesCommand == null) {
                     _cancelChangesCommand = new DelegateCommand<object>(
                         p => CancelChanges(),
-                        p => HasTimeChanged()
+                        p => HasSettingsChanged()
                     );
                 }
                 return _cancelChangesCommand;
@@ -66,7 +79,8 @@ namespace Listings.Views
             WindowTitle = windowTitle;
 
             _defaultSetting = _settingFacade.GetDefaultSettings();
-            
+
+            OwnerName = _defaultSetting.OwnerName;
             _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSetting.Time, _defaultSetting.Time);
             _workedTimeViewModel.OnTimeChanged += (object sender, WorkedTimeEventArgs args) => {
                 CancelChangesCommand.RaiseCanExecuteChanged();
@@ -75,13 +89,22 @@ namespace Listings.Views
         }
 
 
-        private bool HasTimeChanged()
+        private bool HasSettingsChanged()
         {
-            return _defaultSetting.Time.Start != _workedTimeViewModel.StartTime ||
-                   _defaultSetting.Time.End != _workedTimeViewModel.EndTime ||
-                   _defaultSetting.Time.LunchStart != _workedTimeViewModel.LunchStart ||
-                   _defaultSetting.Time.LunchEnd != _workedTimeViewModel.LunchEnd ||
-                   _defaultSetting.Time.OtherHours != _workedTimeViewModel.OtherHours;
+            if (_defaultSetting.Time.Start != _workedTimeViewModel.StartTime ||
+                _defaultSetting.Time.End != _workedTimeViewModel.EndTime ||
+                _defaultSetting.Time.LunchStart != _workedTimeViewModel.LunchStart ||
+                _defaultSetting.Time.LunchEnd != _workedTimeViewModel.LunchEnd ||
+                _defaultSetting.Time.OtherHours != _workedTimeViewModel.OtherHours ) {
+                return true;
+            }
+
+            if (!string.Equals(_defaultSetting.OwnerName, string.IsNullOrEmpty(OwnerName) ? null : OwnerName)) {
+                return true;
+            }
+
+            return false;
+
         }
 
 
@@ -96,6 +119,8 @@ namespace Listings.Views
                 new Time(_workedTimeViewModel.LunchEnd),
                 new Time(_workedTimeViewModel.OtherHours)
             );
+            _defaultSetting.OwnerName = string.IsNullOrEmpty(OwnerName) ? null : OwnerName;
+
             _settingFacade.SaveDefaultSetting(_defaultSetting);
 
             CancelChangesCommand.RaiseCanExecuteChanged();
@@ -113,6 +138,7 @@ namespace Listings.Views
         private void CancelChanges()
         {
             WorkedTimeViewModel.SetTime(_defaultSetting.Time);
+            OwnerName = _defaultSetting.OwnerName;
 
             CancelChangesHandler handler = OnCanceledChanges;
             if (handler != null) {

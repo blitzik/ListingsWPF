@@ -6,15 +6,29 @@
              xmlns:local="clr-namespace:Listings.Views"
              xmlns:converters="clr-namespace:Listings.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="700">
+             d:DesignHeight="500" d:DesignWidth="1000">
     <UserControl.Resources>
         <converters:MonthNameToIntConverter x:Key="MonthNameToIntConverter" />
         <converters:InverseBooleansToBooleanConverter x:Key="InverseBooleansToBooleanConverter" />
+        <converters:TimeToTimeInWordsConverter x:Key="TimeToTimeInWordsConverter" />
     </UserControl.Resources>
 
     <StackPanel>
         <Grid Margin="0 0 0 15">
+            <Grid.Resources>
+                <Style x:Key="LabelText" TargetType="TextBlock" BasedOn="{StaticResource LabelText}">
+                    <Setter Property="Margin" Value="0 10 0 0" />
+                </Style>
+            </Grid.Resources>
             <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
@@ -28,7 +42,10 @@
                 <ColumnDefinition Width="10" />
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="10" />
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Rok" Style="{StaticResource LabelText}" />
@@ -45,7 +62,7 @@
                       ItemsSource="{Binding Months}"
                       SelectedIndex="{Binding SelectedMonth, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock Grid.Row="2" Grid.Column="0" Margin="0 10 0 0" Text="Zaměstnavatel" Style="{StaticResource LabelText}" />
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Zaměstnavatel" Style="{StaticResource LabelText}" />
             <ComboBox Grid.Row="3"
                       Grid.Column="0"
                       Grid.ColumnSpan="3"
@@ -59,35 +76,83 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <TextBlock Grid.Row="4" Grid.Column="2" Margin="0 10 0 0" Text="Hodinová mzda" Style="{StaticResource LabelText}" />
-            <TextBox Grid.Row="5" Grid.Column="2" Name="HoursWage" Text="{Binding HourlyWage, UpdateSourceTrigger=PropertyChanged}" MaxLength="60" Style="{StaticResource DefaultTextBox}" HorizontalContentAlignment="Right" />
-            <TextBlock Grid.Row="5" Grid.Column="4" Text="Kč/h" FontWeight="Bold" VerticalAlignment="Center" />
-        </Grid>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Hodinová mzda" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="5" Grid.Column="0" Name="HoursWage" Text="{Binding HourlyWage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="60" Style="{StaticResource DefaultTextBox}" HorizontalContentAlignment="Right" />
+            <TextBlock Grid.Row="5" Grid.Column="2" Text="Kč/h" FontWeight="Bold" VerticalAlignment="Center" />
+                        
+            <!-- // -->
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="10" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200" />
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="200" />
-            </Grid.ColumnDefinitions>
+            <!-- Worked Hours -->
+            <TextBlock Grid.Row="0" Grid.Column="4" Text="Odpracované hodiny" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="1" Grid.Column="4" IsEnabled="False" Text="{Binding Listing.WorkedHours, Mode=OneWay, Converter={StaticResource TimeToTimeInWordsConverter}}" Style="{StaticResource DefaultTextBox}" />
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Název výčetky" Style="{StaticResource LabelText}" />
-            <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Name}" MaxLength="50" Style="{StaticResource DefaultTextBox}" />
+            <!-- Lunch Hours -->
+            <TextBlock Grid.Row="0" Grid.Column="6" Text="Obědy" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="1" Grid.Column="6" IsEnabled="False" Text="{Binding Listing.LunchHours, Mode=OneWay, Converter={StaticResource TimeToTimeInWordsConverter}}" Style="{StaticResource DefaultTextBox}" />
 
-            <Button Grid.Row="3" Grid.Column="0" Width="100" Content="Zpět" Command="{Binding ReturnBackCommand}" Style="{StaticResource DefaultButton}" HorizontalAlignment="Left" />
-            <Button Grid.Row="3" Grid.Column="2" Content="Uložit" Command="{Binding SaveCommand}" Style="{StaticResource DefaultButton}">
+            <!-- Other Hours -->
+            <TextBlock Grid.Row="2" Grid.Column="4" Text="Ostatní hodiny" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="3" Grid.Column="4" IsEnabled="False" Text="{Binding Listing.OtherHours, Mode=OneWay, Converter={StaticResource TimeToTimeInWordsConverter}}" Style="{StaticResource DefaultTextBox}" />
+
+            <!-- Total Worked Hours -->
+            <TextBlock Grid.Row="2" Grid.Column="6" Text="Hodin celkem" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="3" Grid.Column="6" IsEnabled="False" Text="{Binding Listing.TotalWorkedHours, Mode=OneWay, Converter={StaticResource TimeToTimeInWordsConverter}}" Style="{StaticResource DefaultTextBox}" />
+           
+            <!-- Vacation -->
+            <TextBlock Grid.Row="4" Grid.Column="4" Text="Dovolená" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="5" Grid.Column="4" MaxLength="10" Text="{Binding Vacation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DefaultTextBox}" />
+
+            <!-- Holidays -->
+            <TextBlock Grid.Row="4" Grid.Column="6" Text="Svátek" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="5" Grid.Column="6" MaxLength="10" Text="{Binding Holiday, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DefaultTextBox}" />
+            
+            <!-- Sickness Hours -->
+            <TextBlock Grid.Row="6" Grid.Column="6" Text="Nemoc hod." Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="7" Grid.Column="6" MaxLength="10" Text="{Binding SicknessHours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DefaultTextBox}" />
+
+            <!-- Vacation Days -->
+            <TextBlock Grid.Row="6" Grid.Column="4" Text="Dovolená dni" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="7" Grid.Column="4" MaxLength="20" Text="{Binding VacationDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DefaultTextBox}" />
+
+            <!-- Diets -->
+            <TextBlock Grid.Row="8" Grid.Column="6" Text="Diety" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="9" Grid.Column="6" MaxLength="20" Text="{Binding Diets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DefaultTextBox}" />
+
+            <!-- Paid Holidays -->
+            <TextBlock Grid.Row="10" Grid.Column="6" Text="Placené svátky" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="11" Grid.Column="6" MaxLength="20" Text="{Binding PaidHolidays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DefaultTextBox}" />
+
+            <!-- Bonuses -->
+            <TextBlock Grid.Row="8" Grid.Column="4" Text="Odměny" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="9" Grid.Column="4" MaxLength="20" Text="{Binding Bonuses, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DefaultTextBox}" />
+
+            <!-- Prepayment -->
+            <TextBlock Grid.Row="10" Grid.Column="4" Text="Záloha" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="11" Grid.Column="4" MaxLength="20" Text="{Binding Prepayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DefaultTextBox}" />
+            
+            <!-- Dollars -->
+            <TextBlock Grid.Row="12" Grid.Column="6" Text="$" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="13" Grid.Column="6" MaxLength="20" Text="{Binding Dollars, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DefaultTextBox}" />
+
+            <!-- Sickness -->
+            <TextBlock Grid.Row="12" Grid.Column="4" Text="Nemoc" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="13" Grid.Column="4" MaxLength="15" Text="{Binding Sickness, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DefaultTextBox}" />
+            
+
+            <!-- Listing's Name -->
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="Název výčetky" Style="{StaticResource LabelText}" />
+            <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Name}" MaxLength="50" Style="{StaticResource DefaultTextBox}" />
+
+            <Button Grid.Row="9" Grid.Column="0" Width="100" Content="Zpět" Command="{Binding ReturnBackCommand}" Style="{StaticResource DefaultButton}" HorizontalAlignment="Left" />
+            <Button Grid.Row="9" Grid.Column="2" Content="Uložit" Command="{Binding SaveCommand}" Style="{StaticResource DefaultButton}">
                 <Button.IsEnabled>
                     <MultiBinding Converter="{StaticResource InverseBooleansToBooleanConverter}" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding ElementName="HoursWage" Path="(Validation.HasError)" />
                     </MultiBinding>
                 </Button.IsEnabled>
             </Button>
+
+
         </Grid>
     </StackPanel>
 </UserControl>

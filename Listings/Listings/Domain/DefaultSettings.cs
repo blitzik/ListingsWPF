@@ -16,6 +16,14 @@ namespace Listings.Domain
         }
 
 
+        private string _ownerName;
+        public string OwnerName
+        {
+            get { return _ownerName; }
+            set { _ownerName = value; }
+        }
+
+
         public DefaultSettings(TimeSetting timeSetting)
         {
             _time = timeSetting;

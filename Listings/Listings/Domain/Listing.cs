@@ -55,18 +55,6 @@ namespace Listings.Domain
         }
 
 
-        private int? _hourlyWage;
-        public int? HourlyWage
-        {
-            get { return _hourlyWage; }
-            set
-            {
-                _hourlyWage = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
         private Employer _employer;
         public Employer Employer
         {
@@ -111,22 +99,153 @@ namespace Listings.Domain
         public int WorkedDays
         {
             get { return _workedDays; }
-            private set {
+            private set
+            {
                 _workedDays = value;
                 RaisePropertyChanged();
             }
         }
 
 
-        private Time _workedHours = new Time("00:00");
+        private Time _workedHours;
         public Time WorkedHours
         {
-            get { return _workedHours; }
-            private set {
+            get { return _workedHours ?? new Time("00:00"); }
+            private set
+            {
                 _workedHours = value;
                 RaisePropertyChanged();
             }
         }
+
+
+        private Time _otherHours;
+        public Time OtherHours
+        {
+            get { return _otherHours ?? new Time("00:00"); }
+            set { _otherHours = value; }
+        }
+
+
+        private Time _lunchHours;
+        public Time LunchHours
+        {
+            get { return _lunchHours ?? new Time("00:00"); }
+            set { _lunchHours = value; }
+        }
+
+
+        private Time _totalWorkedHours;
+        public Time TotalWorkedHours
+        {
+            get { return _totalWorkedHours ?? new Time("00:00"); }
+            private set
+            {
+                _totalWorkedHours = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        // ----- Summary hours
+
+
+        private string _vacation;
+        public string Vacation
+        {
+            get { return _vacation; }
+            set { _vacation = value; }
+        }
+
+
+        private string _holiday;
+        public string Holiday
+        {
+            get { return _holiday; }
+            set { _holiday = value; }
+        }
+
+
+        private string _sicknessHours;
+        public string SicknessHours
+        {
+            get { return _sicknessHours; }
+            set { _sicknessHours = value; }
+        }
+
+
+        // -----
+
+
+        private int? _hourlyWage;
+        public int? HourlyWage
+        {
+            get { return _hourlyWage; }
+            set
+            {
+                _hourlyWage = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private string _vacationDays;
+        public string VacationDays
+        {
+            get { return _vacationDays; }
+            set { _vacationDays = value; }
+        }
+
+
+        private string _diets;
+        public string Diets
+        {
+            get { return _diets; }
+            set { _diets = value; }
+        }
+
+
+        private string _paidHolidays;
+        public string PaidHolidays
+        {
+            get { return _paidHolidays; }
+            set { _paidHolidays = value; }
+        }
+
+
+        private string _bonuses;
+        public string Bonuses
+        {
+            get { return _bonuses; }
+            set { _bonuses = value; }
+        }
+
+
+        private string _dollars; // wtf? :D
+        public string Dollars
+        {
+            get { return _dollars; }
+            set { _dollars = value; }
+        }
+
+
+        private string _prepayment;
+        public string Prepayment
+        {
+            get { return _prepayment; }
+            set { _prepayment = value; }
+        }
+
+
+        private string _sickness;
+        public string Sickness
+        {
+            get { return _sickness; }
+            set { _sickness = value; }
+        }
+
+
+        // -----
 
 
         public Listing(int year, int month)
@@ -149,6 +268,9 @@ namespace Listings.Domain
             _items.Add(newItem);
             WorkedDays++;
             WorkedHours += newItem.TimeSetting.WorkedHours;
+            LunchHours += newItem.TimeSetting.LunchHours;
+            OtherHours += newItem.TimeSetting.OtherHours;
+            TotalWorkedHours += newItem.TimeSetting.TotalWorkedHours;
 
             return newItem;
         }
@@ -167,6 +289,9 @@ namespace Listings.Domain
                 ListingItem newItem = new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd, otherHours);
 
                 WorkedHours += newItem.TimeSetting.WorkedHours - currentItem.TimeSetting.WorkedHours;
+                LunchHours += newItem.TimeSetting.LunchHours - currentItem.TimeSetting.LunchHours;
+                OtherHours += newItem.TimeSetting.OtherHours - currentItem.TimeSetting.OtherHours;
+                TotalWorkedHours += newItem.TimeSetting.TotalWorkedHours - currentItem.TimeSetting.TotalWorkedHours;
 
                 _items[_items.IndexOf(currentItem)] = newItem;
                 return newItem;
@@ -192,6 +317,9 @@ namespace Listings.Domain
             ListingItem item = _items[index];
             WorkedDays--;
             WorkedHours -= item.TimeSetting.WorkedHours;
+            LunchHours -= item.TimeSetting.LunchHours;
+            OtherHours -= item.TimeSetting.OtherHours;
+            TotalWorkedHours -= item.TimeSetting.TotalWorkedHours;
 
             _items.RemoveAt(index);
         }

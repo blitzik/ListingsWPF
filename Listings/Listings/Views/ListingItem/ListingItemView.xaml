@@ -42,7 +42,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Popis práce - místo" Style="{StaticResource LabelText}" />
-            <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding Locality, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="35" HorizontalContentAlignment="Left" />
+            <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding Locality, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="40" HorizontalContentAlignment="Left" />
         </Grid>
 
         <Grid>
