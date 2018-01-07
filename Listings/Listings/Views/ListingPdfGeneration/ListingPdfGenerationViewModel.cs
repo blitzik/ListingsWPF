@@ -71,6 +71,11 @@ namespace Listings.Views
         public DefaultListingPdfReportSetting PdfSetting
         {
             get { return _pdfSetting; }
+            set
+            {
+                _pdfSetting = value;
+                RaisePropertyChanged();
+            }
         }
 
 
@@ -83,8 +88,6 @@ namespace Listings.Views
         {
             _settingFacade = settingFacade;
             WindowTitle = windowTitle;
-
-            _pdfSetting = new DefaultListingPdfReportSetting();
         }
 
 
@@ -119,7 +122,7 @@ namespace Listings.Views
         {
             OwnerName = _defaultSettings.OwnerName;
 
-            _pdfSetting.ResetSettings();
+            PdfSetting = _defaultSettings.Pdfsetting;
         }
     }
 }

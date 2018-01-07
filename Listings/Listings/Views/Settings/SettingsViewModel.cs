@@ -25,7 +25,8 @@ namespace Listings.Views
         public string OwnerName
         {
             get { return _ownerName; }
-            set {
+            set
+            {
                 _ownerName = value;
                 RaisePropertyChanged();
                 CancelChangesCommand.RaiseCanExecuteChanged();
@@ -66,12 +67,29 @@ namespace Listings.Views
         }
 
 
+        private DefaultListingPdfReportSetting _pdfSetting;
+        public DefaultListingPdfReportSetting PdfSetting
+        {
+            get { return _pdfSetting; }
+            set
+            {
+                _pdfSetting = value;
+                RaisePropertyChanged();
+                CancelChangesCommand.RaiseCanExecuteChanged();
+                SaveSettingsCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+
+        // -----
+
+
         private DefaultSettings _defaultSetting;
 
         private ListingFacade _listingFacade;
         private SettingFacade _settingFacade;
 
-        
+
         public SettingsViewModel(ListingFacade listingFacade, SettingFacade settingFacade, string windowTitle)
         {
             _listingFacade = listingFacade;
@@ -81,8 +99,12 @@ namespace Listings.Views
             _defaultSetting = _settingFacade.GetDefaultSettings();
 
             OwnerName = _defaultSetting.OwnerName;
+
+            PdfSetting = CreateNewPdfSetting(_defaultSetting.Pdfsetting);
+
             _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSetting.Time, _defaultSetting.Time);
-            _workedTimeViewModel.OnTimeChanged += (object sender, WorkedTimeEventArgs args) => {
+            _workedTimeViewModel.OnTimeChanged += (object sender, WorkedTimeEventArgs args) =>
+            {
                 CancelChangesCommand.RaiseCanExecuteChanged();
                 SaveSettingsCommand.RaiseCanExecuteChanged();
             };
@@ -95,7 +117,7 @@ namespace Listings.Views
                 _defaultSetting.Time.End != _workedTimeViewModel.EndTime ||
                 _defaultSetting.Time.LunchStart != _workedTimeViewModel.LunchStart ||
                 _defaultSetting.Time.LunchEnd != _workedTimeViewModel.LunchEnd ||
-                _defaultSetting.Time.OtherHours != _workedTimeViewModel.OtherHours ) {
+                _defaultSetting.Time.OtherHours != _workedTimeViewModel.OtherHours) {
                 return true;
             }
 
@@ -103,12 +125,15 @@ namespace Listings.Views
                 return true;
             }
 
-            return false;
+            if (!_pdfSetting.IsEqual(_defaultSetting.Pdfsetting)) {
+                return true;
+            }
 
+            return false;
         }
 
 
-        public delegate void SaveSettingsHandler (object sender, EventArgs args);
+        public delegate void SaveSettingsHandler(object sender, EventArgs args);
         public event SaveSettingsHandler OnSavedSettings;
         private void SaveSettings()
         {
@@ -120,6 +145,9 @@ namespace Listings.Views
                 new Time(_workedTimeViewModel.OtherHours)
             );
             _defaultSetting.OwnerName = string.IsNullOrEmpty(OwnerName) ? null : OwnerName;
+
+            _defaultSetting.Pdfsetting = _pdfSetting;
+            PdfSetting = CreateNewPdfSetting(_pdfSetting);
 
             _settingFacade.SaveDefaultSetting(_defaultSetting);
 
@@ -140,10 +168,24 @@ namespace Listings.Views
             WorkedTimeViewModel.SetTime(_defaultSetting.Time);
             OwnerName = _defaultSetting.OwnerName;
 
+            PdfSetting = CreateNewPdfSetting(_defaultSetting.Pdfsetting);
+
             CancelChangesHandler handler = OnCanceledChanges;
             if (handler != null) {
                 handler(this, EventArgs.Empty);
             }
+        }
+
+
+        private DefaultListingPdfReportSetting CreateNewPdfSetting(DefaultListingPdfReportSetting oldSetting)
+        {
+            DefaultListingPdfReportSetting setting = new DefaultListingPdfReportSetting(oldSetting);
+            setting.OnPropertyChanged += (object sender, EventArgs args) => {
+                CancelChangesCommand.RaiseCanExecuteChanged();
+                SaveSettingsCommand.RaiseCanExecuteChanged();
+            };
+
+            return setting;
         }
     }
 }

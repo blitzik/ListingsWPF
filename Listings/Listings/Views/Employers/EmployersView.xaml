@@ -46,7 +46,7 @@
         <TextBlock Grid.Row="0" Grid.Column="2" Text="Nový zaměstnavatel" Style="{StaticResource DefaultHeader}" />
         <StackPanel Grid.Row="2" Grid.Column="2">
             <TextBlock Text="Název zaměstnavatele" Margin="0 0 0 5" />
-            <TextBox Text="{Binding NewEmployerName, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 0 10" Style="{StaticResource DefaultTextBox}" />
+            <TextBox Text="{Binding NewEmployerName, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" Margin="0 0 0 10" Style="{StaticResource DefaultTextBox}" />
             <Button Content="Uložit nového zaměstnavatele" Command="{Binding SaveNewEmployerCommand}" Width="250" HorizontalAlignment="Right" Style="{StaticResource DefaultButton}" />
         </StackPanel>
     </Grid>

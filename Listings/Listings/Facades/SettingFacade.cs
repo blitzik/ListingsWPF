@@ -33,15 +33,7 @@ namespace Listings.Facades
             IEnumerable<DefaultSettings> x = from DefaultSettings ds in _db select ds;
             DefaultSettings settings = x.FirstOrDefault();
             if (settings == null) {
-                settings = new DefaultSettings(
-                    new TimeSetting(
-                        new Time("06:00"),
-                        new Time("14:30"),
-                        new Time("10:30"),
-                        new Time("11:00"),
-                        new Time("00:00")
-                    )
-                );
+                settings = new DefaultSettings();
                 SaveDefaultSetting(settings);
             }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Listings.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,31 @@ namespace Listings.Domain
         {
             get { return _ownerName; }
             set { _ownerName = value; }
+        }
+
+
+        private DefaultListingPdfReportSetting _pdfSetting;
+        public DefaultListingPdfReportSetting Pdfsetting
+        {
+            get { return _pdfSetting; }
+            set
+            {
+                _pdfSetting = value;
+            }
+        }
+
+
+        public DefaultSettings()
+        {
+            Time = new TimeSetting(
+                new Time("06:00"),
+                new Time("14:30"),
+                new Time("10:30"),
+                new Time("11:00"),
+                new Time("00:00")
+            );
+
+            Pdfsetting = new DefaultListingPdfReportSetting();
         }
 
 
