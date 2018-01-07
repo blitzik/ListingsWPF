@@ -67,6 +67,19 @@ namespace Listings.Views
         }
 
 
+        private DelegateCommand<object> _returnBackCommand;
+        public DelegateCommand<object> ReturnBackCommand
+        {
+            get
+            {
+                if (_returnBackCommand == null) {
+                    _returnBackCommand = new DelegateCommand<object>(p => ReturnBack());
+                }
+                return _returnBackCommand;
+            }
+        }
+
+
         private DefaultListingPdfReportSetting _pdfSetting;
         public DefaultListingPdfReportSetting PdfSetting
         {
@@ -123,6 +136,17 @@ namespace Listings.Views
             OwnerName = _defaultSettings.OwnerName;
 
             PdfSetting = _defaultSettings.Pdfsetting;
+        }
+
+
+        public delegate void ReturnBackHandler(object sender, EventArgs args);
+        public event ReturnBackHandler OnReturnBackClicked;
+        private void ReturnBack()
+        {
+            ReturnBackHandler handler = OnReturnBackClicked;
+            if (handler != null) {
+                handler(this, EventArgs.Empty);
+            }
         }
     }
 }
