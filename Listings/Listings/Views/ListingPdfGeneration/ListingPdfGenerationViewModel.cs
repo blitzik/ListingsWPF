@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Listings.Views
 {
@@ -41,13 +42,17 @@ namespace Listings.Views
         }
 
 
+        private bool IsGeneratePdfButtonActive = true;
         private DelegateCommand<object> _generatePdfCommand;
         public DelegateCommand<object> GeneratePdfCommand
         {
             get
             {
                 if (_generatePdfCommand == null) {
-                    _generatePdfCommand = new DelegateCommand<object>(p => GeneratePdf());
+                    _generatePdfCommand = new DelegateCommand<object>(
+                        p => GeneratePdf(),
+                        p => IsGeneratePdfButtonActive == true
+                    );
                 }
                 return _generatePdfCommand;
             }
@@ -106,7 +111,8 @@ namespace Listings.Views
 
         private void GeneratePdf()
         {
-            string path = GetFilePath();
+            IsGeneratePdfButtonActive = false;
+            GeneratePdfCommand.RaiseCanExecuteChanged();
 
             DefaultListingPdfReport report = new DefaultListingPdfReport(Listing);
             report.OwnerName = OwnerName;
@@ -116,7 +122,17 @@ namespace Listings.Views
             PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(true, PdfSharp.Pdf.PdfFontEmbedding.Always);
             pdfRenderer.Document = report.Document;
             pdfRenderer.RenderDocument();
-            pdfRenderer.PdfDocument.Save(Path.Combine(path, "test.pdf"));
+            //pdfRenderer.PdfDocument.Save(Path.Combine(path, "test.pdf"));
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PDF dokument (*.pdf)|.pdf";
+            saveFileDialog.FileName = string.Format("{0} {1}", Date.Months[12 - Listing.Month], Listing.Year);
+            if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                pdfRenderer.PdfDocument.Save(saveFileDialog.FileName);
+            }
+
+            IsGeneratePdfButtonActive = true;
+            GeneratePdfCommand.RaiseCanExecuteChanged();
         }
         
 
