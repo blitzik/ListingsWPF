@@ -15,14 +15,10 @@
         <converters:TimeToTimeInWordsConverter x:Key="TimeToTimeInWordsConverter" />
         <converters:NegateBoolConverter x:Key="NegateBoolConverter" />
     </UserControl.Resources>
-    
+
     <StackPanel Width="875" HorizontalAlignment="Left">
-        <StackPanel.Resources>
-            <Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBox}">
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
-            </Style>
-        </StackPanel.Resources>
-        
+        <Button Grid.Column="0" Content="Zpět na detail výčetky" Command="{Binding ReturnBackToListingDetailCommand}" Margin="0 0 0 30" Width="200" HorizontalAlignment="Left" />
+
         <ContentControl Content="{Binding WorkedTimeViewModel}">
             <ContentControl.Resources>
                 <DataTemplate DataType="{x:Type local:WorkedTimeSettingViewModel}">
@@ -42,19 +38,10 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Popis práce - místo" Style="{StaticResource LabelText}" />
-            <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding Locality, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="40" HorizontalContentAlignment="Left" />
+            <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding Locality, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="40" HorizontalContentAlignment="Left" Style="{StaticResource DefaultTextBox}" />
         </Grid>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0" Content="Zpět na detail výčetky" Command="{Binding ReturnBackToListingDetailCommand}" Width="225" Style="{StaticResource DefaultButton}" HorizontalAlignment="Left" />
-            <Button Grid.Column="2" Content="Uložit" Command="{Binding SaveListingItemCommand}" Width="150" Style="{StaticResource DefaultButton}" HorizontalAlignment="Right" />
-        </Grid>
+        <Button Grid.Column="2" Content="Uložit položku" Command="{Binding SaveListingItemCommand}" Width="150" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Right" />
 
     </StackPanel>
 </UserControl>

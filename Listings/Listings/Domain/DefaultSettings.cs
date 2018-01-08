@@ -25,6 +25,14 @@ namespace Listings.Domain
         }
 
 
+        private int _timeTickInMinutes;
+        public int TimeTickInMinutes
+        {
+            get { return _timeTickInMinutes; }
+            set { _timeTickInMinutes = value; }
+        }
+
+
         private DefaultListingPdfReportSetting _pdfSetting;
         public DefaultListingPdfReportSetting Pdfsetting
         {
@@ -46,13 +54,16 @@ namespace Listings.Domain
                 new Time("00:00")
             );
 
+            TimeTickInMinutes = 5;
+
             Pdfsetting = new DefaultListingPdfReportSetting();
         }
 
 
-        public DefaultSettings(TimeSetting timeSetting)
+        public DefaultSettings(TimeSetting timeSetting, int timeTickInMinutes)
         {
             _time = timeSetting;
+            _timeTickInMinutes = timeTickInMinutes;
         }
     }
 }

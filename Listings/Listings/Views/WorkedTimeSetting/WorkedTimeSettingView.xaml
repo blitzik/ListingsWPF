@@ -16,6 +16,11 @@
     </UserControl.Resources>
 
     <StackPanel>
+        <StackPanel.Resources>
+            <Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBox}">
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+            </Style>
+        </StackPanel.Resources>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -39,7 +44,6 @@
                 <ColumnDefinition Width="100" />
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="30" />
-                <ColumnDefinition Width="10" />
 
                 <ColumnDefinition Width="10" />
                 <ColumnDefinition Width="30" />
@@ -75,10 +79,19 @@
             <Button Grid.Row="6" Grid.Column="10" Content="+" Command="{Binding LunchEndAddCommand}" />
 
             <!-- Other Hours -->
-            <TextBlock Grid.Row="0" Grid.Column="13" Grid.ColumnSpan="5" Text="Ostatní hodiny" Style="{StaticResource LabelText}" />
-            <Button Grid.Row="2" Grid.Column="13" Content="-" Command="{Binding OtherHoursSubCommand}" />
-            <TextBox Name="tb_otherHours" Grid.Row="2" Grid.Column="15" Text="{Binding OtherHours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntToTimeConverter}}" IsReadOnly="True" />
-            <Button Grid.Row="2" Grid.Column="17" Content="+" Command="{Binding OtherHoursAddCommand}" />
+            <TextBlock Grid.Row="0" Grid.Column="12" Grid.ColumnSpan="5" Text="Ostatní hodiny" Style="{StaticResource LabelText}" />
+            <Button Grid.Row="2" Grid.Column="12" Content="-" Command="{Binding OtherHoursSubCommand}" />
+            <TextBox Name="tb_otherHours" Grid.Row="2" Grid.Column="14" Text="{Binding OtherHours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntToTimeConverter}}" IsReadOnly="True" />
+            <Button Grid.Row="2" Grid.Column="16" Content="+" Command="{Binding OtherHoursAddCommand}" />
+
+            <TextBlock Grid.Row="4" Grid.Column="12" Grid.ColumnSpan="5" Text="Posun času" Style="{StaticResource LabelText}" />
+            <ComboBox Grid.Row="6"
+                      Grid.Column="12"
+                      Grid.ColumnSpan="5"
+                      FontSize="18"
+                      ItemsSource="{Binding PossibleTimeTicks, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedValue="{Binding SelectedTimeTickInMinutes, UpdateSourceTrigger=PropertyChanged}" ItemStringFormat="{}{0} minut">
+            </ComboBox>
 
             <!-- Worked Hours -->
             <TextBlock Grid.Row="0" Grid.Column="21" Text="Odpr. hodin" Style="{StaticResource LabelText}" />

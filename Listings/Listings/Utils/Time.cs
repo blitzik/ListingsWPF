@@ -148,6 +148,12 @@ namespace Listings.Utils
         }
 
 
+        public static Time operator +(int a, Time b)
+        {
+            return new Time(a + b.TotalSeconds);
+        }
+
+
         public static Time operator -(Time a, Time b)
         {
             return new Time(a.TotalSeconds - b.TotalSeconds);
@@ -157,6 +163,12 @@ namespace Listings.Utils
         public static Time operator -(Time a, int b)
         {
             return new Time(a.TotalSeconds - b);
+        }
+
+
+        public static Time operator -(int a, Time b)
+        {
+            return new Time(a - b.TotalSeconds);
         }
 
 
@@ -172,6 +184,12 @@ namespace Listings.Utils
         }
 
 
+        public static bool operator >(int a, Time b)
+        {
+            return a > b.TotalSeconds;
+        }
+
+
         public static bool operator <(Time a, Time b)
         {
             return a.TotalSeconds < b.TotalSeconds;
@@ -184,14 +202,27 @@ namespace Listings.Utils
         }
 
 
+        public static bool operator <(int a, Time b)
+        {
+            return a < b.TotalSeconds;
+        }
+
+
         public static bool operator <=(Time a, Time b)
         {
             return a.TotalSeconds <= b.TotalSeconds;
         }
 
+
         public static bool operator <=(Time a, int b)
         {
             return a.TotalSeconds <= b;
+        }
+
+
+        public static bool operator <=(int a, Time b)
+        {
+            return a <= b.TotalSeconds;
         }
 
 
@@ -207,6 +238,12 @@ namespace Listings.Utils
         }
 
 
+        public static bool operator >=(int a, Time b)
+        {
+            return a >= b.TotalSeconds;
+        }
+
+
         public static bool operator ==(Time a, Time b)
         {
             return a.TotalSeconds == b.TotalSeconds;
@@ -219,10 +256,17 @@ namespace Listings.Utils
         }
 
 
+        public static bool operator ==(int a, Time b)
+        {
+            return a == b.TotalSeconds;
+        }
+
+
         public static bool operator !=(Time a, Time b)
         {
             return a.TotalSeconds != b.TotalSeconds;
         }
+
 
         public static bool operator !=(Time a, int b)
         {
@@ -230,10 +274,13 @@ namespace Listings.Utils
         }
 
 
-        public override string ToString()
+        public static bool operator !=(int a, Time b)
         {
-            return Text;
+            return a != b.TotalSeconds;
         }
+
+
+        
 
     }
 

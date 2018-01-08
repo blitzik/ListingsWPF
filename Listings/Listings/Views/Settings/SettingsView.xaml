@@ -25,7 +25,7 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0" Content="Zrušit změny" Command="{Binding CancelChangesCommand}" Style="{StaticResource DefaultButton}" />
-            <Button Grid.Column="2" Width="300" Content="Uložit nastavení" Command="{Binding SaveSettingsCommand}" HorizontalAlignment="Right" Style="{StaticResource DefaultButton}" />
+            <Button Grid.Column="2" Width="300" Content="Uložit nastavení" Command="{Binding SaveSettingsCommand}" HorizontalAlignment="Right" Style="{StaticResource PrimaryButton}" />
         </Grid>
 
         <TabControl Background="#F0F0F0" BorderThickness="0 1 0 0">
@@ -46,11 +46,6 @@
 
             <TabItem Header="Položka výčetky">
                 <Border Padding="15">
-                    <Border.Resources>
-                        <Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBox}">
-                            <Setter Property="HorizontalContentAlignment" Value="Center" />
-                        </Style>
-                    </Border.Resources>
                     <ContentControl Content="{Binding WorkedTimeViewModel}">
                         <ContentControl.Resources>
                             <DataTemplate DataType="{x:Type local:WorkedTimeSettingViewModel}">
@@ -215,45 +210,4 @@
             </TabItem>
         </TabControl>
     </StackPanel>
-
-
-
-    <!--
-    <StackPanel Width="875" HorizontalAlignment="Left">
-        <StackPanel.Resources>
-            <Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBox}">
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
-            </Style>
-        </StackPanel.Resources>
-
-        <TextBlock Text="Vlastník výčetky" Style="{StaticResource DefaultHeader}" />
-        <Border Padding="0 10 0 10" Margin="0 5 0 0" BorderBrush="#CCC" BorderThickness="0 1 0 3">
-            <TextBox Text="{Binding OwnerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="30" Width="400" HorizontalAlignment="Left" Style="{StaticResource DefaultTextBox}" />
-        </Border>
-
-
-        <TextBlock Margin="0 25 0 0" Text="Výchozí čas položky výčetky" Style="{StaticResource DefaultHeader}" />
-        <Border Padding="0 10 0 10" Margin="0 5 0 0" BorderBrush="#CCC" BorderThickness="0 1 0 3">
-            <ContentControl Content="{Binding WorkedTimeViewModel}">
-                <ContentControl.Resources>
-                    <DataTemplate DataType="{x:Type local:WorkedTimeSettingViewModel}">
-                        <local:WorkedTimeSettingView />
-                    </DataTemplate>
-                </ContentControl.Resources>
-            </ContentControl>
-        </Border>
-
-        <Grid Margin="0 15 0 0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0" Content="Zrušit změny" Command="{Binding CancelChangesCommand}" Width="125" Style="{StaticResource DefaultButton}" HorizontalAlignment="Left" />
-            <Button Grid.Column="2" Content="Uložit změny" Command="{Binding SaveSettingsCommand}" Width="225" Style="{StaticResource DefaultButton}" HorizontalAlignment="Right" />
-        </Grid>
-        
-    </StackPanel>
-    -->
 </UserControl>

@@ -262,25 +262,25 @@ namespace Listings.Domain
             Row row = table.AddRow();
             row.Height = 14;
             row.Cells[0].AddParagraph("Dovolená");
-            row.Cells[1].AddParagraph(Setting.IsVacationVisible ? _listing.Vacation : string.Empty);
+            row.Cells[1].AddParagraph(DisplayString(_listing.Vacation, Setting.IsVacationVisible));
 
             row.Cells[2].AddParagraph("Ostat. Hod.");
-            row.Cells[3].AddParagraph(Setting.AreOtherHoursVisible ? GetHoursAndMinutes(_listing.OtherHours) : string.Empty);
+            row.Cells[3].AddParagraph(DisplayString(GetHoursAndMinutes(_listing.OtherHours), Setting.AreOtherHoursVisible));
 
             row.Cells[4].AddParagraph("Odprac. hod.");
-            row.Cells[5].AddParagraph(Setting.AreWorkedHoursVisible ? GetHoursAndMinutes(_listing.WorkedHours) : string.Empty);
+            row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(_listing.WorkedHours), Setting.AreWorkedHoursVisible));
 
             // row 2
             row = table.AddRow();
             row.Height = 14;
             row.Cells[0].AddParagraph("Nemoc hod.");
-            row.Cells[1].AddParagraph(Setting.AreSiknessHoursVisible ? _listing.SicknessHours : string.Empty);
+            row.Cells[1].AddParagraph(DisplayString(_listing.SicknessHours, Setting.AreSiknessHoursVisible));
 
             row.Cells[2].AddParagraph("Svátek");
-            row.Cells[3].AddParagraph(Setting.AreHolidaysHoursVisible ? _listing.Holiday : string.Empty);
+            row.Cells[3].AddParagraph(DisplayString(_listing.Holiday, Setting.AreHolidaysHoursVisible));
 
             row.Cells[4].AddParagraph("Obědy");
-            row.Cells[5].AddParagraph(Setting.AreLunchHoursVisible ? GetHoursAndMinutes(_listing.LunchHours) : string.Empty);
+            row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(_listing.LunchHours), Setting.AreLunchHoursVisible));
 
             // row 3
             row = table.AddRow();
@@ -292,7 +292,7 @@ namespace Listings.Domain
             row.Cells[0].MergeRight = 4;
             row.Cells[0].VerticalAlignment = VerticalAlignment.Center;
 
-            p = row.Cells[5].AddParagraph(GetHoursAndMinutes(listing.TotalWorkedHours));
+            p = row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(listing.TotalWorkedHours), Setting.AreTotalWorkedHoursVisible));
             p.Format.Font.Size = 16;
             p.Format.Alignment = ParagraphAlignment.Center;
             p.Format.Font.Bold = true;
@@ -300,7 +300,7 @@ namespace Listings.Domain
 
             // -----
 
-            p = section.AddParagraph();
+            p = section.AddParagraph(string.Empty);
             p.Format.Font.Size = 2;
             p.Format.SpaceAfter = 3;
         }
@@ -324,33 +324,33 @@ namespace Listings.Domain
             p.Format.Font.Bold = true;
             p.Format.Font.Underline = Underline.Single;
 
-            row.Cells[1].AddParagraph(string.Format("{0} Kč/h", listing.HourlyWage != null ? listing.HourlyWage.ToString() : string.Empty));
+            row.Cells[1].AddParagraph(DisplayString(string.Format("{0} Kč/h", listing.HourlyWage != null ? listing.HourlyWage.ToString() : string.Empty), Setting.IsHourlyWageVisible));
             row.Cells[2].AddParagraph("Dovolená dni");
-            row.Cells[3].AddParagraph(Setting.AreVacationDaysVisible ? _listing.VacationDays : string.Empty);
+            row.Cells[3].AddParagraph(DisplayString(_listing.VacationDays, Setting.AreVacationDaysVisible));
 
             // row 2
             row = table.AddRow();
             row.Height = 14;
             row.Cells[0].AddParagraph("Diety");
-            row.Cells[1].AddParagraph(Setting.AreDietsVisible ? _listing.Diets : string.Empty);
+            row.Cells[1].AddParagraph(DisplayString(_listing.Diets, Setting.AreDietsVisible));
             row.Cells[2].AddParagraph("Placené svátky");
-            row.Cells[3].AddParagraph(Setting.ArePaidHolidaysVisible ? _listing.PaidHolidays : string.Empty);
+            row.Cells[3].AddParagraph(DisplayString(_listing.PaidHolidays, Setting.ArePaidHolidaysVisible));
 
             // row 3
             row = table.AddRow();
             row.Height = 14;
             row.Cells[0].AddParagraph("Odměny");
-            row.Cells[1].AddParagraph(Setting.AreBonusesVisible ? _listing.Bonuses : string.Empty);
+            row.Cells[1].AddParagraph(DisplayString(_listing.Bonuses, Setting.AreBonusesVisible));
             row.Cells[2].AddParagraph("$");
-            row.Cells[3].AddParagraph(Setting.AreDollarsVisible ? _listing.Dollars : string.Empty);
+            row.Cells[3].AddParagraph(DisplayString(_listing.Dollars, Setting.AreDollarsVisible));
 
             // row 3
             row = table.AddRow();
             row.Height = 14;
             row.Cells[0].AddParagraph("Zálohy");
-            row.Cells[1].AddParagraph(Setting.IsPrepaymentVisible ? _listing.Prepayment : string.Empty);
+            row.Cells[1].AddParagraph(DisplayString(_listing.Prepayment, Setting.IsPrepaymentVisible));
             row.Cells[2].AddParagraph("Nemoc");
-            row.Cells[3].AddParagraph(Setting.IsSicknessVisible ? _listing.Sickness : string.Empty);
+            row.Cells[3].AddParagraph(DisplayString(_listing.Sickness, Setting.IsSicknessVisible));
 
             // row 4
             row = table.AddRow();
@@ -415,6 +415,19 @@ namespace Listings.Domain
             }
 
             return dayItems;
+        }
+
+
+        private string DisplayString(string s, bool isVisible)
+        {
+            if (isVisible == true) {
+                if (string.IsNullOrEmpty(s)) {
+                    return string.Empty;
+                }
+                return s;
+            }
+
+            return string.Empty;
         }
 
 

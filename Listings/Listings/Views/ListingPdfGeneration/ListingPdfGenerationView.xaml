@@ -28,7 +28,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0" Content="Reset natavení" Command="{Binding ResetSettingsCommand}" Style="{StaticResource DefaultButton}" />
-                <Button Grid.Column="2" Content="Generuj PDF dokument" Command="{Binding GeneratePdfCommand}" Style="{StaticResource DefaultButton}" />
+                <Button Grid.Column="2" Content="Generuj PDF dokument" Command="{Binding GeneratePdfCommand}" Style="{StaticResource PrimaryButton}" />
             </Grid>
         </StackPanel>
 

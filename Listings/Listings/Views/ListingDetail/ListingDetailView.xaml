@@ -33,34 +33,34 @@
                     <Setter Property="Width" Value="125" />
                 </Style>
             </StackPanel.Resources>
-            <Button Padding="5" Command="{Binding GeneratePdfCommand}">
+            <Button Command="{Binding GeneratePdfCommand}" Margin="0 0 10 0" Style="{StaticResource DefaultButton}">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="12" Height="15" Fill="#333">
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill" Visual="{StaticResource PdfIcon}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <TextBlock Margin="10 0 0 0" Text="Generovat PDF" />
+                    <TextBlock Margin="10 0 0 0" Padding="0 0 5 0" Text="Generovat PDF" FontSize="15" />
                 </StackPanel>
             </Button>
-            <Button Command="{Binding ListingEditCommand}" Width="Auto" Padding="5">
+            <Button Command="{Binding ListingEditCommand}" Margin="0 0 10 0" Style="{StaticResource DefaultButton}">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="12" Height="15" Fill="#333">
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill" Visual="{StaticResource PencilIcon}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <TextBlock Margin="10 0 0 0" Text="Upravit" />
+                    <TextBlock Margin="10 -2 0 0" Padding="0 0 5 0" Text="Upravit" FontSize="15" />
                 </StackPanel>
             </Button>
-            <Button Command="{Binding ListingDeletionCommand}" Padding="5" Width="Auto" Style="{StaticResource CriticalButton}">
+            <Button Command="{Binding ListingDeletionCommand}" Style="{StaticResource CriticalButton}">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="12" Height="15" Fill="White">
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill" Visual="{StaticResource DeleteForeverIcon}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <TextBlock Margin="10 0 0 0" Text="Odstranit" />
+                    <TextBlock Margin="10 -2 0 0" Padding="0 0 5 0" Text="Odstranit" FontSize="15" />
                 </StackPanel>
             </Button>
         </StackPanel>
@@ -209,7 +209,7 @@
                             </Button>
 
                             <!-- Copy button -->
-                            <Button Grid.Column="2" FontSize="17" Visibility="{Binding CanBeCopiedDown, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=reversed}" Command="{Binding ElementName=ScrollViewer, Path=DataContext.CopyItemDownCommand}" CommandParameter="{Binding Day}" Background="#1abc9c" BorderBrush="#1abc9c">
+                            <Button Grid.Column="2" FontSize="17" Visibility="{Binding CanBeCopiedDown, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=reversed}" Command="{Binding ElementName=ScrollViewer, Path=DataContext.CopyItemDownCommand}" CommandParameter="{Binding Day}" Style="{StaticResource TurquoiseButton}">
                                 <Rectangle Width="14" Height="17" Fill="White">
                                     <Rectangle.OpacityMask>
                                         <VisualBrush Stretch="Fill" Visual="{StaticResource ArrowDownIcon}" />

@@ -78,10 +78,10 @@ namespace Listings.Views
                 ListingItem l = dayItem.ListingItem;
                 _locality = l.Locality;
 
-                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSettings.Time, l.TimeSetting);
+                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSettings.Time, l.TimeSetting, defaultSettings.TimeTickInMinutes);
 
             } else {
-                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSettings.Time, _defaultSettings.Time);
+                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSettings.Time, _defaultSettings.Time, defaultSettings.TimeTickInMinutes);
             }
         }
 

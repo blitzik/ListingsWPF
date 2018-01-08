@@ -102,8 +102,13 @@ namespace Listings.Views
 
             PdfSetting = CreateNewPdfSetting(_defaultSetting.Pdfsetting);
 
-            _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSetting.Time, _defaultSetting.Time);
+            _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSetting.Time, _defaultSetting.Time, _defaultSetting.TimeTickInMinutes);
             _workedTimeViewModel.OnTimeChanged += (object sender, WorkedTimeEventArgs args) =>
+            {
+                CancelChangesCommand.RaiseCanExecuteChanged();
+                SaveSettingsCommand.RaiseCanExecuteChanged();
+            };
+            _workedTimeViewModel.OnTimeTickChanged += (object sender, EventArgs args) =>
             {
                 CancelChangesCommand.RaiseCanExecuteChanged();
                 SaveSettingsCommand.RaiseCanExecuteChanged();
@@ -113,11 +118,11 @@ namespace Listings.Views
 
         private bool HasSettingsChanged()
         {
-            if (_defaultSetting.Time.Start != _workedTimeViewModel.StartTime ||
-                _defaultSetting.Time.End != _workedTimeViewModel.EndTime ||
-                _defaultSetting.Time.LunchStart != _workedTimeViewModel.LunchStart ||
-                _defaultSetting.Time.LunchEnd != _workedTimeViewModel.LunchEnd ||
-                _defaultSetting.Time.OtherHours != _workedTimeViewModel.OtherHours) {
+            if (!_workedTimeViewModel.IsTimeEqual(_defaultSetting.Time)) {
+                return true;
+            }
+
+            if (_workedTimeViewModel.SelectedTimeTickInMinutes != _defaultSetting.TimeTickInMinutes) {
                 return true;
             }
 
@@ -145,10 +150,10 @@ namespace Listings.Views
                 new Time(_workedTimeViewModel.OtherHours)
             );
             _defaultSetting.OwnerName = string.IsNullOrEmpty(OwnerName) ? null : OwnerName;
-
+            _defaultSetting.TimeTickInMinutes = _workedTimeViewModel.SelectedTimeTickInMinutes;
             _defaultSetting.Pdfsetting = _pdfSetting;
             PdfSetting = CreateNewPdfSetting(_pdfSetting);
-
+            
             _settingFacade.SaveDefaultSetting(_defaultSetting);
 
             CancelChangesCommand.RaiseCanExecuteChanged();
@@ -166,6 +171,7 @@ namespace Listings.Views
         private void CancelChanges()
         {
             WorkedTimeViewModel.SetTime(_defaultSetting.Time);
+            WorkedTimeViewModel.SelectedTimeTickInMinutes = _defaultSetting.TimeTickInMinutes;
             OwnerName = _defaultSetting.OwnerName;
 
             PdfSetting = CreateNewPdfSetting(_defaultSetting.Pdfsetting);

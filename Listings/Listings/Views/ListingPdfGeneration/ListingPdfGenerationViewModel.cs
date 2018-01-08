@@ -126,7 +126,7 @@ namespace Listings.Views
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF dokument (*.pdf)|.pdf";
-            saveFileDialog.FileName = string.Format("{0} {1}", Date.Months[12 - Listing.Month], Listing.Year);
+            saveFileDialog.FileName = string.Format("{0} {1} - {2}", Date.Months[12 - Listing.Month], Listing.Year, Listing.Name);
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                 pdfRenderer.PdfDocument.Save(saveFileDialog.FileName);
             }

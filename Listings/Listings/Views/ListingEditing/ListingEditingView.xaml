@@ -14,6 +14,8 @@
     </UserControl.Resources>
 
     <StackPanel>
+        <Button Grid.Row="9" Grid.Column="0" Content="Zpět na detail výčetky" Command="{Binding ReturnBackCommand}" Margin="0 0 0 30" Width="200" HorizontalAlignment="Left" />
+        
         <Grid Margin="0 0 0 15">
             <Grid.Resources>
                 <Style x:Key="LabelText" TargetType="TextBlock" BasedOn="{StaticResource LabelText}">
@@ -52,6 +54,7 @@
             <ComboBox Grid.Row="1"
                       Grid.Column="0"
                       Padding="8"
+                      FontSize="17"
                       ItemsSource="{Binding Years}"
                       SelectedIndex="{Binding SelectedYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -59,6 +62,7 @@
             <ComboBox Grid.Row="1"
                       Grid.Column="2"
                       Padding="8"
+                      FontSize="17"
                       ItemsSource="{Binding Months}"
                       SelectedIndex="{Binding SelectedMonth, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -67,6 +71,7 @@
                       Grid.Column="0"
                       Grid.ColumnSpan="3"
                       Padding="8"
+                      FontSize="17"
                       ItemsSource="{Binding Employers}"
                       SelectedItem="{Binding SelectedEmployer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <ComboBox.ItemTemplate>
@@ -143,8 +148,7 @@
             <TextBlock Grid.Row="6" Grid.Column="0" Text="Název výčetky" Style="{StaticResource LabelText}" />
             <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Name}" MaxLength="50" Style="{StaticResource DefaultTextBox}" />
 
-            <Button Grid.Row="9" Grid.Column="0" Width="100" Content="Zpět" Command="{Binding ReturnBackCommand}" Style="{StaticResource DefaultButton}" HorizontalAlignment="Left" />
-            <Button Grid.Row="9" Grid.Column="2" Content="Uložit" Command="{Binding SaveCommand}" Style="{StaticResource DefaultButton}">
+            <Button Grid.Row="9" Grid.Column="2" Content="Uložit změny" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}">
                 <Button.IsEnabled>
                     <MultiBinding Converter="{StaticResource InverseBooleansToBooleanConverter}" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding ElementName="HoursWage" Path="(Validation.HasError)" />
