@@ -226,10 +226,10 @@ namespace Listings.Domain
                 row.Cells[4].AddParagraph(item.TimeSetting != null ? GetHoursAndMinutesRange(item.TimeSetting.LunchStart, item.TimeSetting.LunchEnd, !item.TimeSetting.HasNoTime, "-") : string.Empty);
                 row.Cells[4].VerticalAlignment = VerticalAlignment.Center;
 
-                row.Cells[5].AddParagraph(item.TimeSetting != null ? GetHoursAndMinutes(item.TimeSetting.TotalWorkedHours) : string.Empty);
+                row.Cells[5].AddParagraph(item.TimeSetting != null ? GetHoursAndMinutes(item.TimeSetting.WorkedHours, false) : string.Empty);
                 row.Cells[5].VerticalAlignment = VerticalAlignment.Center;
 
-                row.Cells[6].AddParagraph(item.TimeSetting != null ? GetHoursAndMinutes(item.TimeSetting.OtherHours) : string.Empty);
+                row.Cells[6].AddParagraph(item.TimeSetting != null ? GetHoursAndMinutes(item.TimeSetting.OtherHours, false) : string.Empty);
                 row.Cells[6].VerticalAlignment = VerticalAlignment.Center;
             }
 
@@ -265,10 +265,10 @@ namespace Listings.Domain
             row.Cells[1].AddParagraph(DisplayString(_listing.Vacation, Setting.IsVacationVisible));
 
             row.Cells[2].AddParagraph("Ostat. Hod.");
-            row.Cells[3].AddParagraph(DisplayString(GetHoursAndMinutes(_listing.OtherHours), Setting.AreOtherHoursVisible));
+            row.Cells[3].AddParagraph(DisplayString(GetHoursAndMinutes(_listing.OtherHours, false), Setting.AreOtherHoursVisible));
 
             row.Cells[4].AddParagraph("Odprac. hod.");
-            row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(_listing.WorkedHours), Setting.AreWorkedHoursVisible));
+            row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(_listing.WorkedHours, false), Setting.AreWorkedHoursVisible));
 
             // row 2
             row = table.AddRow();
@@ -280,7 +280,7 @@ namespace Listings.Domain
             row.Cells[3].AddParagraph(DisplayString(_listing.Holiday, Setting.AreHolidaysHoursVisible));
 
             row.Cells[4].AddParagraph("Obědy");
-            row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(_listing.LunchHours), Setting.AreLunchHoursVisible));
+            row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(_listing.LunchHours, false), Setting.AreLunchHoursVisible));
 
             // row 3
             row = table.AddRow();
@@ -292,7 +292,7 @@ namespace Listings.Domain
             row.Cells[0].MergeRight = 4;
             row.Cells[0].VerticalAlignment = VerticalAlignment.Center;
 
-            p = row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(listing.TotalWorkedHours), Setting.AreTotalWorkedHoursVisible));
+            p = row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(listing.TotalWorkedHours, false), Setting.AreTotalWorkedHoursVisible));
             p.Format.Font.Size = 16;
             p.Format.Alignment = ParagraphAlignment.Center;
             p.Format.Font.Bold = true;
@@ -324,7 +324,7 @@ namespace Listings.Domain
             p.Format.Font.Bold = true;
             p.Format.Font.Underline = Underline.Single;
 
-            row.Cells[1].AddParagraph(DisplayString(string.Format("{0} Kč/h", listing.HourlyWage != null ? listing.HourlyWage.ToString() : string.Empty), Setting.IsHourlyWageVisible));
+            row.Cells[1].AddParagraph(DisplayString(listing.HourlyWage != null ? string.Format("{0} Kč/h", listing.HourlyWage.ToString()) : string.Empty, Setting.IsHourlyWageVisible));
             row.Cells[2].AddParagraph("Dovolená dni");
             row.Cells[3].AddParagraph(DisplayString(_listing.VacationDays, Setting.AreVacationDaysVisible));
 
@@ -371,11 +371,28 @@ namespace Listings.Domain
         }
 
 
-        private string GetHoursAndMinutes(Time time)
+        private string GetHoursAndMinutes(Time time, bool displayNoTime)
         {
-            string hours = time.Hours == 0 ? string.Empty : string.Format("{0}h", time.Hours.ToString());
-            string minutes = time.Minutes == 0 ? string.Empty : string.Format(" {0}m", time.Minutes.ToString());
-            return string.Format("{0}{1}", hours, minutes);
+            string result;
+            if (time.TotalSeconds == 0 && displayNoTime == false) {
+                return string.Empty;
+            }
+
+            if (_setting.AreShortHalfHoursEnabled && (time.Minutes == 0 || time.Minutes == 30)) {
+                if (time.Minutes == 0) {
+                    result = time.Hours.ToString();
+                } else {
+                    result = string.Format("{0},{1}", time.Hours, "5");
+                }
+
+            } else {
+                string hours = time.Hours == 0 ? string.Empty : string.Format("{0}h", time.Hours.ToString());
+                string minutes = time.Minutes == 0 ? string.Empty : string.Format(" {0}m", time.Minutes.ToString());
+
+                result = string.Format("{0}{1}", hours, minutes);
+            }
+
+            return result;
         }
 
 

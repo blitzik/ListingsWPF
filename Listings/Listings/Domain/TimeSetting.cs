@@ -56,15 +56,21 @@ namespace Listings.Domain
         }
 
 
-        public Time WorkedHours
+        public Time WorkedHoursWithLunch
         {
             get { return End - Start; }
         }
 
 
+        public Time WorkedHours
+        {
+            get { return WorkedHoursWithLunch - LunchHours; }
+        }
+
+
         public Time TotalWorkedHours
         {
-            get { return WorkedHours - LunchHours + OtherHours; }
+            get { return WorkedHours + OtherHours; }
         }
 
 

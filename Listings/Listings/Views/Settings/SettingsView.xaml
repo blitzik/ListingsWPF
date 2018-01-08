@@ -102,6 +102,12 @@
                                     <TextBlock Text="Hodiny" Style="{StaticResource LabelText}" />
                                     <Border BorderBrush="#CCC" BorderThickness="0 1 0 0" Padding="0 10 0 10" Margin="0 5 0 10">
                                         <StackPanel>
+                                            <CheckBox Margin="0 0 0 15" IsChecked="{Binding PdfSetting.AreShortHalfHoursEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                <TextBlock Style="{StaticResource OutsideTextBlock}">
+                                                    Zobrazit "<TextBlock Text="půlhodiny jako desetiny" Style="{StaticResource InnerTextBlock}" />"
+                                                </TextBlock>
+                                            </CheckBox>
+
                                             <CheckBox IsChecked="{Binding PdfSetting.AreWorkedHoursVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                                 <TextBlock Style="{StaticResource OutsideTextBlock}">
                                                 Zobrazit pole "<TextBlock Text="Odpracované hodiny" Style="{StaticResource InnerTextBlock}" />"

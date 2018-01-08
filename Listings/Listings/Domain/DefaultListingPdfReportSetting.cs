@@ -56,6 +56,18 @@ namespace Listings.Domain
             }
         }
 
+        private bool _areShortHalfHoursEnabled;
+        public bool AreShortHalfHoursEnabled
+        {
+            get { return _areShortHalfHoursEnabled; }
+            set
+            {
+                _areShortHalfHoursEnabled = value;
+                RaisePropertyChanged();
+                ProcessOnPropertyChanged();
+            }
+        }
+
         private bool _areWorkedHoursVisible;
         public bool AreWorkedHoursVisible
         {
@@ -224,6 +236,7 @@ namespace Listings.Domain
             IsEmployerVisible = setting.IsEmployerVisible;
             IsOwnerNameVisible = setting.IsOwnerNameVisible;
 
+            AreShortHalfHoursEnabled = setting.AreShortHalfHoursEnabled;
             AreWorkedHoursVisible = setting.AreWorkedHoursVisible;
             AreLunchHoursVisible = setting.AreLunchHoursVisible;
             AreOtherHoursVisible = setting.AreOtherHoursVisible;
@@ -273,6 +286,7 @@ namespace Listings.Domain
             if (IsEmployerVisible != setting.IsEmployerVisible) { return false; }
             if (IsOwnerNameVisible != setting.IsOwnerNameVisible) { return false; }
 
+            if (AreShortHalfHoursEnabled != setting.AreShortHalfHoursEnabled) { return false; }
             if (AreWorkedHoursVisible != setting.AreWorkedHoursVisible) { return false; }
             if (AreLunchHoursVisible != setting.AreLunchHoursVisible) { return false; }
             if (AreOtherHoursVisible != setting.AreOtherHoursVisible) { return false; }
@@ -298,7 +312,8 @@ namespace Listings.Domain
         {
             IsEmployerVisible = true;
             IsOwnerNameVisible = true;
-            
+
+            AreShortHalfHoursEnabled = false;
             AreWorkedHoursVisible = true;
             AreLunchHoursVisible = true;
             AreOtherHoursVisible = true;
