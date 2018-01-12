@@ -151,8 +151,7 @@ namespace Listings.Views
             );
             _defaultSetting.OwnerName = string.IsNullOrEmpty(OwnerName) ? null : OwnerName;
             _defaultSetting.TimeTickInMinutes = _workedTimeViewModel.SelectedTimeTickInMinutes;
-            _defaultSetting.Pdfsetting = _pdfSetting;
-            PdfSetting = CreateNewPdfSetting(_pdfSetting);
+            _defaultSetting.Pdfsetting.UpdateBy(_pdfSetting);
             
             _settingFacade.SaveDefaultSetting(_defaultSetting);
 

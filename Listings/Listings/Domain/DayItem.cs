@@ -136,29 +136,20 @@ namespace Listings.Domain
             _day = day;
             _date = new DateTime(_year, _month, day);
             _week = PrepareWeek(_year, _month, _day);
-        }
 
-
-        public DayItem(ListingItem item)
-        {
-            _listingItem = item;
-            _listing = item.Listing;
-
-            _year = item.Date.Year;
-            _month = item.Date.Month;
-            _day = item.Day;
-            _date = new DateTime(_year, _month, _day);
-            _week = PrepareWeek(_year, _month, _day);
-
-            Locality = item.Locality;
-            _timeSetting = item.TimeSetting;
+            ListingItem item = listing.GetItemByDay(day);
+            if (item != null) {
+                _listingItem = item;
+                Locality = item.Locality;
+                _timeSetting = item.TimeSetting;
+            }
         }
 
 
         public void Update(ListingItem item)
         {
             ArgumentException e = new ArgumentException();
-            if (item.Listing != Listing) {
+            if (!Listing.ContainsItem(item)) {
                 throw e;
             }
 

@@ -10,19 +10,10 @@ namespace Listings.Domain
 {
     public class ListingItem : BindableObject
     {
-        private Listing _listing;
-        public Listing Listing
-        {
-            get { return _listing; }
-            private set { _listing = value; }
-        }
-
-
-        private DateTime _date;
+        private readonly DateTime _date;
         public DateTime Date
         {
             get { return _date; }
-            private set { _date = value; }
         }
 
 
@@ -33,11 +24,10 @@ namespace Listings.Domain
         }
 
 
-        private TimeSetting _timeSetting;
+        private readonly TimeSetting _timeSetting;
         public TimeSetting TimeSetting
         {
             get { return _timeSetting; }
-            private set { _timeSetting = value; }
         }
 
 
@@ -51,9 +41,7 @@ namespace Listings.Domain
 
         public ListingItem(Listing listing, int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
         {
-            Listing = listing;
-
-            Date = new DateTime(listing.Year, listing.Month, day);
+            _date = new DateTime(listing.Year, listing.Month, day);
 
             _day = day;
             _locality = locality;

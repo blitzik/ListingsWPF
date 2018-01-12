@@ -233,6 +233,12 @@ namespace Listings.Domain
 
         public DefaultListingPdfReportSetting(DefaultListingPdfReportSetting setting)
         {
+            UpdateBy(setting);
+        }
+
+
+        public void UpdateBy(DefaultListingPdfReportSetting setting)
+        {
             IsEmployerVisible = setting.IsEmployerVisible;
             IsOwnerNameVisible = setting.IsOwnerNameVisible;
 

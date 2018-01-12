@@ -30,16 +30,24 @@ namespace Listings.Facades
 
         public DefaultSettings GetDefaultSettings()
         {
-            IEnumerable<DefaultSettings> x = from DefaultSettings ds in _db select ds;
+            IEnumerable<DefaultSettings> x = from DefaultSettings ds in _db where ds.ID == "main" select ds;
             DefaultSettings settings = x.FirstOrDefault();
             if (settings == null) {
-                settings = new DefaultSettings();
+                settings = new DefaultSettings("main");
                 SaveDefaultSetting(settings);
             }
 
             _db.Activate(settings, 4);
+
+            settings.OnTimeSettingUpdate += OnTimeSettingUpdate;
             
             return settings;
+        }
+
+
+        private void OnTimeSettingUpdate(object sender, TimeSetting oldSetting, TimeSetting newSetting)
+        {
+            _db.Delete(oldSetting);
         }
     }
 }

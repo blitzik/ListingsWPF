@@ -10,43 +10,38 @@ namespace Listings.Domain
 {
     public class TimeSetting
     {
-        private Time _start;
+        private readonly Time _start;
         public Time Start
         {
             get { return _start; }
-            private set { _start = value; }
         }
 
 
-        private Time _end;
+        private readonly Time _end;
         public Time End
         {
             get { return _end; }
-            private set { _end = value; }
         }
 
 
-        private Time _lunchStart;
+        private readonly Time _lunchStart;
         public Time LunchStart
         {
             get { return _lunchStart; }
-            private set { _lunchStart = value; }
         }
 
 
-        private Time _lunchEnd;
+        private readonly Time _lunchEnd;
         public Time LunchEnd
         {
             get { return _lunchEnd; }
-            private set { _lunchEnd = value; }
         }
 
 
-        private Time _otherHours;
+        private readonly Time _otherHours;
         public Time OtherHours
         {
             get { return _otherHours; }
-            private set { _otherHours = value; }
         }
 
 
@@ -89,11 +84,11 @@ namespace Listings.Domain
 
         public TimeSetting()
         {
-            Start = new Time();
-            End = new Time();
-            LunchStart = new Time();
-            LunchEnd = new Time();
-            OtherHours = new Time();
+            _start = new Time();
+            _end = new Time();
+            _lunchStart = new Time();
+            _lunchEnd = new Time();
+            _otherHours = new Time();
         }
 
 
@@ -101,11 +96,11 @@ namespace Listings.Domain
         {
             CheckTime(start, end, lunchStart, lunchEnd, otherHours);
 
-            Start = start;
-            End = end;
-            LunchStart = lunchStart;
-            LunchEnd = lunchEnd;
-            OtherHours = otherHours;
+            _start = start;
+            _end = end;
+            _lunchStart = lunchStart;
+            _lunchEnd = lunchEnd;
+            _otherHours = otherHours;
         }
 
 
@@ -113,11 +108,11 @@ namespace Listings.Domain
         {
             CheckTime(start, end, lunchStart, lunchEnd, otherHours);
 
-            Start = new Time(start);
-            End = new Time(end);
-            LunchStart = new Time(lunchStart);
-            LunchEnd = new Time(lunchEnd);
-            OtherHours = new Time(otherHours);
+            _start = new Time(start);
+            _end = new Time(end);
+            _lunchStart = new Time(lunchStart);
+            _lunchEnd = new Time(lunchEnd);
+            _otherHours = new Time(otherHours);
         }
 
 

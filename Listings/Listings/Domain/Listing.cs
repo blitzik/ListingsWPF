@@ -1,4 +1,5 @@
-﻿using Listings.Exceptions;
+﻿using Listings.EventArguments;
+using Listings.Exceptions;
 using Listings.Utils;
 using System;
 using System.Collections.Generic;
@@ -84,8 +85,8 @@ namespace Listings.Domain
         }
 
 
-        private List<ListingItem> _items;
-        public List<ListingItem> Items
+        private Dictionary<int, ListingItem> _items;
+        public Dictionary<int, ListingItem> Items
         {
             get { return _items; }
             private set
@@ -107,12 +108,19 @@ namespace Listings.Domain
         }
 
 
+        public delegate void ListingSummaryTimeChangedHandler(object sender, Time changedTime);
+        public event ListingSummaryTimeChangedHandler OnSummaryTimeChanged;
+
+
         private Time _workedHours;
         public Time WorkedHours
         {
             get { return _workedHours ?? new Time("00:00"); }
             private set
             {
+                if (_workedHours != null) {
+                    OnSummaryTimeChanged?.Invoke(this, _workedHours);
+                }
                 _workedHours = value;
                 RaisePropertyChanged();
             }
@@ -123,7 +131,13 @@ namespace Listings.Domain
         public Time OtherHours
         {
             get { return _otherHours ?? new Time("00:00"); }
-            set { _otherHours = value; }
+            set
+            {
+                if (_otherHours != null) {
+                    OnSummaryTimeChanged?.Invoke(this, _otherHours);
+                }
+                _otherHours = value;
+            }
         }
 
 
@@ -131,7 +145,13 @@ namespace Listings.Domain
         public Time LunchHours
         {
             get { return _lunchHours ?? new Time("00:00"); }
-            set { _lunchHours = value; }
+            set
+            {
+                if (_lunchHours != null) {
+                    OnSummaryTimeChanged?.Invoke(this, _lunchHours);
+                }
+                _lunchHours = value;
+            }
         }
 
 
@@ -141,6 +161,9 @@ namespace Listings.Domain
             get { return _totalWorkedHours ?? new Time("00:00"); }
             private set
             {
+                if (_totalWorkedHours != null) {
+                    OnSummaryTimeChanged?.Invoke(this, _totalWorkedHours);
+                }
                 _totalWorkedHours = value;
                 RaisePropertyChanged();
             }
@@ -221,7 +244,7 @@ namespace Listings.Domain
         }
 
 
-        private string _dollars; // wtf? :D
+        private string _dollars; // I need to come up with a better name :-)
         public string Dollars
         {
             get { return _dollars; }
@@ -254,18 +277,18 @@ namespace Listings.Domain
             Month = month;
             CreatedAt = DateTime.Now;
 
-            _items = new List<ListingItem>();
+            _items = new Dictionary<int, ListingItem>();
         }
 
 
         public ListingItem AddItem(int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
         {
-            if (_items.Exists(i => i.Day == day)) {
+            if (_items.ContainsKey(day)) {
                 throw new ListingItemAlreadyExistsException();
             }
 
             ListingItem newItem = new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd, otherHours);
-            _items.Add(newItem);
+            _items.Add(day, newItem);
             WorkedDays++;
             WorkedHours += newItem.TimeSetting.WorkedHours;
             LunchHours += newItem.TimeSetting.LunchHours;
@@ -282,22 +305,30 @@ namespace Listings.Domain
         }
 
 
+        public delegate void ReplaceItemHandler(object sender, ListingItemArgs oldListingItemArgs);
+        public event ReplaceItemHandler OnReplacedListingItem;
         public ListingItem ReplaceItem(int day, string locality, Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
         {
-            if (_items.Exists(i => i.Day == day)) {
-                ListingItem currentItem = GetItemByDay(day);
-                ListingItem newItem = new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd, otherHours);
-
-                WorkedHours += newItem.TimeSetting.WorkedHours - currentItem.TimeSetting.WorkedHours;
-                LunchHours += newItem.TimeSetting.LunchHours - currentItem.TimeSetting.LunchHours;
-                OtherHours += newItem.TimeSetting.OtherHours - currentItem.TimeSetting.OtherHours;
-                TotalWorkedHours += newItem.TimeSetting.TotalWorkedHours - currentItem.TimeSetting.TotalWorkedHours;
-
-                _items[_items.IndexOf(currentItem)] = newItem;
-                return newItem;
+            if (!_items.ContainsKey(day)) {
+                return AddItem(day, locality, start, end, lunchStart, lunchEnd, otherHours);
             }
 
-            return AddItem(day, locality, start, end, lunchStart, lunchEnd, otherHours);
+            ListingItem oldItem = GetItemByDay(day);
+            ReplaceItemHandler handler = OnReplacedListingItem;
+            if (handler != null) {
+                handler(this, new ListingItemArgs(oldItem));
+            }
+
+            ListingItem newItem = new ListingItem(this, day, locality, start, end, lunchStart, lunchEnd, otherHours);
+
+            WorkedHours += newItem.TimeSetting.WorkedHours - oldItem.TimeSetting.WorkedHours;
+            LunchHours += newItem.TimeSetting.LunchHours - oldItem.TimeSetting.LunchHours;
+            OtherHours += newItem.TimeSetting.OtherHours - oldItem.TimeSetting.OtherHours;
+            TotalWorkedHours += newItem.TimeSetting.TotalWorkedHours - oldItem.TimeSetting.TotalWorkedHours;
+
+            _items[day] = newItem;
+
+            return newItem;
         }
 
 
@@ -307,27 +338,43 @@ namespace Listings.Domain
         }
 
 
+        public delegate void RemoveItemHandler(object sender, ListingItemArgs oldListingItemArgs);
+        public event RemoveItemHandler OnRemovedListingItem;
         public void RemoveItemByDay(int day)
         {
-            int index = _items.FindIndex(i => i.Day == day);
-            if (index == -1) { // there is no listing item for that day
+            if (!_items.ContainsKey(day)) {
                 return;
             }
 
-            ListingItem item = _items[index];
+            ListingItem item = _items[day];
             WorkedDays--;
             WorkedHours -= item.TimeSetting.WorkedHours;
             LunchHours -= item.TimeSetting.LunchHours;
             OtherHours -= item.TimeSetting.OtherHours;
             TotalWorkedHours -= item.TimeSetting.TotalWorkedHours;
 
-            _items.RemoveAt(index);
+            _items.Remove(day);
+
+            RemoveItemHandler handler = OnRemovedListingItem;
+            if (handler != null) {
+                handler(this, new ListingItemArgs(item));
+            }
         }
 
 
         public ListingItem GetItemByDay(int day)
         {
-            return _items.FirstOrDefault<ListingItem>(i => i.Day == day);
+            if (_items.ContainsKey(day)) {
+                return _items[day];
+            }
+
+            return null;
+        }
+
+
+        public bool ContainsItem(ListingItem item)
+        {
+            return _items.ContainsValue(item);
         }
         
     }

@@ -246,6 +246,14 @@ namespace Listings.Utils
 
         public static bool operator ==(Time a, Time b)
         {
+            if (Object.ReferenceEquals(a, null) && Object.ReferenceEquals(b, null)) {
+                return true;
+            }
+
+            if (Object.ReferenceEquals(a, null) || Object.ReferenceEquals(b, null)) {
+                return false;
+            }
+
             return a.TotalSeconds == b.TotalSeconds;
         }
 
@@ -264,6 +272,14 @@ namespace Listings.Utils
 
         public static bool operator !=(Time a, Time b)
         {
+            if (Object.ReferenceEquals(a, null) && Object.ReferenceEquals(b, null)) {
+                return false;
+            }
+
+            if (Object.ReferenceEquals(a, null) || Object.ReferenceEquals(b, null)) {
+                return true;
+            }
+
             return a.TotalSeconds != b.TotalSeconds;
         }
 

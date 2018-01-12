@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Db4objects.Db4o.Linq;
 using Db4objects.Db4o.Foundation;
+using Listings.EventArguments;
+using Listings.Utils;
 
 namespace Listings.Facades
 {
@@ -52,9 +54,25 @@ namespace Listings.Facades
 
             Comparison<Listing> comp = new Comparison<Listing>(comparer);
             IEnumerable<Listing> listings = _db.Query<Listing>(l => l.Year == year, comp);
-
+            foreach (Listing l in listings) {
+                l.OnReplacedListingItem += OnChangedListingItem;
+                l.OnRemovedListingItem += OnChangedListingItem;
+                l.OnSummaryTimeChanged += OnTimeChanged;
+            }
 
             return new List<Listing>(listings);
+        }
+
+
+        private void OnChangedListingItem(object sender, ListingItemArgs args)
+        {
+            _db.Delete(args.ListingItem);
+        }
+
+
+        private void OnTimeChanged(object sender, Time time)
+        {
+            _db.Delete(time);
         }
 
 

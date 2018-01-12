@@ -420,15 +420,7 @@ namespace Listings.Domain
 
             int daysInMonth = listing.DaysInMonth;
             for (int day = 0; day < daysInMonth; day++) {
-                ListingItem listingItem = listing.GetItemByDay(day + 1);
-                DayItem dayItem;
-                if (listingItem == null) {
-                    dayItem = new DayItem(listing, day + 1);
-                } else {
-                    dayItem = new DayItem(listingItem);
-                }
-
-                dayItems.Add(dayItem);
+                dayItems.Add(new DayItem(listing, day + 1));
             }
 
             return dayItems;

@@ -249,14 +249,9 @@ namespace Listings.Views
             _weeksInMonth = new List<Week>();
             _dayItems = new List<DayItem>();
             int daysInMonth = DateTime.DaysInMonth(Listing.Year, Listing.Month);
+            DayItem dayItem;
             for (int day = 0; day < daysInMonth; day++) {
-                ListingItem listingItem = Listing.GetItemByDay(day + 1);
-                DayItem dayItem;
-                if (listingItem == null) {
-                    dayItem = new DayItem(Listing, day + 1);
-                } else {
-                    dayItem = new DayItem(listingItem);
-                }
+                dayItem = new DayItem(Listing, day + 1);
 
                 _dayItems.Add(dayItem);
 

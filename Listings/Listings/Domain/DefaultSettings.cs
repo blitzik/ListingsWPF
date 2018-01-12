@@ -1,4 +1,5 @@
-﻿using Listings.Utils;
+﻿using Db4objects.Db4o;
+using Listings.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,23 @@ namespace Listings.Domain
 {
     public class DefaultSettings
     {
+        private readonly string _id;
+        public string ID
+        {
+            get { return _id; }
+        }
+
+        public delegate void TimeSettingUpdateHandler(object sender, TimeSetting oldSetting, TimeSetting newSetting);
+        public event TimeSettingUpdateHandler OnTimeSettingUpdate;
         private TimeSetting _time;
         public TimeSetting Time
         {
             get { return _time; }
-            set { _time = value; }
+            set
+            {
+                OnTimeSettingUpdate?.Invoke(this, _time, value);
+                _time = value;
+            }
         }
 
 
@@ -44,8 +57,10 @@ namespace Listings.Domain
         }
 
 
-        public DefaultSettings()
+        public DefaultSettings(string identifier)
         {
+            _id = identifier;
+
             Time = new TimeSetting(
                 new Time("06:00"),
                 new Time("14:30"),
@@ -60,10 +75,13 @@ namespace Listings.Domain
         }
 
 
-        public DefaultSettings(TimeSetting timeSetting, int timeTickInMinutes)
+        public DefaultSettings(string identifier, TimeSetting timeSetting, int timeTickInMinutes)
         {
+            _id = identifier;
+
             _time = timeSetting;
             _timeTickInMinutes = timeTickInMinutes;
         }
+ 
     }
 }
