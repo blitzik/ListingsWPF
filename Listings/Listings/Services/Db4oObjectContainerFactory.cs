@@ -13,9 +13,14 @@ namespace Listings.Services
 {
     public class Db4oObjectContainerFactory
     {
+        public const string DATABASE_EXTENSION = "evdo";
+        public const string MAIN_DATABASE_NAME = "data";
+        public const string MAIN_DATABASE_FILE_NAME = MAIN_DATABASE_NAME + "." + DATABASE_EXTENSION;
+
+
         public IObjectContainer Create(string databaseName)
         {
-            string filePath = Path.Combine(GetFilePath(), databaseName);
+            string filePath = Path.Combine(GetDatabaseDirectoryPath(), databaseName + "." + DATABASE_EXTENSION);
             IObjectContainer db = Db4oEmbedded.OpenFile(PrepareConfig(), filePath);
             
             return db;
@@ -50,9 +55,9 @@ namespace Listings.Services
         }
 
 
-        private string GetFilePath()
+        public static string GetDatabaseDirectoryPath()
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "_BlitzikListings");
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "_evidooApp");
             if (!Directory.Exists(path)) {
                 Directory.CreateDirectory(path);
             }

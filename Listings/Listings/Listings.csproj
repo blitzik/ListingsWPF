@@ -116,6 +116,7 @@
     <Compile Include="Domain\DefaultListingPdfReportSetting.cs" />
     <Compile Include="Domain\DefaultSettings.cs" />
     <Compile Include="Domain\Employer.cs" />
+    <Compile Include="Domain\ResultObject.cs" />
     <Compile Include="Domain\TimeSetting.cs" />
     <Compile Include="Domain\Week.cs" />
     <Compile Include="EventArguments\SelectedDayItemArgs.cs" />
@@ -130,10 +131,12 @@
     <Compile Include="Exceptions\WorkedHoursRangeException.cs" />
     <Compile Include="Domain\ListingItem.cs" />
     <Compile Include="Exceptions\WrongTimeException.cs" />
+    <Compile Include="Facades\BaseFacade.cs" />
     <Compile Include="Facades\EmployerFacade.cs" />
     <Compile Include="Facades\ListingFacade.cs" />
     <Compile Include="Facades\SettingFacade.cs" />
     <Compile Include="Services\Db4oObjectContainerFactory.cs" />
+    <Compile Include="Services\ObjectContainerRegistry.cs" />
     <Compile Include="Views\ListingPdfGeneration\ListingPdfGenerationView.xaml.cs">
       <DependentUpon>ListingPdfGenerationView.xaml</DependentUpon>
     </Compile>

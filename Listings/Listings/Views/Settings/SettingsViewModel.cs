@@ -6,9 +6,11 @@ using Listings.Services;
 using Listings.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Listings.Views
 {
@@ -67,6 +69,73 @@ namespace Listings.Views
         }
 
 
+        private DelegateCommand<object> _backupDataCommand;
+        public DelegateCommand<object> BackupDataCommand
+        {
+            get
+            {
+                if (_backupDataCommand == null) {
+                    _backupDataCommand = new DelegateCommand<object>(p => CreateBackup());
+                }
+                return _backupDataCommand;
+            }
+        }
+
+
+        private string _backupFilePath;
+        public string BackupFilePath
+        {
+            get { return _backupFilePath; }
+            set
+            {
+                _backupFilePath = value;
+                RaisePropertyChanged();
+                ImportDataCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+
+        private DelegateCommand<object> _browseCommand;
+        public DelegateCommand<object> BrowseCommand
+        {
+            get
+            {
+                if (_browseCommand == null) {
+                    _browseCommand = new DelegateCommand<object>(p => Browse());
+                }
+                return _browseCommand;
+            }
+        }
+
+
+        private string _importDataResultMessage;
+        public string ImportDataResultMessage
+        {
+            get { return _importDataResultMessage; }
+            set
+            {
+                _importDataResultMessage = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private DelegateCommand<object> _importDataCommand;
+        public DelegateCommand<object> ImportDataCommand
+        {
+            get
+            {
+                if (_importDataCommand == null) {
+                    _importDataCommand = new DelegateCommand<object>(
+                        p => ImportBackup(),
+                        p => !string.IsNullOrEmpty(BackupFilePath) && File.Exists(BackupFilePath)
+                    );
+                }
+                return _importDataCommand;
+            }
+        }
+
+
         private DefaultListingPdfReportSetting _pdfSetting;
         public DefaultListingPdfReportSetting PdfSetting
         {
@@ -96,23 +165,35 @@ namespace Listings.Views
             _settingFacade = settingFacade;
             WindowTitle = windowTitle;
 
+            RefreshSettings();
+        }
+
+
+        public void RefreshSettings()
+        {
             _defaultSetting = _settingFacade.GetDefaultSettings();
 
             OwnerName = _defaultSetting.OwnerName;
 
             PdfSetting = CreateNewPdfSetting(_defaultSetting.Pdfsetting);
 
-            _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSetting.Time, _defaultSetting.Time, _defaultSetting.TimeTickInMinutes);
-            _workedTimeViewModel.OnTimeChanged += (object sender, WorkedTimeEventArgs args) =>
-            {
-                CancelChangesCommand.RaiseCanExecuteChanged();
-                SaveSettingsCommand.RaiseCanExecuteChanged();
-            };
-            _workedTimeViewModel.OnTimeTickChanged += (object sender, EventArgs args) =>
-            {
-                CancelChangesCommand.RaiseCanExecuteChanged();
-                SaveSettingsCommand.RaiseCanExecuteChanged();
-            };
+            if (_workedTimeViewModel == null) {
+                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSetting.Time, _defaultSetting.Time, _defaultSetting.TimeTickInMinutes);
+                _workedTimeViewModel.OnTimeChanged += (object sender, WorkedTimeEventArgs args) =>
+                {
+                    CancelChangesCommand.RaiseCanExecuteChanged();
+                    SaveSettingsCommand.RaiseCanExecuteChanged();
+                };
+                _workedTimeViewModel.OnTimeTickChanged += (object sender, EventArgs args) =>
+                {
+                    CancelChangesCommand.RaiseCanExecuteChanged();
+                    SaveSettingsCommand.RaiseCanExecuteChanged();
+                };
+            }
+            _workedTimeViewModel.SetTime(_defaultSetting.Time);
+            _workedTimeViewModel.SelectedTimeTickInMinutes = _defaultSetting.TimeTickInMinutes;
+
+            ImportDataResultMessage = null;
         }
 
 
@@ -176,6 +257,55 @@ namespace Listings.Views
             PdfSetting = CreateNewPdfSetting(_defaultSetting.Pdfsetting);
 
             CancelChangesHandler handler = OnCanceledChanges;
+            if (handler != null) {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
+
+        private void Browse()
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.DefaultExt = "." + Db4oObjectContainerFactory.DATABASE_EXTENSION;
+            ofd.Filter = "Evidoo data (*.evdo)|*.evdo";
+            if (ofd.ShowDialog() == DialogResult.OK) {
+                BackupFilePath = ofd.FileName;
+
+            }
+        }
+
+
+        private void CreateBackup()
+        {
+            DateTime now = DateTime.Now;
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Evidoo data (*.evdo)|*.evdo";
+            saveFileDialog.FileName = string.Format("Záloha dat - {0}-{1}-{2}", now.Day, now.Month, now.Year);
+            if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                try {
+                    _settingFacade.BackupData(saveFileDialog.FileName);
+
+                } catch (Exception e) {
+
+                }
+            }
+        }
+
+
+        public delegate void AfterImportBackupHandler(object sender, EventArgs args);
+        public event AfterImportBackupHandler OnAfterBackupImport;
+        private void ImportBackup()
+        {
+            ResultObject ro = _settingFacade.ImportBackup(BackupFilePath);
+
+            _defaultSetting = _settingFacade.GetDefaultSettings();
+            RefreshSettings();
+
+            BackupFilePath = null;
+            ImportDataResultMessage = ro.GetLastMessage();
+
+            AfterImportBackupHandler handler = OnAfterBackupImport;
             if (handler != null) {
                 handler(this, EventArgs.Empty);
             }

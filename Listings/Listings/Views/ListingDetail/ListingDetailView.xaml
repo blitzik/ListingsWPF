@@ -158,7 +158,7 @@
 
                                     <!-- Day number -->
                                     <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Background="#78909C" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                                        <TextBlock Foreground="#FFF" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock Foreground="#FFF" FontSize="19" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="{}{0}.">
                                                     <Binding Path="Day" />
@@ -169,12 +169,12 @@
 
                                     <!-- Short day name -->
                                     <Border Grid.Row="4" Grid.Column="0" Grid.RowSpan="3" Background="#78909C" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                                        <TextBlock Text="{Binding ShortDayName}" Foreground="#FFF" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding ShortDayName}" Foreground="#FFF" FontSize="19" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     </Border>
 
                                     <!-- Shift hours -->
                                     <TextBlock Grid.Row="0" Grid.Column="2" Text="Pracovní doba" Style="{StaticResource LabelText}" HorizontalAlignment="Left" />
-                                    <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left">
+                                    <TextBlock Grid.Row="2" Grid.Column="2" FontSize="14" HorizontalAlignment="Left">
                                         <TextBlock.Text>
                                             <MultiBinding Converter="{StaticResource TimeToHoursAndMinutesRangeConverter}">
                                                 <Binding Path="TimeSetting.Start" />
@@ -185,7 +185,7 @@
 
                                     <!-- Lunch hours -->
                                     <TextBlock Grid.Row="0" Grid.Column="4" Text="Oběd" Style="{StaticResource LabelText}" HorizontalAlignment="Left" />
-                                    <TextBlock Grid.Row="2" Grid.Column="4" HorizontalAlignment="Left">
+                                    <TextBlock Grid.Row="2" Grid.Column="4" FontSize="14" HorizontalAlignment="Left">
                                         <TextBlock.Text>
                                             <MultiBinding Converter="{StaticResource TimeToHoursAndMinutesRangeConverter}">
                                                 <Binding Path="TimeSetting.LunchStart" />
@@ -196,7 +196,7 @@
 
                                     <!-- Other hours -->
                                     <TextBlock Grid.Row="0" Grid.Column="6" Text="Ostatní hodiny" Style="{StaticResource LabelText}" />
-                                    <TextBlock Grid.Row="2" Grid.Column="6" Text="{Binding TimeSetting.OtherHours, Converter={StaticResource TimeToTimeInWordsConverter}}" HorizontalAlignment="Left" />
+                                    <TextBlock Grid.Row="2" Grid.Column="6" FontSize="14" Text="{Binding TimeSetting.OtherHours, Converter={StaticResource TimeToTimeInWordsConverter}}" HorizontalAlignment="Left" />
 
                                     <!-- Total Worked hours -->
                                     <TextBlock Grid.Row="0" Grid.Column="8" Text="Odpracované hodiny celkem" HorizontalAlignment="Center" Style="{StaticResource LabelText}" />
@@ -204,7 +204,7 @@
 
                                     <!-- Job description - locality -->
                                     <TextBlock Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="5" Text="Popis práce - místo" Style="{StaticResource LabelText}" HorizontalAlignment="Left" />
-                                    <TextBlock Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="5" Text="{Binding Locality}" TextWrapping="Wrap" />
+                                    <TextBlock Grid.Row="6" Grid.Column="2" FontSize="14" Grid.ColumnSpan="5" Text="{Binding Locality}" TextWrapping="Wrap" />
                                 </Grid>
                             </Button>
 

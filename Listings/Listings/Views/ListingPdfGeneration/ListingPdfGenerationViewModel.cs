@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -106,6 +107,10 @@ namespace Listings.Views
         {
             _settingFacade = settingFacade;
             WindowTitle = windowTitle;
+
+            _defaultSettings = settingFacade.GetDefaultSettings();
+
+            PdfSetting = new DefaultListingPdfReportSetting(_defaultSettings.Pdfsetting);
         }
 
 
@@ -121,11 +126,14 @@ namespace Listings.Views
 
             PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(true, PdfSharp.Pdf.PdfFontEmbedding.Always);
             pdfRenderer.Document = report.Document;
-            pdfRenderer.RenderDocument();
+
+            Thread t = new Thread(delegate () { pdfRenderer.RenderDocument(); });
+            t.Start();
+            //pdfRenderer.RenderDocument();
             //pdfRenderer.PdfDocument.Save(Path.Combine(path, "test.pdf"));
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "PDF dokument (*.pdf)|.pdf";
+            saveFileDialog.Filter = "PDF dokument (*.pdf)|*.pdf";
             saveFileDialog.FileName = string.Format("{0} {1} - {2}", Date.Months[12 - Listing.Month], Listing.Year, Listing.Name);
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                 pdfRenderer.PdfDocument.Save(saveFileDialog.FileName);
@@ -151,7 +159,7 @@ namespace Listings.Views
         {
             OwnerName = _defaultSettings.OwnerName;
 
-            PdfSetting = _defaultSettings.Pdfsetting;
+            PdfSetting.UpdateBy(_defaultSettings.Pdfsetting);
         }
 
 

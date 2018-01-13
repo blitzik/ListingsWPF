@@ -8,17 +8,17 @@
              d:DesignHeight="300" d:DesignWidth="300">
     
     <StackPanel>
-        <TextBlock Text="{Binding Employer.Name}" Margin="0 0 0 5" FontWeight="Bold" />
+        <TextBlock Text="{Binding Employer.Name}" Margin="0 0 0 5" FontSize="15" FontWeight="Bold" />
         <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" Style="{StaticResource DefaultTextBox}" />
         <Grid Margin="0 5 0 0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="100" />
                 <ColumnDefinition Width="10" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             
             <Button Grid.Column="0" Command="{Binding EmployerDeletionCommand}" Content="odstranit" Style="{StaticResource CriticalButton}" Padding="5" />
-            <Button Grid.Column="2" Width="150" Command="{Binding EmployerNameSaveCommand}" Content="uložit" Padding="5" HorizontalAlignment="Right" />
+            <Button Grid.Column="2" Width="150" Command="{Binding EmployerNameSaveCommand}" Content="uložit" Padding="5" HorizontalAlignment="Right" Style="{StaticResource DefaultButton}" />
         </Grid>
     </StackPanel>
     

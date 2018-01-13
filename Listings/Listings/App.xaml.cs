@@ -18,19 +18,24 @@ namespace Listings
     /// </summary>
     public partial class App : Application
     {
-        private IObjectContainer _db;
+        private ObjectContainerRegistry _dbRegistry;
+
+
+        public App()
+        {
+            _dbRegistry = new ObjectContainerRegistry();
+        }
 
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnActivated(e);
+            
+            _dbRegistry.Add(Db4oObjectContainerFactory.MAIN_DATABASE_NAME, (new Db4oObjectContainerFactory()).Create(Db4oObjectContainerFactory.MAIN_DATABASE_NAME));
 
-            Db4oObjectContainerFactory dbFactory = new Db4oObjectContainerFactory();
-            _db = dbFactory.Create("data.dbs");
-
-            ListingFacade listingFacade = new ListingFacade(_db);
-            EmployerFacade employersFacade = new EmployerFacade(_db);
-            SettingFacade settingFacade = new SettingFacade(_db);
+            ListingFacade listingFacade = new ListingFacade(_dbRegistry);
+            EmployerFacade employersFacade = new EmployerFacade(_dbRegistry);
+            SettingFacade settingFacade = new SettingFacade(_dbRegistry);
 
             MainViewModel mainViewModel = new MainViewModel(listingFacade, employersFacade, settingFacade);
 
@@ -47,7 +52,7 @@ namespace Listings
         {
             base.OnExit(e);
 
-            _db.Close();
+            _dbRegistry.CloseAll();
         }
     }
 }

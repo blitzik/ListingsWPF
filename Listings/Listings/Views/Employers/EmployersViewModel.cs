@@ -54,12 +54,12 @@ namespace Listings.Views
         }
 
 
-        public EmployersViewModel(EmployerFacade employersFacade, string windowTitle)
+        public EmployersViewModel(EmployerFacade employerFacade, string windowTitle)
         {
-            _employerFacade = employersFacade;
+            _employerFacade = employerFacade;
             WindowTitle = windowTitle;
 
-            List<Employer> foundEmployers = employersFacade.FindAllEmployers();
+            List<Employer> foundEmployers = employerFacade.FindAllEmployers();
             _employers = new ObservableCollection<EmployerItemViewModel>();
             foreach (Employer e in foundEmployers) {
                 _employers.Add(CreateEmployerItemViewModel(e));
@@ -67,10 +67,16 @@ namespace Listings.Views
         }
 
 
-        public void RestoreDefaultStates()
+        public void RestoreDefaultState()
         {
-            foreach (EmployerItemViewModel i in _employers) {
-                i.RestoreDefaultState();
+            List<Employer> foundEmployers = _employerFacade.FindAllEmployers();
+
+            _employers = new ObservableCollection<EmployerItemViewModel>();
+            foreach (Employer e in foundEmployers) {
+                EmployerItemViewModel vm = CreateEmployerItemViewModel(e);
+                vm.RestoreDefaultState();
+
+                _employers.Add(vm);
             }
         }
 

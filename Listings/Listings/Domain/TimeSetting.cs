@@ -92,15 +92,25 @@ namespace Listings.Domain
         }
 
 
+        public TimeSetting(TimeSetting timeSetting)
+        {
+            _start = new Time(timeSetting.Start);
+            _end = new Time(timeSetting.End);
+            _lunchStart = new Time(timeSetting.LunchStart);
+            _lunchEnd = new Time(timeSetting.LunchEnd);
+            _otherHours = new Time(timeSetting.OtherHours);
+        }
+
+
         public TimeSetting(Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
         {
             CheckTime(start, end, lunchStart, lunchEnd, otherHours);
 
-            _start = start;
-            _end = end;
-            _lunchStart = lunchStart;
-            _lunchEnd = lunchEnd;
-            _otherHours = otherHours;
+            _start = new Time(start);
+            _end = new Time(end);
+            _lunchStart = new Time(lunchStart);
+            _lunchEnd = new Time(lunchEnd);
+            _otherHours = new Time(otherHours);
         }
 
 

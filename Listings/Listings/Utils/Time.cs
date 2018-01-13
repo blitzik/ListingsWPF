@@ -87,6 +87,17 @@ namespace Listings.Utils
         }
 
 
+        public Time(Time time)
+        {
+            Hours = time.Hours;
+            Minutes = time.Minutes;
+            Seconds = time.Seconds;
+            TotalSeconds = time.TotalSeconds;
+            Text = time.Text;
+            HoursAndMinutes = time.HoursAndMinutes;
+        }
+
+
         private string GetHoursAndMinutes(Time time)
         {
             return time.Text.Substring(0, time.Text.LastIndexOf(":"));

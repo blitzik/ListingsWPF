@@ -27,7 +27,7 @@
                 <ColumnDefinition Width="125" />
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Content="Zpět" Command="{Binding ReturnBackCommand}" />
+            <Button Grid.Column="0" Content="Zpět" Command="{Binding ReturnBackCommand}" Style="{StaticResource DefaultButton}" />
             <Button Grid.Column="2" Content="Odstranit" Command="{Binding DeleteCommand}" Style="{StaticResource CriticalButton}" />
         </Grid>
     </StackPanel>

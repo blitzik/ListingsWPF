@@ -100,6 +100,7 @@ namespace Listings.Views
                     };
 
                     _listingDetailViewModel.OnListingPdfGenerationClicked += (object sender, ListingArgs args) => {
+                        //_listingFacade.RefreshListing(args.Listing);
                         ListingPdfGenerationViewModel.Listing = args.Listing;
                         ChangeView(nameof(ListingPdfGenerationViewModel));
                     };
@@ -189,9 +190,14 @@ namespace Listings.Views
             {
                 if (_settingsViewModel == null) {
                     _settingsViewModel = new SettingsViewModel(_listingFacade, _settingFacade, "Nastavení");
-                    /*_settingsViewModel.OnCanceledChanges += (object sender, EventArgs args) => {
-                        ChangeView();
-                    };*/
+                    _settingsViewModel.OnAfterBackupImport += (object sender, EventArgs args) => {
+                        _listingsOverviewViewModel = null;
+                        _employersViewModel = null;
+                        _settingsViewModel = null;
+                        _listingPdfGenerationViewModel = null;
+
+                        //ChangeView(nameof(ListingsOverviewViewModel));
+                    };
                 }
                 return _settingsViewModel;
             }
@@ -269,11 +275,12 @@ namespace Listings.Views
                     break;
 
                 case nameof(EmployersViewModel):
-                    EmployersViewModel.RestoreDefaultStates();
+                    EmployersViewModel.RestoreDefaultState();
                     CurrentViewModel = EmployersViewModel;
                     break;
 
                 case nameof(SettingsViewModel):
+                    SettingsViewModel.RefreshSettings();
                     CurrentViewModel = SettingsViewModel;
                     break;
 

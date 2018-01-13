@@ -214,6 +214,37 @@
                     </StackPanel>
                 </Border>
             </TabItem>
+
+            <TabItem Header="Záloha dat">
+                <Border Padding="15">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="600" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="250" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Margin="0 0 0 0" Text="Import dat" Style="{StaticResource LabelText}" />
+                            <TextBlock Text="{Binding ImportDataResultMessage, UpdateSourceTrigger=PropertyChanged}" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition Width="150" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0" Text="{Binding BackupFilePath, UpdateSourceTrigger=PropertyChanged}" />
+                                <Button Grid.Column="2" Content="Vybrat soubor" Command="{Binding BrowseCommand}" />
+                            </Grid>
+                            
+                            <Button Margin="0 15 0 0" Content="Importovat zálohu" Command="{Binding ImportDataCommand}" Style="{StaticResource TurquoiseButton}" />
+                        </StackPanel>
+
+                        <Button Grid.Column="2" Content="Zálohovat data" Command="{Binding BackupDataCommand}" />
+                    </Grid>
+                </Border>
+            </TabItem>
         </TabControl>
     </StackPanel>
 </UserControl>

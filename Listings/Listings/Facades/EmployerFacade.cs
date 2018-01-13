@@ -6,31 +6,29 @@ using System.Linq;
 using System.Text;
 using Db4objects.Db4o.Linq;
 using System.Threading.Tasks;
+using Listings.Services;
 
 namespace Listings.Facades
 {
-    public class EmployerFacade
+    public class EmployerFacade : BaseFacade
     {
-        private IObjectContainer _db;
-
-
-        public EmployerFacade(IObjectContainer db)
+        public EmployerFacade(ObjectContainerRegistry dbRegistry)
         {
-            _db = db;
+            _dbRegistry = dbRegistry;
         }
 
 
         public void Save(Employer employer)
         {
-            _db.Store(employer);
-            _db.Commit();
+            Db().Store(employer);
+            Db().Commit();
         }
 
 
         public void Delete(Employer employer)
         {
-            _db.Delete(employer);
-            _db.Commit();
+            Db().Delete(employer);
+            Db().Commit();
         }
 
 
@@ -39,11 +37,11 @@ namespace Listings.Facades
             IEnumerable<Employer> employers;
             switch (order.ToLower()) {
                 case "ASC":
-                    employers = from Employer e in _db orderby e.CreatedAt ascending select e;
+                    employers = from Employer e in Db() orderby e.CreatedAt ascending select e;
                     break;
 
                 default:
-                    employers = from Employer e in _db orderby e.CreatedAt descending select e;
+                    employers = from Employer e in Db() orderby e.CreatedAt descending select e;
                     break;
             }
             

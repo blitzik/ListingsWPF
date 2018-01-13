@@ -170,6 +170,7 @@ namespace Listings.Views
 
             SelectedEmployer = _promptEmployer;
             HourlyWage = null;
+            Name = null;
             SelectedYear = DateTime.Now.Year;
             SelectedMonth = DateTime.Now.Month;
 

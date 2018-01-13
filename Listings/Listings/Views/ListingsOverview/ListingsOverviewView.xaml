@@ -74,7 +74,7 @@
 
                                         <!-- Listing period -->
                                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Období" Style="{StaticResource LabelText}" HorizontalAlignment="Left" />
-                                        <TextBlock Grid.Row="2" Grid.Column="0">
+                                        <TextBlock Grid.Row="2" Grid.Column="0" FontSize="16">
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="{}{0} {1}">
                                                     <Binding Path="Month" Converter="{StaticResource MonthNameToIntConverter}" />
@@ -85,11 +85,11 @@
 
                                         <!-- Worked hours -->
                                         <TextBlock Grid.Row="0" Grid.Column="2" Text="Odpracované hodiny" Style="{StaticResource LabelText}" />
-                                        <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding TotalWorkedHours, Converter={StaticResource TimeToTimeInWordsConverter}}" HorizontalAlignment="Center" />
+                                        <TextBlock Grid.Row="2" Grid.Column="2" FontSize="16" Text="{Binding TotalWorkedHours, Converter={StaticResource TimeToTimeInWordsConverter}}" HorizontalAlignment="Center" />
 
                                         <!-- Worked days -->
                                         <TextBlock Grid.Row="0" Grid.Column="4" Text="Odpracované dny" Style="{StaticResource LabelText}" />
-                                        <TextBlock Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center">
+                                        <TextBlock Grid.Row="2" Grid.Column="4" FontSize="16" HorizontalAlignment="Center">
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="{}{0} / {1}">
                                                     <Binding Path="WorkedDays" />

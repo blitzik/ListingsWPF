@@ -9,30 +9,29 @@ using Db4objects.Db4o.Linq;
 using Db4objects.Db4o.Foundation;
 using Listings.EventArguments;
 using Listings.Utils;
+using Db4objects.Db4o.Ext;
+using Listings.Services;
 
 namespace Listings.Facades
 {
-    public class ListingFacade
+    public class ListingFacade : BaseFacade
     {
-        private IObjectContainer _db;
-
-
-        public ListingFacade(IObjectContainer db)
+        public ListingFacade(ObjectContainerRegistry dbRegistry)
         {
-            _db = db;
+            _dbRegistry = dbRegistry;
         }
 
 
         public void Save(Listing listing)
         {
-            _db.Store(listing);
-            _db.Commit();
+            Db().Store(listing);
+            Db().Commit();
         }
 
 
         public List<Listing> FindAllListings()
         {
-            IEnumerable<Listing> listings = from Listing l in _db select l;
+            IEnumerable<Listing> listings = from Listing l in Db() select l;
 
             return new List<Listing>(listings);
         }
@@ -53,7 +52,7 @@ namespace Listings.Facades
             }
 
             Comparison<Listing> comp = new Comparison<Listing>(comparer);
-            IEnumerable<Listing> listings = _db.Query<Listing>(l => l.Year == year, comp);
+            IEnumerable<Listing> listings = Db().Query<Listing>(l => l.Year == year, comp);
             foreach (Listing l in listings) {
                 l.OnReplacedListingItem += OnChangedListingItem;
                 l.OnRemovedListingItem += OnChangedListingItem;
@@ -66,20 +65,20 @@ namespace Listings.Facades
 
         private void OnChangedListingItem(object sender, ListingItemArgs args)
         {
-            _db.Delete(args.ListingItem);
+            Db().Delete(args.ListingItem);
         }
 
 
         private void OnTimeChanged(object sender, Time time)
         {
-            _db.Delete(time);
+            Db().Delete(time);
         }
 
 
         public void DeleteListing(Listing listing)
         {
-            _db.Delete(listing);
-            _db.Commit();
+            Db().Delete(listing);
+            Db().Commit();
         }
 
 
@@ -97,7 +96,32 @@ namespace Listings.Facades
 
         public void Activate(Listing listing, int depth)
         {
-            _db.Activate(listing, depth);
+            Db().Activate(listing, depth);
+        }
+
+
+        public void RefreshListing(Listing listing)
+        {
+            Db().Ext().Refresh(listing, 4);
+        }
+
+
+        // -----
+
+
+        public Dictionary<string, int> DisplayStats()
+        {
+            Dictionary<string, int> stats = new Dictionary<string, int>();
+
+            stats.Add("Listing", (from Listing l in Db() select l).Count());
+            stats.Add("ListingItem", (from ListingItem l in Db() select l).Count());
+            stats.Add("Time", (from Time l in Db() select l).Count());
+            stats.Add("TimeSetting", (from TimeSetting l in Db() select l).Count());
+            stats.Add("DefaultSettings", (from DefaultSettings l in Db() select l).Count());
+            stats.Add("Employer", (from Employer l in Db() select l).Count());
+            stats.Add("DefaultListingPdfReportSetting", (from DefaultListingPdfReportSetting l in Db() select l).Count());
+
+            return stats;
         }
 
     }
