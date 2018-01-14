@@ -27,10 +27,6 @@ namespace Listings.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((bool)value == true) {
-                return (string)parameter;
-            }
-
             return Binding.DoNothing;
         }
     }

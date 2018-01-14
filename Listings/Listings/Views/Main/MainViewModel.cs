@@ -38,7 +38,6 @@ namespace Listings.Views
                 if (_navigationCommand == null) {
                     _navigationCommand = new DelegateCommand<string>(p => ChangeView(p));
                 }
-
                 return _navigationCommand;
             }
         }
@@ -56,7 +55,6 @@ namespace Listings.Views
                         ChangeView(nameof(ListingDetailViewModel));
                     };
                 }
-
                 return _listingsOverviewViewModel;
             }
         }
@@ -74,7 +72,6 @@ namespace Listings.Views
                         ChangeView(nameof(ListingDetailViewModel));
                     };
                 }
-
                 return _listingViewModel;
             }
         }
@@ -115,7 +112,6 @@ namespace Listings.Views
                         ChangeView(nameof(ListingDeletionViewModel));
                     };
                 }
-
                 return _listingDetailViewModel;
             }
         }
@@ -154,7 +150,6 @@ namespace Listings.Views
                         ChangeView(nameof(ListingDetailViewModel));
                     };
                 }
-
                 return _listingDeletionViewModel;
             }
         }
