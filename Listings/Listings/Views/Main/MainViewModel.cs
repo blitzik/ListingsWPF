@@ -253,7 +253,7 @@ namespace Listings.Views
                     break;
 
                 case nameof(ListingViewModel):
-                    ListingViewModel.RefreshEmployers();
+                    ListingViewModel.Refresh();
                     CurrentViewModel = ListingViewModel;
                     break;
 

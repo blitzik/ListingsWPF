@@ -15,13 +15,21 @@ namespace Listings.Domain
         }
 
 
+        private object _result;
+        public object Result
+        {
+            get { return _result; }
+        }
+
+
         private List<string> _messages;
 
 
-        public ResultObject(bool success)
+        public ResultObject(bool success, object result = null)
         {
             _messages = new List<string>();
             _success = success;
+            _result = result;
         }
 
 

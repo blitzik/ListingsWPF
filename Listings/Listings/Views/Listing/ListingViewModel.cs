@@ -142,10 +142,16 @@ namespace Listings.Views
         }
 
 
-        public void RefreshEmployers()
+        public void Refresh()
         {
             _employers = _employerFacade.FindAllEmployers();
             _employers.Insert(0, _promptEmployer);
+
+            SelectedYear = DateTime.Now.Year;
+            SelectedMonth = DateTime.Now.Month;
+            SelectedEmployer = _promptEmployer;
+            HourlyWage = null;
+            Name = null;
         }
 
 
