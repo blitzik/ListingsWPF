@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Listings.Services.IO;
 
 namespace Listings.Views
 {
@@ -184,7 +185,7 @@ namespace Listings.Views
             get
             {
                 if (_settingsViewModel == null) {
-                    _settingsViewModel = new SettingsViewModel(_listingFacade, _settingFacade, "Nastavení");
+                    _settingsViewModel = new SettingsViewModel(_listingFacade, _settingFacade, _filePathSelector, "Nastavení");
                     _settingsViewModel.OnAfterBackupImport += (object sender, EventArgs args) => {
                         _listingsOverviewViewModel = null;
                         _employersViewModel = null;
@@ -218,15 +219,17 @@ namespace Listings.Views
         private ListingFacade _listingFacade;
         private EmployerFacade _employerFacade;
         private SettingFacade _settingFacade;
+        private IFilePathSelector _filePathSelector;
 
         private DefaultSettings _defaultSettings;
 
 
-        public MainViewModel(ListingFacade listingFacade, EmployerFacade employersFacade, SettingFacade settingFacade)
+        public MainViewModel(ListingFacade listingFacade, EmployerFacade employersFacade, SettingFacade settingFacade, IFilePathSelector filePathSelector)
         {
             _listingFacade = listingFacade;
             _employerFacade = employersFacade;
             _settingFacade = settingFacade;
+            _filePathSelector = filePathSelector;
 
             _defaultSettings = _settingFacade.GetDefaultSettings();
 

@@ -3,12 +3,15 @@ using Listings.Domain;
 using Listings.EventArguments;
 using Listings.Facades;
 using Listings.Services;
+using Listings.Services.IO;
 using Listings.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -157,12 +160,14 @@ namespace Listings.Views
 
         private ListingFacade _listingFacade;
         private SettingFacade _settingFacade;
+        private IFilePathSelector _openFileDialogPathSelector;
 
 
-        public SettingsViewModel(ListingFacade listingFacade, SettingFacade settingFacade, string windowTitle)
+        public SettingsViewModel(ListingFacade listingFacade, SettingFacade settingFacade, IFilePathSelector openFileDialogPathSelector, string windowTitle)
         {
             _listingFacade = listingFacade;
             _settingFacade = settingFacade;
+            _openFileDialogPathSelector = openFileDialogPathSelector;
             WindowTitle = windowTitle;
 
             RefreshSettings();
@@ -265,30 +270,35 @@ namespace Listings.Views
 
         private void Browse()
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.DefaultExt = "." + Db4oObjectContainerFactory.DATABASE_EXTENSION;
-            ofd.Filter = "Evidoo data (*.evdo)|*.evdo";
-            if (ofd.ShowDialog() == DialogResult.OK) {
-                BackupFilePath = ofd.FileName;
-
-            }
+            BackupFilePath = _openFileDialogPathSelector.GetFilePath(o => {
+                OpenFileDialog d = (OpenFileDialog)o;
+                d.DefaultExt = "." + Db4oObjectContainerFactory.DATABASE_EXTENSION;
+                d.Filter = "Evidoo data (*.evdo)|*.evdo";
+            });
         }
 
 
         private void CreateBackup()
         {
+
             DateTime now = DateTime.Now;
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Evidoo data (*.evdo)|*.evdo";
             saveFileDialog.FileName = string.Format("Záloha dat - {0}-{1}-{2}", now.Day, now.Month, now.Year);
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                try {
+                ProgressBarWindow pb = new ProgressBarWindow();
+                pb.Owner = System.Windows.Application.Current.MainWindow;
+                BackgroundWorker bw = new BackgroundWorker();
+                bw.DoWork += (object sender, DoWorkEventArgs e) => {
                     _settingFacade.BackupData(saveFileDialog.FileName);
+                };
+                bw.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
+                    pb.Close();
+                };
+                bw.RunWorkerAsync();
 
-                } catch (Exception e) {
-
-                }
+                pb.ShowDialog();
             }
         }
 

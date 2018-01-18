@@ -136,11 +136,18 @@
     <Compile Include="Facades\ListingFacade.cs" />
     <Compile Include="Facades\SettingFacade.cs" />
     <Compile Include="Services\Db4oObjectContainerFactory.cs" />
+    <Compile Include="Services\IO\IOpenFileDialog.cs" />
+    <Compile Include="Services\IO\NullFilePathSelector.cs" />
+    <Compile Include="Services\IO\OpenFileDialogPathSelector.cs" />
+    <Compile Include="Services\IO\SaveFileDialogPathSelector.cs" />
     <Compile Include="Services\ObjectContainerRegistry.cs" />
     <Compile Include="Views\ListingPdfGeneration\ListingPdfGenerationView.xaml.cs">
       <DependentUpon>ListingPdfGenerationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ListingPdfGeneration\ListingPdfGenerationViewModel.cs" />
+    <Compile Include="Views\ProgressBarWindow\ProgressBarWindow.xaml.cs">
+      <DependentUpon>ProgressBarWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WorkedTimeSetting\WorkedTimeSettingView.xaml.cs">
       <DependentUpon>WorkedTimeSettingView.xaml</DependentUpon>
     </Compile>
@@ -247,6 +254,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Listing\ListingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProgressBarWindow\ProgressBarWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

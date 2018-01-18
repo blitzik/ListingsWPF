@@ -111,6 +111,16 @@ namespace Listings.Facades
 
         public Dictionary<string, int> DisplayStats()
         {
+            IEnumerable<Listing> list = from Listing l in Db() where l.Month == 5 && l.Year == 2013 select l;
+
+            /*Random r = new Random();
+            for (int i = 0; i < 100000; i++) {
+                Listing l = new Listing(r.Next(2010, 2019), r.Next(1, 13));
+                Db().Store(l);
+            }
+            Db().Commit();*/
+
+
             Dictionary<string, int> stats = new Dictionary<string, int>();
 
             stats.Add("Listing", (from Listing l in Db() select l).Count());

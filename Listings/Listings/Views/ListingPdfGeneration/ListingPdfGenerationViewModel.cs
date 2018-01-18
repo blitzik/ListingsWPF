@@ -8,11 +8,13 @@ using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 
 namespace Listings.Views
@@ -121,28 +123,29 @@ namespace Listings.Views
 
             DefaultListingPdfReport report = new DefaultListingPdfReport(Listing);
             report.OwnerName = OwnerName;
-
             report.Setting = _pdfSetting;
 
             PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(true, PdfSharp.Pdf.PdfFontEmbedding.Always);
             pdfRenderer.Document = report.Document;
-
-            Thread t = new Thread(delegate () { pdfRenderer.RenderDocument(); });
-            t.Start();
-            //pdfRenderer.RenderDocument();
-            //pdfRenderer.PdfDocument.Save(Path.Combine(path, "test.pdf"));
-
+            
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF dokument (*.pdf)|*.pdf";
             saveFileDialog.FileName = string.Format("{0} {1} - {2}", Date.Months[12 - Listing.Month], Listing.Year, Listing.Name);
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                pdfRenderer.PdfDocument.Save(saveFileDialog.FileName);
-            }
+                BackgroundWorker bw = new BackgroundWorker();
+                bw.DoWork += (object sender, DoWorkEventArgs e) => {
+                    pdfRenderer.RenderDocument();
+                };
+                bw.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
+                    pdfRenderer.PdfDocument.Save(saveFileDialog.FileName);
 
-            IsGeneratePdfButtonActive = true;
-            GeneratePdfCommand.RaiseCanExecuteChanged();
+                    IsGeneratePdfButtonActive = true;
+                    GeneratePdfCommand.RaiseCanExecuteChanged();
+                };
+                bw.RunWorkerAsync(pdfRenderer);
+            }
         }
-        
+
 
         private string GetFilePath()
         {

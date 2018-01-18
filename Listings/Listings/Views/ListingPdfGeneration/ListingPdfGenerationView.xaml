@@ -20,7 +20,7 @@
             <TextBlock Text="Jméno" Style="{StaticResource LabelText}" />
             <TextBox Text="{Binding OwnerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="30" Style="{StaticResource DefaultTextBox}" />
 
-            <Grid Margin="0 25 0 0">
+            <Grid Margin="0 15 0 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="125" />
                     <ColumnDefinition Width="10" />
