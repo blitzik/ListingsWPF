@@ -160,14 +160,12 @@ namespace Listings.Views
 
         private ListingFacade _listingFacade;
         private SettingFacade _settingFacade;
-        private IFilePathSelector _openFileDialogPathSelector;
 
 
-        public SettingsViewModel(ListingFacade listingFacade, SettingFacade settingFacade, IFilePathSelector openFileDialogPathSelector, string windowTitle)
+        public SettingsViewModel(ListingFacade listingFacade, SettingFacade settingFacade, string windowTitle)
         {
             _listingFacade = listingFacade;
             _settingFacade = settingFacade;
-            _openFileDialogPathSelector = openFileDialogPathSelector;
             WindowTitle = windowTitle;
 
             Reset();
@@ -270,11 +268,11 @@ namespace Listings.Views
 
         private void Browse()
         {
-            BackupFilePath = _openFileDialogPathSelector.GetFilePath(o => {
-                OpenFileDialog d = (OpenFileDialog)o;
-                d.DefaultExt = "." + Db4oObjectContainerFactory.DATABASE_EXTENSION;
-                d.Filter = "Evidoo data (*.evdo)|*.evdo";
-            });
+            //BackupFilePath = _openFileDialogPathSelector.GetFilePath(o => {
+            //    OpenFileDialog d = (OpenFileDialog)o;
+            //    d.DefaultExt = "." + Db4oObjectContainerFactory.DATABASE_EXTENSION;
+            //    d.Filter = "Evidoo data (*.evdo)|*.evdo";
+            //});
         }
 
 
