@@ -23,7 +23,7 @@ namespace Listings.Views
             set
             {
                 _listing = value;
-                RefreshWindowTitle();
+                Reset();
                 InitializeData();
                 RaisePropertyChanged();
             }
@@ -228,7 +228,7 @@ namespace Listings.Views
         }
 
 
-        public void RefreshWindowTitle()
+        public override void Reset()
         {
             WindowTitle = string.Format("{0} [{1} {2} {3}]", _basicWindowTitle, Date.Months[12 - Listing.Month], Listing.Year, string.Format("- {0}", Listing.Name));
         }

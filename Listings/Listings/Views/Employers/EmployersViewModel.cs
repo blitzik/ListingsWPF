@@ -67,14 +67,14 @@ namespace Listings.Views
         }
 
 
-        public void RestoreDefaultState()
+        public override void Reset()
         {
             List<Employer> foundEmployers = _employerFacade.FindAllEmployers();
 
             _employers = new ObservableCollection<EmployerItemViewModel>();
             foreach (Employer e in foundEmployers) {
                 EmployerItemViewModel vm = CreateEmployerItemViewModel(e);
-                vm.RestoreDefaultState();
+                vm.Reset();
 
                 _employers.Add(vm);
             }

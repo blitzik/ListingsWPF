@@ -22,6 +22,9 @@ namespace Listings.Views
         }
 
 
+        public virtual void Reset() { }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged([CallerMemberName]string propertyName = "")
         {

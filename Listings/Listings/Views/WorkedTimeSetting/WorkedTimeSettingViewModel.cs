@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class WorkedTimeSettingViewModel : Views.ViewModel
+    public class WorkedTimeSettingViewModel : ViewModel
     {
         private int _startTime;
         public int StartTime
@@ -514,6 +514,11 @@ namespace Listings.Views
             if (OnTimeChanged != null) {
                 OnTimeChanged(this, new WorkedTimeEventArgs(new Time(StartTime), new Time(EndTime), new Time(LunchStart), new Time(LunchEnd), new Time(OtherHours)));
             }
+        }
+
+
+        public override void Reset()
+        {
         }
     }
 

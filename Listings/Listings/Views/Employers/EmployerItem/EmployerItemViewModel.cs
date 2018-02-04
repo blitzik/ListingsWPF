@@ -99,7 +99,7 @@ namespace Listings.Views
         }
 
 
-        public void RestoreDefaultState()
+        public override void Reset()
         {
             ChangeView(nameof(EmployerDetailViewModel));
             _employerDetailViewModel.ResetName();

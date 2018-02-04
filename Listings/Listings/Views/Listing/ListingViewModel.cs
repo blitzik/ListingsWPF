@@ -142,7 +142,7 @@ namespace Listings.Views
         }
 
 
-        public void Refresh()
+        public override void Reset()
         {
             _employers = _employerFacade.FindAllEmployers();
             _employers.Insert(0, _promptEmployer);

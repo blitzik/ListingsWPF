@@ -170,11 +170,11 @@ namespace Listings.Views
             _openFileDialogPathSelector = openFileDialogPathSelector;
             WindowTitle = windowTitle;
 
-            RefreshSettings();
+            Reset();
         }
 
 
-        public void RefreshSettings()
+        public override void Reset()
         {
             _defaultSetting = _settingFacade.GetDefaultSettings();
 
@@ -310,7 +310,7 @@ namespace Listings.Views
             ResultObject ro = _settingFacade.ImportBackup(BackupFilePath);
 
             _defaultSetting = _settingFacade.GetDefaultSettings();
-            RefreshSettings();
+            Reset();
 
             BackupFilePath = null;
             ImportDataResultMessage = ro.GetLastMessage();

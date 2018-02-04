@@ -92,7 +92,7 @@ namespace Listings.Views
         }
 
 
-        public void RefreshList()
+        public override void Reset()
         {
             LoadListings(SelectedYear);
         }

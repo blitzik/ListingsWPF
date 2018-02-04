@@ -246,12 +246,10 @@ namespace Listings.Views
 
             switch (viewCode) {
                 case nameof(ListingsOverviewViewModel):
-                    ListingsOverviewViewModel.RefreshList();
                     CurrentViewModel = ListingsOverviewViewModel;
                     break;
 
                 case nameof(ListingViewModel):
-                    ListingViewModel.Refresh();
                     CurrentViewModel = ListingViewModel;
                     break;
 
@@ -260,7 +258,6 @@ namespace Listings.Views
                     break;
 
                 case nameof(ListingDetailViewModel):
-                    ListingDetailViewModel.RefreshWindowTitle();
                     CurrentViewModel = ListingDetailViewModel;
                     break;
 
@@ -273,12 +270,10 @@ namespace Listings.Views
                     break;
 
                 case nameof(EmployersViewModel):
-                    EmployersViewModel.RestoreDefaultState();
                     CurrentViewModel = EmployersViewModel;
                     break;
 
                 case nameof(SettingsViewModel):
-                    SettingsViewModel.RefreshSettings();
                     CurrentViewModel = SettingsViewModel;
                     break;
 
@@ -287,6 +282,7 @@ namespace Listings.Views
                     break;
             }
 
+            CurrentViewModel.Reset();
             WindowTitle = CurrentViewModel.WindowTitle;
         }
     }
