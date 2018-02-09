@@ -22,6 +22,24 @@ namespace Listings.Views
         }
 
 
+        protected string _baseWindowTitle;
+        public string BaseWindowTitle
+        {
+            get { return _baseWindowTitle; }
+            set
+            {
+                _baseWindowTitle = value;
+                WindowTitle = value;
+            }
+        }
+
+
+        public ViewModel(string windowTitle)
+        {
+            BaseWindowTitle = windowTitle;
+        }
+
+
         public virtual void Reset() { }
 
 

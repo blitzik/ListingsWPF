@@ -105,10 +105,9 @@ namespace Listings.Views
         private DefaultSettings _defaultSettings;
 
 
-        public ListingPdfGenerationViewModel(SettingFacade settingFacade, string windowTitle)
+        public ListingPdfGenerationViewModel(string windowTitle, SettingFacade settingFacade) : base(windowTitle)
         {
             _settingFacade = settingFacade;
-            WindowTitle = windowTitle;
 
             _defaultSettings = settingFacade.GetDefaultSettings();
 

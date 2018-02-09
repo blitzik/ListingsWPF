@@ -129,14 +129,13 @@ namespace Listings.Views
         }
 
 
-        public ListingViewModel(ListingFacade listingFacade, EmployerFacade employerFacade, string windowTitle)
+        public ListingViewModel(string windowTitle, ListingFacade listingFacade, EmployerFacade employerFacade) : base(windowTitle)
         {
             _listingFacade = listingFacade;
             _employerFacade = employerFacade;
 
             SelectedYear = DateTime.Now.Year;
             SelectedMonth = DateTime.Now.Month;
-            WindowTitle = windowTitle;
 
             SelectedEmployer = _promptEmployer;
         }

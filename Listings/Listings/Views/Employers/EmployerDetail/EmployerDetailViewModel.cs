@@ -63,7 +63,7 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
 
-        public EmployerDetailViewModel(EmployerFacade employerFacade, Employer employer)
+        public EmployerDetailViewModel(EmployerFacade employerFacade, Employer employer) : base(null)
         {
             _employer = employer;
             Name = employer.Name;

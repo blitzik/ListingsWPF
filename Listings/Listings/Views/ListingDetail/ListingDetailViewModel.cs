@@ -12,10 +12,6 @@ namespace Listings.Views
 {
     public class ListingDetailViewModel : ViewModel
     {
-        private readonly ListingFacade _listingFacade;
-
-        private string _basicWindowTitle;
-        
         private Listing _listing;
         public Listing Listing
         {
@@ -147,11 +143,12 @@ namespace Listings.Views
         }
 
 
-        public ListingDetailViewModel(ListingFacade listingFacade, string windowTitle)
+        private readonly ListingFacade _listingFacade;
+
+
+        public ListingDetailViewModel(string windowTitle, ListingFacade listingFacade) : base(windowTitle)
         {
             _listingFacade = listingFacade;
-            WindowTitle = windowTitle;
-            _basicWindowTitle = windowTitle;
 
             _dayItems = new List<DayItem>();
             DisplayableItems = new ObservableCollection<DayItem>();
@@ -230,7 +227,7 @@ namespace Listings.Views
 
         public override void Reset()
         {
-            WindowTitle = string.Format("{0} [{1} {2} {3}]", _basicWindowTitle, Date.Months[12 - Listing.Month], Listing.Year, string.Format("- {0}", Listing.Name));
+            WindowTitle = string.Format("{0} [{1} {2} {3}]", BaseWindowTitle, Date.Months[12 - Listing.Month], Listing.Year, string.Format("- {0}", Listing.Name));
         }
 
 

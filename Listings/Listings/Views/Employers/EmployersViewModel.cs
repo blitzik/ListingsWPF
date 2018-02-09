@@ -54,10 +54,9 @@ namespace Listings.Views
         }
 
 
-        public EmployersViewModel(EmployerFacade employerFacade, string windowTitle)
+        public EmployersViewModel(string windowTitle, EmployerFacade employerFacade) : base(windowTitle)
         {
             _employerFacade = employerFacade;
-            WindowTitle = windowTitle;
 
             List<Employer> foundEmployers = employerFacade.FindAllEmployers();
             _employers = new ObservableCollection<EmployerItemViewModel>();

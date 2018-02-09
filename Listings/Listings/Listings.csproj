@@ -141,13 +141,23 @@
     <Compile Include="Services\IO\OpenFileDialogPathSelector.cs" />
     <Compile Include="Services\IO\SaveFileDialogPathSelector.cs" />
     <Compile Include="Services\ObjectContainerRegistry.cs" />
+    <Compile Include="Services\ViewModelLocator.cs" />
+    <Compile Include="Views\Employers\EmployersViewModelFactory.cs" />
+    <Compile Include="Views\ListingDeletion\ListingDeletionViewModelFactory.cs" />
+    <Compile Include="Views\ListingDetail\ListingDetailViewModelFactory.cs" />
+    <Compile Include="Views\ListingEditing\ListingEditingViewModelFactory.cs" />
+    <Compile Include="Views\ListingItem\ListingItemViewModelFactory.cs" />
     <Compile Include="Views\ListingPdfGeneration\ListingPdfGenerationView.xaml.cs">
       <DependentUpon>ListingPdfGenerationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ListingPdfGeneration\ListingPdfGenerationViewModel.cs" />
+    <Compile Include="Views\ListingPdfGeneration\ListingPdfGenerationViewModelFactory.cs" />
+    <Compile Include="Views\ListingsOverview\ListingsOverviewViewModelFactory.cs" />
+    <Compile Include="Views\Listing\ListingViewModelFactory.cs" />
     <Compile Include="Views\ProgressBarWindow\ProgressBarWindow.xaml.cs">
       <DependentUpon>ProgressBarWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Settings\SettingsViewModelFactory.cs" />
     <Compile Include="Views\WorkedTimeSetting\WorkedTimeSettingView.xaml.cs">
       <DependentUpon>WorkedTimeSettingView.xaml</DependentUpon>
     </Compile>

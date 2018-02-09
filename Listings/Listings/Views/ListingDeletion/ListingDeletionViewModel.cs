@@ -12,11 +12,6 @@ namespace Listings.Views
 {
     public class ListingDeletionViewModel : ViewModel
     {
-        private ListingFacade _listingFacade;
-
-        private string _basicWindowTitle;
-
-
         private Listing _listing;
         public Listing Listing
         {
@@ -25,10 +20,10 @@ namespace Listings.Views
             {
                 _listing = value;
                 if (value == null) {
-                    WindowTitle = _basicWindowTitle;
+                    WindowTitle = BaseWindowTitle;
 
                 } else {
-                    WindowTitle = string.Format("{0} [{1} {2} {3}]", _basicWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));
+                    WindowTitle = string.Format("{0} [{1} {2} {3}]", BaseWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));
                 }
             }
         }
@@ -77,11 +72,11 @@ namespace Listings.Views
         }
 
 
-        public ListingDeletionViewModel(ListingFacade listingFacade, string windowTitle)
-        {
-            _listingFacade = listingFacade;
+        private ListingFacade _listingFacade;
 
-            _basicWindowTitle = windowTitle;
+        public ListingDeletionViewModel(string windowTitle, ListingFacade listingFacade) : base(windowTitle)
+        {
+            _listingFacade = listingFacade;            
         }
 
 

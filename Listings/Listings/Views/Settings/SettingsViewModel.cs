@@ -158,15 +158,12 @@ namespace Listings.Views
 
         private DefaultSettings _defaultSetting;
 
-        private ListingFacade _listingFacade;
         private SettingFacade _settingFacade;
 
 
-        public SettingsViewModel(ListingFacade listingFacade, SettingFacade settingFacade, string windowTitle)
+        public SettingsViewModel(string windowTitle, SettingFacade settingFacade) : base(windowTitle)
         {
-            _listingFacade = listingFacade;
             _settingFacade = settingFacade;
-            WindowTitle = windowTitle;
 
             Reset();
         }

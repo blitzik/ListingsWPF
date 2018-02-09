@@ -62,26 +62,27 @@ namespace Listings.Views
 
 
         private ListingFacade _listingFacade;
+        private SettingFacade _settingFacade;
         
         private DayItem _dayItem;
         private DefaultSettings _defaultSettings;
 
 
-        public ListingItemViewModel(ListingFacade listingFacade, DayItem dayItem, DefaultSettings defaultSettings, string windowTitle)
+        public ListingItemViewModel(string windowTitle, DayItem dayItem, ListingFacade listingFacade, SettingFacade settingFacade) : base(windowTitle)
         {
             _listingFacade = listingFacade;
-            _defaultSettings = defaultSettings;
-            WindowTitle = windowTitle;
+            _settingFacade = settingFacade;
+            _defaultSettings = settingFacade.GetDefaultSettings();
 
             _dayItem = dayItem;
             if (dayItem.ListingItem != null) {
                 ListingItem l = dayItem.ListingItem;
                 _locality = l.Locality;
 
-                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSettings.Time, l.TimeSetting, defaultSettings.TimeTickInMinutes);
+                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSettings.Time, l.TimeSetting, _defaultSettings.TimeTickInMinutes);
 
             } else {
-                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSettings.Time, _defaultSettings.Time, defaultSettings.TimeTickInMinutes);
+                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSettings.Time, _defaultSettings.Time, _defaultSettings.TimeTickInMinutes);
             }
         }
 

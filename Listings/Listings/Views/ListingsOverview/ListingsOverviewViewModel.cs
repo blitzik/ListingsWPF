@@ -70,19 +70,13 @@ namespace Listings.Views
         }
 
 
-        public ListingsOverviewViewModel(ListingFacade listingFacade, string windowTitle)
+        public ListingsOverviewViewModel(string windowTitle, ListingFacade listingFacade) : base(windowTitle)
         {
             _listingFacade = listingFacade;
 
             Listings = new ObservableCollection<Listing>(listingFacade.FindListings(DateTime.Now.Year));
 
             _selectedYear = DateTime.Now.Year;
-            _windowTitle = windowTitle;
-        }
-
-
-        public ListingsOverviewViewModel(ListingFacade listingFacade) : this(listingFacade, null)
-        {
         }
 
 

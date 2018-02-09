@@ -14,8 +14,6 @@ namespace Listings.Views
 {
     public class ListingEditingViewModel : ViewModel//, IDataErrorInfo
     {
-        private string _basicWindowTitle;
-
         private Listing _listing;
         public Listing Listing
         {
@@ -26,7 +24,7 @@ namespace Listings.Views
                 RaisePropertyChanged();
                 RefreshEmployers();
 
-                WindowTitle = string.Format("{0} [{1} {2} {3}]", _basicWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));
+                WindowTitle = string.Format("{0} [{1} {2} {3}]", BaseWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));
 
                 _years.Clear();
                 _years.Add(value.Year);
@@ -267,13 +265,10 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
         
-        public ListingEditingViewModel(ListingFacade listingFacade, EmployerFacade employerFacade, string windowTitle)
+        public ListingEditingViewModel(string windowTitle, ListingFacade listingFacade, EmployerFacade employerFacade) : base(windowTitle)
         {
             _listingFacade = listingFacade;
             _employerFacade = employerFacade;
-
-            WindowTitle = windowTitle;
-            _basicWindowTitle = windowTitle;
 
             _selectedEmployer = _promptEmployer;
         }

@@ -44,7 +44,7 @@ namespace Listings.Views
         }
 
 
-        private ListingsOverviewViewModel _listingsOverviewViewModel;
+        /*private ListingsOverviewViewModel _listingsOverviewViewModel;
         private ListingsOverviewViewModel ListingsOverviewViewModel
         {
             get
@@ -213,23 +213,23 @@ namespace Listings.Views
                 }
                 return _listingPdfGenerationViewModel;
             }
-        }
+        }*/
         
 
-        private ListingFacade _listingFacade;
-        private EmployerFacade _employerFacade;
-        private SettingFacade _settingFacade;
+        //private ListingFacade _listingFacade;
+        //private EmployerFacade _employerFacade;
+        //private SettingFacade _settingFacade;
 
-        private DefaultSettings _defaultSettings;
+        //private DefaultSettings _defaultSettings;
 
 
-        public MainViewModel(ListingFacade listingFacade, EmployerFacade employersFacade, SettingFacade settingFacade)
+        public MainViewModel(ViewModelLocator viewModelLocator/*ListingFacade listingFacade, EmployerFacade employersFacade, SettingFacade settingFacade*/) : base(null)
         {
-            _listingFacade = listingFacade;
-            _employerFacade = employersFacade;
-            _settingFacade = settingFacade;
+            //_listingFacade = listingFacade;
+            //_employerFacade = employersFacade;
+            //_settingFacade = settingFacade;
 
-            _defaultSettings = _settingFacade.GetDefaultSettings();
+            //_defaultSettings = _settingFacade.GetDefaultSettings();
 
             ChangeView(nameof(ListingsOverviewViewModel));
         }
@@ -242,7 +242,7 @@ namespace Listings.Views
                 return;
             }
 
-            switch (viewCode) {
+            /*switch (viewCode) {
                 case nameof(ListingsOverviewViewModel):
                     CurrentViewModel = ListingsOverviewViewModel;
                     break;
@@ -278,7 +278,7 @@ namespace Listings.Views
                 case nameof(ListingPdfGenerationViewModel):
                     CurrentViewModel = ListingPdfGenerationViewModel;
                     break;
-            }
+            }*/
 
             CurrentViewModel.Reset();
             WindowTitle = CurrentViewModel.WindowTitle;

@@ -47,7 +47,7 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
 
-        public EmployerDeletionViewModel(EmployerFacade employerFacade, Employer employer)
+        public EmployerDeletionViewModel(EmployerFacade employerFacade, Employer employer) : base(null)
         {
             _employer = employer;
             _employerFacade = employerFacade;
