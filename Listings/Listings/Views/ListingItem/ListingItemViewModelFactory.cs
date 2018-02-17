@@ -1,4 +1,5 @@
-﻿using Listings.Domain;
+﻿using Caliburn.Micro;
+using Listings.Domain;
 using Listings.Facades;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,14 @@ namespace Listings.Views
 {
     public class ListingItemViewModelFactory
     {
+        private readonly IEventAggregator _eventAggregator;
         private readonly ListingFacade _listingFacade;
         private readonly SettingFacade _settingFacade;
 
 
-        public ListingItemViewModelFactory(ListingFacade listingFacade, SettingFacade settingFacade)
+        public ListingItemViewModelFactory(IEventAggregator eventAggregator, ListingFacade listingFacade, SettingFacade settingFacade)
         {
+            _eventAggregator = eventAggregator;
             _listingFacade = listingFacade;
             _settingFacade = settingFacade;
         }
@@ -23,7 +26,7 @@ namespace Listings.Views
 
         public ListingItemViewModel Create(string windowTitle, DayItem dayItem)
         {
-            return new ListingItemViewModel(windowTitle, dayItem, _listingFacade, _settingFacade);
+            return new ListingItemViewModel(_eventAggregator, windowTitle, dayItem, _listingFacade, _settingFacade);
         }
     }
 }

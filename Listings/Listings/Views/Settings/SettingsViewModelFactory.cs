@@ -1,4 +1,5 @@
-﻿using Listings.Facades;
+﻿using Caliburn.Micro;
+using Listings.Facades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,10 @@ namespace Listings.Views
     public class SettingsViewModelFactory
     {
         private readonly SettingFacade _settingFacade;
+        private readonly IEventAggregator _eventAggregator;
 
 
-        public SettingsViewModelFactory(SettingFacade settingFacade)
+        public SettingsViewModelFactory(IEventAggregator eventAggregator, SettingFacade settingFacade)
         {
             _settingFacade = settingFacade;
         }
@@ -20,7 +22,7 @@ namespace Listings.Views
 
         public SettingsViewModel Create(string windowTitle)
         {
-            return new SettingsViewModel(windowTitle, _settingFacade);
+            return new SettingsViewModel(_eventAggregator, windowTitle, _settingFacade);
         }
     }
 }

@@ -1,25 +1,45 @@
-﻿using Listings.Commands;
+﻿using Caliburn.Micro;
+using Listings.Commands;
 using Listings.Domain;
 using Listings.EventArguments;
 using Listings.Exceptions;
 using Listings.Facades;
 using Listings.Services;
 using Listings.Utils;
+using System.Globalization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Listings.Messages;
 
 namespace Listings.Views
 {
-    public class ListingItemViewModel : ViewModel
+    public class ListingItemViewModel : ScreenBaseViewModel
     {
+        private string _header;
+        public string Header
+        {
+            get { return _header; }
+            private set
+            {
+                _header = value;
+                NotifyOfPropertyChange(() => Header);
+            }
+        }
+
+
         private WorkedTimeSettingViewModel _workedTimeViewModel;
         public WorkedTimeSettingViewModel WorkedTimeViewModel
         {
             get { return _workedTimeViewModel; }
+            private set
+            {
+                _workedTimeViewModel = value;
+                NotifyOfPropertyChange(() => WorkedTimeViewModel);
+            }
         }
 
 
@@ -30,7 +50,7 @@ namespace Listings.Views
             set
             {
                 _locality = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => Locality);
             }
         }
 
@@ -61,28 +81,47 @@ namespace Listings.Views
         }
 
 
+        private DayItem _dayItem;
+        public DayItem DayItem
+        {
+            get { return _dayItem; }
+            set
+            {
+                _dayItem = value;
+                Reset(value);
+            }
+        }
+
+
         private ListingFacade _listingFacade;
         private SettingFacade _settingFacade;
         
-        private DayItem _dayItem;
         private DefaultSettings _defaultSettings;
 
 
-        public ListingItemViewModel(string windowTitle, DayItem dayItem, ListingFacade listingFacade, SettingFacade settingFacade) : base(windowTitle)
+        public ListingItemViewModel(IEventAggregator eventAggregator, string windowTitle, DayItem dayItem, ListingFacade listingFacade, SettingFacade settingFacade) : base(eventAggregator, windowTitle)
         {
             _listingFacade = listingFacade;
             _settingFacade = settingFacade;
-            _defaultSettings = settingFacade.GetDefaultSettings();
 
-            _dayItem = dayItem;
+            DayItem = dayItem;
+        }
+
+
+        private void Reset(DayItem dayItem)
+        {
+            string date = CultureInfo.CurrentCulture.TextInfo.ToTitleCase((DateTime.Now).ToLongDateString().ToLower());
+            WindowTitle = String.Format("{0} - {1}", date, dayItem.Listing.Name);
+            _defaultSettings = _settingFacade.GetDefaultSettings();
+
             if (dayItem.ListingItem != null) {
                 ListingItem l = dayItem.ListingItem;
-                _locality = l.Locality;
+                Locality = l.Locality;
 
-                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSettings.Time, l.TimeSetting, _defaultSettings.TimeTickInMinutes);
+                WorkedTimeViewModel = new WorkedTimeSettingViewModel(_eventAggregator, _defaultSettings.Time, l.TimeSetting, _defaultSettings.TimeTickInMinutes);
 
             } else {
-                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSettings.Time, _defaultSettings.Time, _defaultSettings.TimeTickInMinutes);
+                WorkedTimeViewModel = new WorkedTimeSettingViewModel(_eventAggregator, _defaultSettings.Time, _defaultSettings.Time, _defaultSettings.TimeTickInMinutes);
             }
         }
 
@@ -110,15 +149,9 @@ namespace Listings.Views
         }
 
 
-
-        public delegate void ReturnBackToListingDetailHandler(object sender, EventArgs args);
-        public event ReturnBackToListingDetailHandler OnReturnBackToListingDetail;
         private void ReturnBackToListingDetail()
         {
-            ReturnBackToListingDetailHandler handler = OnReturnBackToListingDetail;
-            if (handler != null) {
-                handler(this, EventArgs.Empty);
-            }
+            _eventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingDetailViewModel)));
         }
         
     }

@@ -1,4 +1,4 @@
-﻿<Window x:Class="Listings.Views.MainWindow"
+﻿<Window x:Class="Listings.Views.MainWindowView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -69,7 +69,7 @@
                 </Style>
             </StackPanel.Resources>
 
-            <RadioButton Grid.Row="0" Command="{Binding NavigationCommand}" CommandParameter="ListingsOverviewViewModel" IsChecked="{Binding CurrentViewModel, Converter={StaticResource ViewModelToBooleanConverter}, ConverterParameter=ListingsOverviewViewModel}">
+            <RadioButton x:Name="DisplayListingsOverview" Grid.Row="0" IsChecked="{Binding ActiveItem, Converter={StaticResource ViewModelToBooleanConverter}, ConverterParameter=ListingsOverviewViewModel}">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="17" Height="17" Fill="White">
                         <Rectangle.OpacityMask>
@@ -79,7 +79,7 @@
                     <TextBlock Margin="10 2 0 0" Text="Přehled výčetek" />
                 </StackPanel>
             </RadioButton>
-            <RadioButton Grid.Row="1" Command="{Binding NavigationCommand}" CommandParameter="ListingViewModel" IsChecked="{Binding CurrentViewModel, Converter={StaticResource ViewModelToBooleanConverter}, ConverterParameter=ListingViewModel}">
+            <RadioButton x:Name="DisplayListingCreation" Grid.Row="1" IsChecked="{Binding ActiveItem, Converter={StaticResource ViewModelToBooleanConverter}, ConverterParameter=ListingViewModel}">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="17" Height="17" Fill="White">
                         <Rectangle.OpacityMask>
@@ -89,7 +89,7 @@
                     <TextBlock Margin="10 3 0 0" Text="Nová výčetka" />
                 </StackPanel>
             </RadioButton>
-            <RadioButton Grid.Row="2" Command="{Binding NavigationCommand}" CommandParameter="EmployersViewModel" IsChecked="{Binding CurrentViewModel, Converter={StaticResource ViewModelToBooleanConverter}, ConverterParameter=EmployersViewModel}">
+            <RadioButton x:Name="DisplayEmployersList" Grid.Row="2" IsChecked="{Binding ActiveItem, Converter={StaticResource ViewModelToBooleanConverter}, ConverterParameter=EmployersViewModel}">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="17" Height="17" Fill="White">
                         <Rectangle.OpacityMask>
@@ -99,7 +99,7 @@
                     <TextBlock Margin="10 3 0 0" Text="Správa zaměstnavatelů" />
                 </StackPanel>
             </RadioButton>
-            <RadioButton Grid.Row="3" Command="{Binding NavigationCommand}" CommandParameter="SettingsViewModel" IsChecked="{Binding CurrentViewModel, Converter={StaticResource ViewModelToBooleanConverter}, ConverterParameter=SettingsViewModel}">
+            <RadioButton x:Name="DisplaySettings" Grid.Row="3" IsChecked="{Binding ActiveItem, Converter={StaticResource ViewModelToBooleanConverter}, ConverterParameter=SettingsViewModel}">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="17" Height="17" Fill="White">
                         <Rectangle.OpacityMask>
@@ -113,50 +113,11 @@
 
 
         <Border Grid.Row="0" Grid.Column="1" Padding="0 10 5 10" Margin="10 0 10 0" BorderBrush="#ccc" BorderThickness="0 0 0 1">
-            <TextBlock Text="{Binding WindowTitle, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" FontSize="23" Foreground="#333" FontWeight="Medium" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding Title, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" FontSize="23" Foreground="#333" FontWeight="Medium" VerticalAlignment="Center" />
         </Border>
 
         <Border Grid.Row="1" Grid.Column="1" Padding="10">
-            <ContentControl Content="{Binding CurrentViewModel}">
-                <ContentControl.Resources>
-                    <!-- Listings Overview -->
-                    <DataTemplate DataType="{x:Type local:ListingsOverviewViewModel}">
-                        <local:ListingsOverviewView />
-                    </DataTemplate>
-                    <!-- New Listing -->
-                    <DataTemplate DataType="{x:Type local:ListingViewModel}">
-                        <local:ListingView />
-                    </DataTemplate>
-                    <!-- Listing Detail -->
-                    <DataTemplate DataType="{x:Type local:ListingDetailViewModel}">
-                        <local:ListingDetailView />
-                    </DataTemplate>
-                    <!-- Listing Deletion -->
-                    <DataTemplate DataType="{x:Type local:ListingDeletionViewModel}">
-                        <local:ListingDeletionView />
-                    </DataTemplate>
-                    <!-- Listing Editing -->
-                    <DataTemplate DataType="{x:Type local:ListingEditingViewModel}">
-                        <local:ListingEditingView />
-                    </DataTemplate>
-                    <!-- ListingItem Detail -->
-                    <DataTemplate DataType="{x:Type local:ListingItemViewModel}">
-                        <local:ListingItemView />
-                    </DataTemplate>
-                    <!-- Employers -->
-                    <DataTemplate DataType="{x:Type local:EmployersViewModel}">
-                        <local:EmployersView />
-                    </DataTemplate>
-                    <!-- Settings -->
-                    <DataTemplate DataType="{x:Type local:SettingsViewModel}">
-                        <local:SettingsView />
-                    </DataTemplate>
-                    <!-- Listing PDF generation -->
-                    <DataTemplate DataType="{x:Type local:ListingPdfGenerationViewModel}">
-                        <local:ListingPdfGenerationView />
-                    </DataTemplate>
-                </ContentControl.Resources>
-            </ContentControl>
+            <ContentControl x:Name="ActiveItem" />
         </Border>
 
     </Grid>

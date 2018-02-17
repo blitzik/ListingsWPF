@@ -1,7 +1,9 @@
-﻿using Listings.Commands;
+﻿using Caliburn.Micro;
+using Listings.Commands;
 using Listings.Domain;
 using Listings.EventArguments;
 using Listings.Facades;
+using Listings.Messages;
 using Listings.Utils;
 using System;
 using System.Collections.Generic;
@@ -12,11 +14,8 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class ListingsOverviewViewModel : ViewModel
+    public class ListingsOverviewViewModel : ScreenBaseViewModel
     {
-        private ListingFacade _listingFacade;
-
-
         private DelegateCommand<Listing> _openListingCommand;
         public DelegateCommand<Listing> OpenListingCommand
         {
@@ -37,7 +36,7 @@ namespace Listings.Views
             get { return _listings; }
             set {
                 _listings = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => Listings);
             }
         }
 
@@ -63,17 +62,28 @@ namespace Listings.Views
             set
             {
                 _selectedYear = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => SelectedYear);
 
                 LoadListings(SelectedYear);
             }
         }
 
 
-        public ListingsOverviewViewModel(string windowTitle, ListingFacade listingFacade) : base(windowTitle)
-        {
-            _listingFacade = listingFacade;
+        private ListingDetailViewModel _listingDetailViewModel;
 
+
+        private readonly ListingFacade _listingFacade;
+        private readonly ListingDetailViewModelFactory _listingDetailViewModelFactory;
+
+
+        public ListingsOverviewViewModel(
+            IEventAggregator eventAggregator,
+            string windowTitle,
+            ListingFacade listingFacade,
+            ListingDetailViewModelFactory listingDetailViewModelFactory
+        ) : base(eventAggregator, windowTitle) {
+            _listingFacade = listingFacade;
+            _listingDetailViewModelFactory = listingDetailViewModelFactory;
             Listings = new ObservableCollection<Listing>(listingFacade.FindListings(DateTime.Now.Year));
 
             _selectedYear = DateTime.Now.Year;
@@ -86,22 +96,23 @@ namespace Listings.Views
         }
 
 
-        public override void Reset()
+        private void OpenListing(Listing listing)
+        {
+            if (_listingDetailViewModel == null) {
+                _listingDetailViewModel = _listingDetailViewModelFactory.Create(String.Empty, listing);
+            }
+            _listingDetailViewModel.Listing = listing;
+
+            _eventAggregator.PublishOnUIThread(new DisplayViewMessage(_listingDetailViewModel));
+        }
+
+
+        // -----
+
+
+        protected override void OnActivate()
         {
             LoadListings(SelectedYear);
         }
-
-
-        public delegate void ListingSelectionHandler(object sender, ListingArgs args);
-        public event ListingSelectionHandler OnListingSelected;
-        private void OpenListing(Listing listing)
-        {
-            ListingSelectionHandler handler = OnListingSelected;
-            if (handler != null) {
-                handler(this, new ListingArgs(listing));
-            }
-        }
-
-
     }
 }

@@ -34,6 +34,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Caliburn.Micro, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.Core.3.2.0\lib\net45\Caliburn.Micro.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.3.2.0\lib\net45\Caliburn.Micro.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.3.2.0\lib\net45\Caliburn.Micro.Platform.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Cecil.FlowAnalysis, Version=0.1.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\db4o-nq-devel.8.1.184.15492\lib\net40\Cecil.FlowAnalysis.dll</HintPath>
     </Reference>
@@ -78,7 +87,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Expression.Blend.Sdk.1.0.2\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\packages\Caliburn.Micro.3.2.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -98,6 +107,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Bootstrapper.cs" />
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Comparers\SortIntDescending.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
@@ -135,14 +145,17 @@
     <Compile Include="Facades\EmployerFacade.cs" />
     <Compile Include="Facades\ListingFacade.cs" />
     <Compile Include="Facades\SettingFacade.cs" />
+    <Compile Include="Messages\ChangeViewMessage.cs" />
+    <Compile Include="Messages\DisplayViewMessage.cs" />
     <Compile Include="Services\Db4oObjectContainerFactory.cs" />
     <Compile Include="Services\IO\IOpenFileDialog.cs" />
     <Compile Include="Services\IO\NullFilePathSelector.cs" />
     <Compile Include="Services\IO\OpenFileDialogPathSelector.cs" />
     <Compile Include="Services\IO\SaveFileDialogPathSelector.cs" />
     <Compile Include="Services\ObjectContainerRegistry.cs" />
-    <Compile Include="Services\ViewModelLocator.cs" />
+    <Compile Include="Views\ConductorOneActiveBaseViewModel.cs" />
     <Compile Include="Views\Employers\EmployersViewModelFactory.cs" />
+    <Compile Include="Views\IViewModel.cs" />
     <Compile Include="Views\ListingDeletion\ListingDeletionViewModelFactory.cs" />
     <Compile Include="Views\ListingDetail\ListingDetailViewModelFactory.cs" />
     <Compile Include="Views\ListingEditing\ListingEditingViewModelFactory.cs" />
@@ -197,7 +210,7 @@
     </Compile>
     <Compile Include="Views\ListingItem\ListingItemViewModel.cs" />
     <Compile Include="Views\ListingsOverview\ListingsOverviewViewModel.cs" />
-    <Compile Include="Views\Main\ViewModel.cs" />
+    <Compile Include="Views\ScreenBaseViewModel.cs" />
     <Compile Include="Views\ListingsOverview\ListingsOverviewView.xaml.cs">
       <DependentUpon>ListingsOverviewView.xaml</DependentUpon>
     </Compile>
@@ -245,7 +258,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Main\MainWindow.xaml">
+    <Page Include="Views\Main\MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -254,9 +267,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Exceptions\OutOfRangeException.cs" />
-    <Compile Include="Views\Main\MainViewModel.cs" />
-    <Compile Include="Views\Main\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="Views\Main\MainWindowViewModel.cs" />
+    <Compile Include="Views\Main\MainWindowView.xaml.cs">
+      <DependentUpon>MainWindowView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\ListingsOverview\ListingsOverviewView.xaml">

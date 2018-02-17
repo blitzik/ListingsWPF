@@ -1,4 +1,5 @@
-﻿using Listings.Commands;
+﻿using Caliburn.Micro;
+using Listings.Commands;
 using Listings.Domain;
 using Listings.Facades;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class EmployerDeletionViewModel : ViewModel
+    public class EmployerDeletionViewModel : ScreenBaseViewModel
     {
         private Employer _employer;
         public Employer Employer
@@ -47,7 +48,7 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
 
-        public EmployerDeletionViewModel(EmployerFacade employerFacade, Employer employer) : base(null)
+        public EmployerDeletionViewModel(IEventAggregator eventAggregator, EmployerFacade employerFacade, Employer employer) : base(eventAggregator, null)
         {
             _employer = employer;
             _employerFacade = employerFacade;

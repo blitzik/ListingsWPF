@@ -1,4 +1,5 @@
-﻿using Listings.Commands;
+﻿using Caliburn.Micro;
+using Listings.Commands;
 using Listings.Domain;
 using Listings.EventArguments;
 using Listings.Facades;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class ListingViewModel : ViewModel
+    public class ListingViewModel : ScreenBaseViewModel
     {
         private ListingFacade _listingFacade;
         private EmployerFacade _employerFacade;
@@ -48,7 +49,7 @@ namespace Listings.Views
             set
             {
                 _selectedYear = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => SelectedYear);
             }
         }
 
@@ -60,7 +61,7 @@ namespace Listings.Views
             set
             {
                 _selectedMonth = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => SelectedMonth);
             }
         }
 
@@ -72,7 +73,7 @@ namespace Listings.Views
             set
             {
                 _selectedEmployer = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => SelectedEmployer);
             }
         }
 
@@ -84,7 +85,7 @@ namespace Listings.Views
             set
             {
                 _name = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => Name);
             }
         }
 
@@ -98,7 +99,7 @@ namespace Listings.Views
                 int result;
                 if (!int.TryParse(value, out result)) {
                     _hourlyWage = null;
-                    RaisePropertyChanged();
+                    NotifyOfPropertyChange(() => HourlyWage);
                     return;
                 }
 
@@ -109,7 +110,7 @@ namespace Listings.Views
                     _hourlyWage = result;
                 }
 
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => HourlyWage);
             }
         }
 
@@ -129,7 +130,7 @@ namespace Listings.Views
         }
 
 
-        public ListingViewModel(string windowTitle, ListingFacade listingFacade, EmployerFacade employerFacade) : base(windowTitle)
+        public ListingViewModel(IEventAggregator eventAggregator, string windowTitle, ListingFacade listingFacade, EmployerFacade employerFacade) : base(eventAggregator, windowTitle)
         {
             _listingFacade = listingFacade;
             _employerFacade = employerFacade;
@@ -137,15 +138,12 @@ namespace Listings.Views
             SelectedYear = DateTime.Now.Year;
             SelectedMonth = DateTime.Now.Month;
 
-            SelectedEmployer = _promptEmployer;
+            Reset();
         }
 
 
-        public override void Reset()
+        private void SetDefaults()
         {
-            _employers = _employerFacade.FindAllEmployers();
-            _employers.Insert(0, _promptEmployer);
-
             SelectedYear = DateTime.Now.Year;
             SelectedMonth = DateTime.Now.Month;
             SelectedEmployer = _promptEmployer;
@@ -154,8 +152,16 @@ namespace Listings.Views
         }
 
 
-        public delegate void NewListingSaveHandler(object sender, ListingArgs args);
-        public event NewListingSaveHandler OnListingCreation;
+        private void Reset()
+        {
+            _employers = _employerFacade.FindAllEmployers();
+            _employers.Insert(0, _promptEmployer);
+            NotifyOfPropertyChange(() => Employers);
+
+            SetDefaults();
+        }
+
+
         private void SaveListing()
         {
             Name = string.IsNullOrEmpty(Name) ? null : Name.Trim();
@@ -173,16 +179,18 @@ namespace Listings.Views
 
             _listingFacade.Save(newListing);
 
-            SelectedEmployer = _promptEmployer;
-            HourlyWage = null;
-            Name = null;
-            SelectedYear = DateTime.Now.Year;
-            SelectedMonth = DateTime.Now.Month;
+            SetDefaults();
 
-            NewListingSaveHandler handler = OnListingCreation;
-            if (handler != null) {
-                handler(this, new ListingArgs(newListing));
-            }
+
+        }
+
+
+        // -----
+
+
+        protected override void OnActivate()
+        {
+            Reset();
         }
 
     }

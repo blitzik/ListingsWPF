@@ -52,7 +52,7 @@
                       Grid.ColumnSpan="3"
                       Padding="8"
                       FontSize="17"
-                      ItemsSource="{Binding Employers}"
+                      ItemsSource="{Binding Employers, UpdateSourceTrigger=PropertyChanged}"
                       SelectedItem="{Binding SelectedEmployer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>

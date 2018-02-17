@@ -1,15 +1,21 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public abstract class ViewModel : INotifyPropertyChanged
+    public abstract class ConductorOneActiveBaseViewModel : Conductor<IViewModel>.Collection.OneActive, IViewModel
     {
+        protected string _viewModelName;
+        public string ViewModelName
+        {
+            get { return _viewModelName; }
+        }
+
+
         protected string _windowTitle;
         public string WindowTitle
         {
@@ -17,7 +23,7 @@ namespace Listings.Views
             set
             {
                 _windowTitle = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => WindowTitle);
             }
         }
 
@@ -34,22 +40,15 @@ namespace Listings.Views
         }
 
 
-        public ViewModel(string windowTitle)
+        protected IEventAggregator _eventAggregator;
+
+
+        public ConductorOneActiveBaseViewModel(IEventAggregator eventAggregator , string windowTitle)
         {
+            _viewModelName = this.GetType().Name;
             BaseWindowTitle = windowTitle;
+            _eventAggregator = eventAggregator;
         }
 
-
-        public virtual void Reset() { }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void RaisePropertyChanged([CallerMemberName]string propertyName = "")
-        {
-            var handler = PropertyChanged;
-            if (handler != null) {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
     }
 }

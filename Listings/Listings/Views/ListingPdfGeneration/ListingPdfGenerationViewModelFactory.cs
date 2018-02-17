@@ -1,4 +1,5 @@
-﻿using Listings.Facades;
+﻿using Caliburn.Micro;
+using Listings.Facades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +10,20 @@ namespace Listings.Views
 {
     public class ListingPdfGenerationViewModelFactory
     {
+        private readonly IEventAggregator _eventAggregator;
         private readonly SettingFacade _settingFacade;
 
 
-        public ListingPdfGenerationViewModelFactory(SettingFacade settingFacade)
+        public ListingPdfGenerationViewModelFactory(IEventAggregator eventAggregator, SettingFacade settingFacade)
         {
+            _eventAggregator = eventAggregator;
             _settingFacade = settingFacade;
         }
 
 
         public ListingPdfGenerationViewModel Create(string windowTitle)
         {
-            return new ListingPdfGenerationViewModel(windowTitle, _settingFacade);
+            return new ListingPdfGenerationViewModel(_eventAggregator, windowTitle, _settingFacade);
         }
     }
 }

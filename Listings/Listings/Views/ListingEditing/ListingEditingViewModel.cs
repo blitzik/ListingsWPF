@@ -1,4 +1,5 @@
-﻿using Listings.Commands;
+﻿using Caliburn.Micro;
+using Listings.Commands;
 using Listings.Domain;
 using Listings.EventArguments;
 using Listings.Facades;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class ListingEditingViewModel : ViewModel//, IDataErrorInfo
+    public class ListingEditingViewModel : ScreenBaseViewModel//, IDataErrorInfo
     {
         private Listing _listing;
         public Listing Listing
@@ -21,7 +22,7 @@ namespace Listings.Views
             set
             {
                 _listing = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => Listing);
                 RefreshEmployers();
 
                 WindowTitle = string.Format("{0} [{1} {2} {3}]", BaseWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));
@@ -88,7 +89,7 @@ namespace Listings.Views
             set
             {
                 _selectedYear = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => SelectedYear);
             }
         }
 
@@ -100,7 +101,7 @@ namespace Listings.Views
             set
             {
                 _selectedMonth = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => SelectedMonth);
             }
         }
 
@@ -112,7 +113,7 @@ namespace Listings.Views
             set
             {
                 _selectedEmployer = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => SelectedEmployer);
             }
         }
 
@@ -124,7 +125,7 @@ namespace Listings.Views
             set
             {
                 _name = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => Name);
             }
         }
 
@@ -162,7 +163,7 @@ namespace Listings.Views
                 int result;
                 if (!int.TryParse(value, out result)) {
                     _hourlyWage = null;
-                    RaisePropertyChanged();
+                    NotifyOfPropertyChange(() => HourlyWage);
                     return;
                 }
 
@@ -173,7 +174,7 @@ namespace Listings.Views
                     _hourlyWage = result;
                 }
 
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => HourlyWage);
             }
         }
 
@@ -265,7 +266,7 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
         
-        public ListingEditingViewModel(string windowTitle, ListingFacade listingFacade, EmployerFacade employerFacade) : base(windowTitle)
+        public ListingEditingViewModel(IEventAggregator eventAggregator, string windowTitle, ListingFacade listingFacade, EmployerFacade employerFacade) : base(eventAggregator, windowTitle)
         {
             _listingFacade = listingFacade;
             _employerFacade = employerFacade;

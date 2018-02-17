@@ -1,4 +1,5 @@
-﻿using Listings.Commands;
+﻿using Caliburn.Micro;
+using Listings.Commands;
 using Listings.Domain;
 using Listings.Facades;
 using Listings.Utils;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class ListingDeletionViewModel : ViewModel
+    public class ListingDeletionViewModel : ScreenBaseViewModel
     {
         private Listing _listing;
         public Listing Listing
@@ -35,7 +36,7 @@ namespace Listings.Views
             get { return _confirmationText; }
             set {
                 _confirmationText = value != null ? value.ToLower() : null;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => ConfirmationText);
                 DeleteListingCommand.RaiseCanExecuteChanged();
             }
         }
@@ -74,7 +75,7 @@ namespace Listings.Views
 
         private ListingFacade _listingFacade;
 
-        public ListingDeletionViewModel(string windowTitle, ListingFacade listingFacade) : base(windowTitle)
+        public ListingDeletionViewModel(IEventAggregator eventAggregator, string windowTitle, ListingFacade listingFacade) : base(eventAggregator, windowTitle)
         {
             _listingFacade = listingFacade;            
         }

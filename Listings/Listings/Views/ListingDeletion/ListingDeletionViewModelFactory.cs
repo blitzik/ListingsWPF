@@ -1,4 +1,5 @@
-﻿using Listings.Facades;
+﻿using Caliburn.Micro;
+using Listings.Facades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +10,20 @@ namespace Listings.Views
 {
     public class ListingDeletionViewModelFactory
     {
+        private readonly IEventAggregator _eventAggregator;
         private readonly ListingFacade _listingFacade;
 
 
-        public ListingDeletionViewModelFactory(ListingFacade listingFacade)
+        public ListingDeletionViewModelFactory(IEventAggregator eventAggregator, ListingFacade listingFacade)
         {
+            _eventAggregator = eventAggregator;
             _listingFacade = listingFacade;
         }
 
 
         public ListingDeletionViewModel Create(string windowTitle)
         {
-            return new ListingDeletionViewModel(windowTitle, _listingFacade);
+            return new ListingDeletionViewModel(_eventAggregator, windowTitle, _listingFacade);
         }
     }
 }

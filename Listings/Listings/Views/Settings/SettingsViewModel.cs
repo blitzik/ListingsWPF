@@ -1,4 +1,5 @@
-﻿using Listings.Commands;
+﻿using Caliburn.Micro;
+using Listings.Commands;
 using Listings.Domain;
 using Listings.EventArguments;
 using Listings.Facades;
@@ -17,7 +18,7 @@ using System.Windows.Forms;
 
 namespace Listings.Views
 {
-    public class SettingsViewModel : ViewModel
+    public class SettingsViewModel : ScreenBaseViewModel
     {
         private WorkedTimeSettingViewModel _workedTimeViewModel;
         public WorkedTimeSettingViewModel WorkedTimeViewModel
@@ -33,7 +34,7 @@ namespace Listings.Views
             set
             {
                 _ownerName = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => OwnerName);
                 CancelChangesCommand.RaiseCanExecuteChanged();
                 SaveSettingsCommand.RaiseCanExecuteChanged();
             }
@@ -92,7 +93,7 @@ namespace Listings.Views
             set
             {
                 _backupFilePath = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => BackupFilePath);
                 ImportDataCommand.RaiseCanExecuteChanged();
             }
         }
@@ -118,7 +119,7 @@ namespace Listings.Views
             set
             {
                 _importDataResultMessage = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => ImportDataResultMessage);
             }
         }
 
@@ -146,7 +147,7 @@ namespace Listings.Views
             set
             {
                 _pdfSetting = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => PdfSetting);
                 CancelChangesCommand.RaiseCanExecuteChanged();
                 SaveSettingsCommand.RaiseCanExecuteChanged();
             }
@@ -161,7 +162,7 @@ namespace Listings.Views
         private SettingFacade _settingFacade;
 
 
-        public SettingsViewModel(string windowTitle, SettingFacade settingFacade) : base(windowTitle)
+        public SettingsViewModel(IEventAggregator eventAggregator, string windowTitle, SettingFacade settingFacade) : base(eventAggregator, windowTitle)
         {
             _settingFacade = settingFacade;
 
@@ -169,7 +170,7 @@ namespace Listings.Views
         }
 
 
-        public override void Reset()
+        public void Reset()
         {
             _defaultSetting = _settingFacade.GetDefaultSettings();
 
@@ -178,7 +179,7 @@ namespace Listings.Views
             PdfSetting = CreateNewPdfSetting(_defaultSetting.Pdfsetting);
 
             if (_workedTimeViewModel == null) {
-                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSetting.Time, _defaultSetting.Time, _defaultSetting.TimeTickInMinutes);
+                _workedTimeViewModel = new WorkedTimeSettingViewModel(_eventAggregator, _defaultSetting.Time, _defaultSetting.Time, _defaultSetting.TimeTickInMinutes);
                 _workedTimeViewModel.OnTimeChanged += (object sender, WorkedTimeEventArgs args) =>
                 {
                     CancelChangesCommand.RaiseCanExecuteChanged();

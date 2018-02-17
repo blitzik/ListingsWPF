@@ -1,4 +1,5 @@
-﻿using Listings.Commands;
+﻿using Caliburn.Micro;
+using Listings.Commands;
 using Listings.Domain;
 using Listings.Facades;
 using System;
@@ -9,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class EmployerItemViewModel : ViewModel
+    public class EmployerItemViewModel : ScreenBaseViewModel
     {
-        private ViewModel _currentViewModel;
-        public ViewModel CurrentViewModel
+        private ScreenBaseViewModel _currentViewModel;
+        public ScreenBaseViewModel CurrentViewModel
         {
             get { return _currentViewModel; }
             set
@@ -20,7 +21,7 @@ namespace Listings.Views
                 if (_currentViewModel == value) return;
 
                 _currentViewModel = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => CurrentViewModel);
             }
         }
 
@@ -31,7 +32,7 @@ namespace Listings.Views
             get
             {
                 if (_employerDetailViewModel == null) {
-                    _employerDetailViewModel = new EmployerDetailViewModel(_employerFacade, Employer);
+                    _employerDetailViewModel = new EmployerDetailViewModel(_eventAggregator, _employerFacade, Employer);
                     _employerDetailViewModel.OnDeletionClicked += (object sender, EventArgs args) => {
                         ChangeView(nameof(EmployerDeletionViewModel));
                     };
@@ -50,7 +51,7 @@ namespace Listings.Views
             get
             {
                 if (_employerDeletionViewModel == null) {
-                    _employerDeletionViewModel = new EmployerDeletionViewModel(_employerFacade, Employer);
+                    _employerDeletionViewModel = new EmployerDeletionViewModel(_eventAggregator, _employerFacade, Employer);
                     _employerDeletionViewModel.OnDeletedEmployer += (object sender, EventArgs args) => {
                         EmployerDeletionHandler handler = OnDeletedEmployer;
                         if (handler != null) {
@@ -91,7 +92,7 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
 
-        public EmployerItemViewModel(EmployerFacade employerFacade, Employer employer) : base(null)
+        public EmployerItemViewModel(IEventAggregator eventAggregator, EmployerFacade employerFacade, Employer employer) : base(eventAggregator, null)
         {
             _employer = employer;
             _employerFacade = employerFacade;
@@ -99,7 +100,7 @@ namespace Listings.Views
         }
 
 
-        public override void Reset()
+        public void Reset()
         {
             ChangeView(nameof(EmployerDetailViewModel));
             _employerDetailViewModel.ResetName();

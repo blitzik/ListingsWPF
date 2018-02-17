@@ -1,4 +1,5 @@
-﻿using Listings.Commands;
+﻿using Caliburn.Micro;
+using Listings.Commands;
 using Listings.Domain;
 using Listings.Facades;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class EmployersViewModel : ViewModel
+    public class EmployersViewModel : ScreenBaseViewModel
     {
         private EmployerFacade _employerFacade;
 
@@ -35,7 +36,7 @@ namespace Listings.Views
             set
             {
                 _newEmployerName = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => NewEmployerName);
                 _saveNewEmployerCommand.RaiseCanExecuteChanged();
             }
         }
@@ -54,7 +55,7 @@ namespace Listings.Views
         }
 
 
-        public EmployersViewModel(string windowTitle, EmployerFacade employerFacade) : base(windowTitle)
+        public EmployersViewModel(IEventAggregator eventAggregator, string windowTitle, EmployerFacade employerFacade) : base(eventAggregator, windowTitle)
         {
             _employerFacade = employerFacade;
 
@@ -62,20 +63,6 @@ namespace Listings.Views
             _employers = new ObservableCollection<EmployerItemViewModel>();
             foreach (Employer e in foundEmployers) {
                 _employers.Add(CreateEmployerItemViewModel(e));
-            }
-        }
-
-
-        public override void Reset()
-        {
-            List<Employer> foundEmployers = _employerFacade.FindAllEmployers();
-
-            _employers = new ObservableCollection<EmployerItemViewModel>();
-            foreach (Employer e in foundEmployers) {
-                EmployerItemViewModel vm = CreateEmployerItemViewModel(e);
-                vm.Reset();
-
-                _employers.Add(vm);
             }
         }
 
@@ -93,7 +80,7 @@ namespace Listings.Views
 
         private EmployerItemViewModel CreateEmployerItemViewModel(Employer employer)
         {
-            EmployerItemViewModel vm = new EmployerItemViewModel(_employerFacade, employer);
+            EmployerItemViewModel vm = new EmployerItemViewModel(_eventAggregator, _employerFacade, employer);
             vm.OnDeletedEmployer += OnEmployerDeletion;
 
             return vm;
@@ -103,6 +90,17 @@ namespace Listings.Views
         private void OnEmployerDeletion(object sender, EventArgs args)
         {
             _employers.Remove((EmployerItemViewModel)sender);
+        }
+
+
+        // -----
+
+
+        protected override void OnActivate()
+        {
+            foreach (EmployerItemViewModel vm in _employers) {
+                vm.Reset();
+            }
         }
     }
 }

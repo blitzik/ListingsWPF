@@ -78,7 +78,7 @@
                     <ColumnDefinition Width="0.5*" />
                 </Grid.ColumnDefinitions>
                 
-                <ListBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding WeeksInMonth}" SelectedValue="{Binding SelectedWeek}">
+                <ListBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding WeeksInMonth, UpdateSourceTrigger=PropertyChanged}" SelectedValue="{Binding SelectedWeek, UpdateSourceTrigger=PropertyChanged}">
                     <ListBox.Resources>
                         <Style TargetType="{x:Type ListBoxItem}">
                             <Setter Property="HorizontalContentAlignment" Value="Center" />

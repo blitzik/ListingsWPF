@@ -1,4 +1,5 @@
-﻿using Listings.Commands;
+﻿using Caliburn.Micro;
+using Listings.Commands;
 using Listings.Domain;
 using Listings.Facades;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class EmployerDetailViewModel : ViewModel
+    public class EmployerDetailViewModel : ScreenBaseViewModel
     {
         private string _name;
         public string Name
@@ -18,7 +19,7 @@ namespace Listings.Views
             set
             {
                 _name = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => Name);
                 EmployerNameSaveCommand.RaiseCanExecuteChanged();
             }
         }
@@ -52,7 +53,7 @@ namespace Listings.Views
                 if (_employerNameSaveCommand == null) {
                     _employerNameSaveCommand = new DelegateCommand<object>(
                         p => SaveEmployerChanges(),
-                        p => _name != _employer.Name
+                        p => !String.IsNullOrEmpty(_name) && _name != _employer.Name
                     );
                 }
                 return _employerNameSaveCommand;
@@ -63,7 +64,7 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
 
-        public EmployerDetailViewModel(EmployerFacade employerFacade, Employer employer) : base(null)
+        public EmployerDetailViewModel(IEventAggregator eventAggregator, EmployerFacade employerFacade, Employer employer) : base(eventAggregator, null)
         {
             _employer = employer;
             Name = employer.Name;

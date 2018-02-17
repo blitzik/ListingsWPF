@@ -1,4 +1,5 @@
-﻿using Listings.Commands;
+﻿using Caliburn.Micro;
+using Listings.Commands;
 using Listings.Domain;
 using Listings.EventArguments;
 using Listings.Utils;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class WorkedTimeSettingViewModel : ViewModel
+    public class WorkedTimeSettingViewModel : ScreenBaseViewModel
     {
         private int _startTime;
         public int StartTime
@@ -21,8 +22,8 @@ namespace Listings.Views
                 TimeSetting.CheckTime(value, EndTime, LunchStart, LunchEnd, OtherHours);
 
                 _startTime = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(WorkedHours));
+                NotifyOfPropertyChange(() => StartTime);
+                NotifyOfPropertyChange(() => WorkedHours);
                 SetFlags();
                 UpdateCommandsCanExecute();
                 ProcessEventOnTimeChanged();
@@ -39,8 +40,8 @@ namespace Listings.Views
                 TimeSetting.CheckTime(StartTime, value, LunchStart, LunchEnd, OtherHours);
 
                 _endTime = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(WorkedHours));
+                NotifyOfPropertyChange(() => EndTime);
+                NotifyOfPropertyChange(() => WorkedHours);
                 SetFlags();
                 UpdateCommandsCanExecute();
                 ProcessEventOnTimeChanged();
@@ -57,8 +58,8 @@ namespace Listings.Views
                 TimeSetting.CheckTime(StartTime, EndTime, value, LunchEnd, OtherHours);
 
                 _lunchStart = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(WorkedHours));
+                NotifyOfPropertyChange(() => LunchStart);
+                NotifyOfPropertyChange(() => WorkedHours);
                 SetFlags();
                 UpdateCommandsCanExecute();
                 ProcessEventOnTimeChanged();
@@ -75,8 +76,8 @@ namespace Listings.Views
                 TimeSetting.CheckTime(StartTime, EndTime, LunchStart, value, OtherHours);
 
                 _lunchEnd = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(WorkedHours));
+                NotifyOfPropertyChange(() => LunchEnd);
+                NotifyOfPropertyChange(() => WorkedHours);
                 SetFlags();
                 UpdateCommandsCanExecute();
                 ProcessEventOnTimeChanged();
@@ -93,8 +94,8 @@ namespace Listings.Views
                 TimeSetting.CheckTime(StartTime, EndTime, LunchStart, LunchEnd, value);
 
                 _otherHours = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(WorkedHours));
+                NotifyOfPropertyChange(() => OtherHours);
+                NotifyOfPropertyChange(() => WorkedHours);
                 SetFlags();
                 UpdateCommandsCanExecute();
                 ProcessEventOnTimeChanged();
@@ -109,7 +110,7 @@ namespace Listings.Views
             set
             {
                 _noLunch = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => NoLunch);
 
                 if (value == true) {
                     _lunchStart = 0;
@@ -120,9 +121,9 @@ namespace Listings.Views
                     _lunchEnd = EndTime;
                 }
 
-                RaisePropertyChanged(nameof(LunchStart));
-                RaisePropertyChanged(nameof(LunchEnd));
-                RaisePropertyChanged(nameof(WorkedHours));
+                NotifyOfPropertyChange(() => LunchStart);
+                NotifyOfPropertyChange(() => LunchEnd);
+                NotifyOfPropertyChange(() => WorkedHours);
 
                 ProcessEventOnTimeChanged();
                 UpdateCommandsCanExecute();
@@ -137,7 +138,7 @@ namespace Listings.Views
             set
             {
                 _noTime = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => NoTime);
                 if (value == true) {
                     _lastSetTime = new TimeSetting(_startTime, _endTime, _lunchStart, _lunchEnd, _otherHours);
                     SetTime(new TimeSetting());
@@ -187,7 +188,7 @@ namespace Listings.Views
             {
                 _selectedTimeTickInMinutes = value;
                 _timeTickInSeconds = value * 60;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => SelectedTimeTickInMinutes);
                 UpdateCommandsCanExecute();
 
                 if (OnTimeTickChanged != null) {
@@ -368,7 +369,7 @@ namespace Listings.Views
         private TimeSetting _lastSetTime;
 
 
-        public WorkedTimeSettingViewModel(TimeSetting defaultTimeSettings, TimeSetting timeSetting, int timeTickInMinutes)
+        public WorkedTimeSettingViewModel(IEventAggregator eventAggregator, TimeSetting defaultTimeSettings, TimeSetting timeSetting, int timeTickInMinutes) : base(eventAggregator, null)
         {
             _defaultTimeSettings = defaultTimeSettings;
             _lastSetTime = timeSetting;
@@ -474,19 +475,19 @@ namespace Listings.Views
                 }
             }
 
-            RaisePropertyChanged(nameof(NoTime));
-            RaisePropertyChanged(nameof(NoLunch));
+            NotifyOfPropertyChange(() => NoTime);
+            NotifyOfPropertyChange(() => NoLunch);
         }
 
 
         private void NotifyTimePropertiesChanged()
         {
-            RaisePropertyChanged(nameof(StartTime));
-            RaisePropertyChanged(nameof(EndTime));
-            RaisePropertyChanged(nameof(LunchStart));
-            RaisePropertyChanged(nameof(LunchEnd));
-            RaisePropertyChanged(nameof(OtherHours));
-            RaisePropertyChanged(nameof(WorkedHours));
+            NotifyOfPropertyChange(() => StartTime);
+            NotifyOfPropertyChange(() => EndTime);
+            NotifyOfPropertyChange(() => LunchStart);
+            NotifyOfPropertyChange(() => LunchEnd);
+            NotifyOfPropertyChange(() => OtherHours);
+            NotifyOfPropertyChange(() => WorkedHours);
 
             SetFlags();
         }
@@ -517,7 +518,7 @@ namespace Listings.Views
         }
 
 
-        public override void Reset()
+        public void Reset()
         {
         }
     }

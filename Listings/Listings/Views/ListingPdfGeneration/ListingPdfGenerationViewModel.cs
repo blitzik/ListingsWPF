@@ -1,4 +1,5 @@
-﻿using Listings.Commands;
+﻿using Caliburn.Micro;
+using Listings.Commands;
 using Listings.Domain;
 using Listings.Facades;
 using Listings.Services;
@@ -19,7 +20,7 @@ using System.Windows.Forms;
 
 namespace Listings.Views
 {
-    public class ListingPdfGenerationViewModel : ViewModel
+    public class ListingPdfGenerationViewModel : ScreenBaseViewModel
     {
         private Listing _listing;
         public Listing Listing
@@ -41,7 +42,7 @@ namespace Listings.Views
         public string OwnerName
         {
             get { return _ownerName; }
-            set { _ownerName = value; RaisePropertyChanged(); }
+            set { _ownerName = value; NotifyOfPropertyChange(() => OwnerName); }
         }
 
 
@@ -95,7 +96,7 @@ namespace Listings.Views
             set
             {
                 _pdfSetting = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => PdfSetting);
             }
         }
 
@@ -105,7 +106,7 @@ namespace Listings.Views
         private DefaultSettings _defaultSettings;
 
 
-        public ListingPdfGenerationViewModel(string windowTitle, SettingFacade settingFacade) : base(windowTitle)
+        public ListingPdfGenerationViewModel(IEventAggregator eventAggregator, string windowTitle, SettingFacade settingFacade) : base(eventAggregator, windowTitle)
         {
             _settingFacade = settingFacade;
 
