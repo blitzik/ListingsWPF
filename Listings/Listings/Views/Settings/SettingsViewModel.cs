@@ -162,9 +162,11 @@ namespace Listings.Views
         private SettingFacade _settingFacade;
 
 
-        public SettingsViewModel(IEventAggregator eventAggregator, string windowTitle, SettingFacade settingFacade) : base(eventAggregator, windowTitle)
+        public SettingsViewModel(IEventAggregator eventAggregator, SettingFacade settingFacade) : base(eventAggregator)
         {
             _settingFacade = settingFacade;
+
+            BaseWindowTitle = "Nastavení";
 
             Reset();
         }
@@ -283,7 +285,7 @@ namespace Listings.Views
             saveFileDialog.Filter = "Evidoo data (*.evdo)|*.evdo";
             saveFileDialog.FileName = string.Format("Záloha dat - {0}-{1}-{2}", now.Day, now.Month, now.Year);
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                ProgressBarWindow pb = new ProgressBarWindow();
+                ProgressBarWindowView pb = new ProgressBarWindowView();
                 pb.Owner = System.Windows.Application.Current.MainWindow;
                 BackgroundWorker bw = new BackgroundWorker();
                 bw.DoWork += (object sender, DoWorkEventArgs e) => {

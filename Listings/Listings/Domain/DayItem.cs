@@ -1,9 +1,10 @@
-﻿using Listings.Utils;
+﻿using Caliburn.Micro;
+using Listings.Utils;
 using System;
 
 namespace Listings.Domain
 {
-    public class DayItem : BindableObject
+    public class DayItem : PropertyChangedBase
     {
         private int _year;
         public int Year
@@ -56,7 +57,7 @@ namespace Listings.Domain
             private set
             {
                 _locality = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => Locality);
             }
         }
 
@@ -68,7 +69,7 @@ namespace Listings.Domain
             private set
             {
                 _timeSetting = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => TimeSetting);
             }
         }
 
@@ -179,8 +180,12 @@ namespace Listings.Domain
 
         private void NotifyPropertiesChanged()
         {
-            RaisePropertyChanged(nameof(CanBeCopiedDown));
-            RaisePropertyChanged(nameof(CanBeRemoved));
+            NotifyOfPropertyChange(() => CanBeCopiedDown);
+            NotifyOfPropertyChange(() => CanBeRemoved);
+
+            NotifyOfPropertyChange(() => ShortDayName);
+            NotifyOfPropertyChange(() => Locality);
+            NotifyOfPropertyChange(() => ListingItem);
         }
 
 

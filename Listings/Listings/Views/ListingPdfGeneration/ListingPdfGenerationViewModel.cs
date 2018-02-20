@@ -2,7 +2,9 @@
 using Listings.Commands;
 using Listings.Domain;
 using Listings.Facades;
+using Listings.Messages;
 using Listings.Services;
+using Listings.Services.IO;
 using Listings.Utils;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
@@ -20,7 +22,7 @@ using System.Windows.Forms;
 
 namespace Listings.Views
 {
-    public class ListingPdfGenerationViewModel : ScreenBaseViewModel
+    public class ListingPdfGenerationViewModel : ScreenBaseViewModel, IHandle<ListingMessage>
     {
         private Listing _listing;
         public Listing Listing
@@ -46,17 +48,13 @@ namespace Listings.Views
         }
 
 
-        private bool IsGeneratePdfButtonActive = true;
         private DelegateCommand<object> _generatePdfCommand;
         public DelegateCommand<object> GeneratePdfCommand
         {
             get
             {
                 if (_generatePdfCommand == null) {
-                    _generatePdfCommand = new DelegateCommand<object>(
-                        p => GeneratePdf(),
-                        p => IsGeneratePdfButtonActive == true
-                    );
+                    _generatePdfCommand = new DelegateCommand<object>(p => GeneratePdf());
                 }
                 return _generatePdfCommand;
             }
@@ -101,14 +99,23 @@ namespace Listings.Views
         }
 
 
+        private ISavingFilePathSelector _savingFilePathSelector;
         private SettingFacade _settingFacade;
+        private IWindowManager _windowManager;
+
 
         private DefaultSettings _defaultSettings;
 
 
-        public ListingPdfGenerationViewModel(IEventAggregator eventAggregator, string windowTitle, SettingFacade settingFacade) : base(eventAggregator, windowTitle)
+        public ListingPdfGenerationViewModel(IEventAggregator eventAggregator, SettingFacade settingFacade, IWindowManager windowManager, ISavingFilePathSelector savingFilePathSelector) : base(eventAggregator)
         {
+            eventAggregator.Subscribe(this);
+
+            BaseWindowTitle = "Generování PDF dokumentu";
+
             _settingFacade = settingFacade;
+            _windowManager = windowManager;
+            _savingFilePathSelector = savingFilePathSelector;
 
             _defaultSettings = settingFacade.GetDefaultSettings();
 
@@ -118,32 +125,39 @@ namespace Listings.Views
 
         private void GeneratePdf()
         {
-            IsGeneratePdfButtonActive = false;
-            GeneratePdfCommand.RaiseCanExecuteChanged();
-
             DefaultListingPdfReport report = new DefaultListingPdfReport(Listing);
             report.OwnerName = OwnerName;
             report.Setting = _pdfSetting;
 
             PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(true, PdfSharp.Pdf.PdfFontEmbedding.Always);
             pdfRenderer.Document = report.Document;
-            
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "PDF dokument (*.pdf)|*.pdf";
-            saveFileDialog.FileName = string.Format("{0} {1} - {2}", Date.Months[12 - Listing.Month], Listing.Year, Listing.Name);
-            if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                BackgroundWorker bw = new BackgroundWorker();
-                bw.DoWork += (object sender, DoWorkEventArgs e) => {
-                    pdfRenderer.RenderDocument();
-                };
-                bw.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
-                    pdfRenderer.PdfDocument.Save(saveFileDialog.FileName);
 
-                    IsGeneratePdfButtonActive = true;
-                    GeneratePdfCommand.RaiseCanExecuteChanged();
-                };
-                bw.RunWorkerAsync(pdfRenderer);
+            string filePath = _savingFilePathSelector.GetFilePath(string.Format("{0} {1} - {2}", Date.Months[12 - Listing.Month], Listing.Year, Listing.Name), PrepareDialog);
+            if (filePath == null) {
+                pdfRenderer = null;
+                report = null;
+                return;
             }
+
+            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel() { Text = "Vytváří se Váš PDF dokument..." };
+            Task.Run(() => {
+                pdfRenderer.RenderDocument();
+                pdfRenderer.PdfDocument.Save(filePath);
+
+                pdfRenderer = null;
+                report = null;
+
+                pb.TryClose();
+            });
+
+            _windowManager.ShowDialog(pb);
+        }
+
+
+        private void PrepareDialog(object obj)
+        {
+            SaveFileDialog d = (SaveFileDialog)obj;
+            d.Filter = "PDF dokument (*.pdf)|*.pdf";
         }
 
 
@@ -166,14 +180,18 @@ namespace Listings.Views
         }
 
 
-        public delegate void ReturnBackHandler(object sender, EventArgs args);
-        public event ReturnBackHandler OnReturnBackClicked;
         private void ReturnBack()
         {
-            ReturnBackHandler handler = OnReturnBackClicked;
-            if (handler != null) {
-                handler(this, EventArgs.Empty);
-            }
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingDetailViewModel)));
+        }
+
+
+        // -----
+
+
+        public void Handle(ListingMessage message)
+        {
+            Listing = message.Listing;
         }
     }
 }

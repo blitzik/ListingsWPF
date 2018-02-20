@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Listings.Services.IO
 {
-    public interface IFilePathSelector
+    public interface ISavingFilePathSelector
     {
-        string GetFilePath(Action<object> settingSetter = null);
+        string GetFilePath(string defaultFilePath, Action<object> modifier);
     }
 }

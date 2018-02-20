@@ -23,7 +23,10 @@ namespace Listings.Views
 
         public ListingDeletionViewModel Create(string windowTitle)
         {
-            return new ListingDeletionViewModel(_eventAggregator, windowTitle, _listingFacade);
+            ListingDeletionViewModel vm = new ListingDeletionViewModel(_eventAggregator, _listingFacade);
+            vm.BaseWindowTitle = windowTitle;
+
+            return vm;
         }
     }
 }

@@ -26,7 +26,10 @@ namespace Listings.Views
 
         public ListingDetailViewModel Create(string windowTitle, Listing listing)
         {
-            return new ListingDetailViewModel(listing, _eventAggregator, windowTitle, _listingFacade, _listingItemViewModelFactory);
+            ListingDetailViewModel vm = new ListingDetailViewModel(_eventAggregator, _listingFacade);
+            vm.BaseWindowTitle = windowTitle;
+
+            return vm;
         }
     }
 }

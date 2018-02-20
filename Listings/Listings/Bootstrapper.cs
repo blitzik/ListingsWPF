@@ -1,6 +1,8 @@
 ﻿using Caliburn.Micro;
 using Listings.Facades;
 using Listings.Services;
+using Listings.Services.IO;
+using Listings.Services.ViewModelResolver;
 using Listings.Views;
 using System;
 using System.Collections.Generic;
@@ -24,11 +26,6 @@ namespace Listings
 
         protected override void Configure()
         {
-            ViewModelLocator.ConfigureTypeMappings(new TypeMappingConfiguration() {
-                DefaultSubNamespaceForViewModels = "Listings.Views",
-                DefaultSubNamespaceForViews = "Listings.Views"
-            });
-
             _container = new SimpleContainer();
 
             _container.Singleton<IWindowManager, WindowManager>();
@@ -37,17 +34,32 @@ namespace Listings
             // Services
             _container.Singleton<Db4oObjectContainerFactory>();
             _container.Singleton<ObjectContainerRegistry>();
+            _container.Singleton<IViewModelResolver<IViewModel>, ViewModelResolver>();
+            _container.Singleton<IOpeningFilePathSelector, OpenFilePathSelector>();
+            _container.Singleton<ISavingFilePathSelector, SaveFilePathSelector>();
 
             // facades
             _container.Singleton<ListingFacade>();
             _container.Singleton<SettingFacade>();
             _container.Singleton<EmployerFacade>();
 
-            // MainWindow
+            // Windows
             _container.Singleton<MainWindowViewModel>();
+            _container.Singleton<ProgressBarWindowViewModel>();
+
+            // ViewModels
+            _container.Singleton<ListingsOverviewViewModel>(nameof(ListingsOverviewViewModel));
+            _container.Singleton<EmployersViewModel>(nameof(EmployersViewModel));
+            _container.Singleton<ListingViewModel>(nameof(ListingViewModel));
+            _container.Singleton<ListingDeletionViewModel>(nameof(ListingDeletionViewModel));
+            _container.Singleton<ListingDetailViewModel>(nameof(ListingDetailViewModel));
+            _container.Singleton<ListingEditingViewModel>(nameof(ListingEditingViewModel));
+            _container.Singleton<ListingItemViewModel>(nameof(ListingItemViewModel));
+            _container.Singleton<ListingPdfGenerationViewModel>(nameof(ListingPdfGenerationViewModel));
+            _container.Singleton<SettingsViewModel>(nameof(SettingsViewModel));
 
             // ViewModel's factories
-            _container.Singleton<EmployersViewModelFactory>();
+            /*_container.Singleton<EmployersViewModelFactory>();
             _container.Singleton<ListingViewModelFactory>();
             _container.Singleton<ListingDeletionViewModelFactory>();
             _container.Singleton<ListingDetailViewModelFactory>();
@@ -55,7 +67,7 @@ namespace Listings
             _container.Singleton<ListingItemViewModelFactory>();
             _container.Singleton<ListingPdfGenerationViewModelFactory>();
             _container.Singleton<ListingsOverviewViewModelFactory>();
-            _container.Singleton<SettingsViewModelFactory>();
+            _container.Singleton<SettingsViewModelFactory>();*/
 
             _container.Instance(_container);
         }

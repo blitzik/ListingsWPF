@@ -25,7 +25,11 @@ namespace Listings.Views
 
         public ListingEditingViewModel Create(string windowTitle)
         {
-            return new ListingEditingViewModel(_eventaggregator, windowTitle, _listingFacade, _employerFacade);
+            ListingEditingViewModel vm = new ListingEditingViewModel(_eventaggregator, _listingFacade, _employerFacade);
+            vm.BaseWindowTitle = windowTitle;
+
+
+            return vm;
         }
     }
 }

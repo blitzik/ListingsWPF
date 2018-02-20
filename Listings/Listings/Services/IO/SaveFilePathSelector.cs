@@ -7,20 +7,19 @@ using System.Windows.Forms;
 
 namespace Listings.Services.IO
 {
-    public class OpenFileDialogPathSelector : IFilePathSelector
+    public class SaveFilePathSelector : ISavingFilePathSelector
     {
-        public string GetFilePath(Action<object> settingSetter = null)
+        public string GetFilePath(string defaultFilePath, Action<object> modifier)
         {
-            OpenFileDialog d = new OpenFileDialog();
-            if (settingSetter != null) {
-                settingSetter.Invoke(d);
-            }
+            SaveFileDialog d = new SaveFileDialog();
+            d.FileName = defaultFilePath;
+            modifier.Invoke(d);
 
             if (d.ShowDialog() == DialogResult.OK) {
                 return d.FileName;
             }
 
-            return string.Empty;
+            return null;
         }
     }
 }

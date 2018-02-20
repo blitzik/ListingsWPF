@@ -17,9 +17,9 @@ namespace Listings.Views
     /// <summary>
     /// Interaction logic for ProgressBarWindow.xaml
     /// </summary>
-    public partial class ProgressBarWindow : Window
+    public partial class ProgressBarWindowView : Window
     {
-        public ProgressBarWindow()
+        public ProgressBarWindowView()
         {
             InitializeComponent();
         }

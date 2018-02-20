@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Listings.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,6 @@ namespace Listings.Views
         string ViewModelName { get; }
 
         string BaseWindowTitle { get; set; }
-        string WindowTitle { get; set; }
+        PageTitle WindowTitle { get; set; }
     }
 }

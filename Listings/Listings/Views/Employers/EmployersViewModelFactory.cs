@@ -23,7 +23,10 @@ namespace Listings.Views
 
         public EmployersViewModel Create(string windowTitle)
         {
-            return new EmployersViewModel(_eventAggregator, windowTitle, _employerFacade);
+            EmployersViewModel vm = new EmployersViewModel(_eventAggregator, _employerFacade);
+            vm.BaseWindowTitle = windowTitle;
+
+            return vm;
         }
     }
 }

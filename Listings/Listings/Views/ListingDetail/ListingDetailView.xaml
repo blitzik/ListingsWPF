@@ -176,7 +176,7 @@
                                     <TextBlock Grid.Row="0" Grid.Column="2" Text="Pracovní doba" Style="{StaticResource LabelText}" HorizontalAlignment="Left" />
                                     <TextBlock Grid.Row="2" Grid.Column="2" FontSize="14" HorizontalAlignment="Left">
                                         <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource TimeToHoursAndMinutesRangeConverter}">
+                                            <MultiBinding UpdateSourceTrigger="PropertyChanged" Converter="{StaticResource TimeToHoursAndMinutesRangeConverter}">
                                                 <Binding Path="TimeSetting.Start" />
                                                 <Binding Path="TimeSetting.End" />
                                             </MultiBinding>
@@ -187,7 +187,7 @@
                                     <TextBlock Grid.Row="0" Grid.Column="4" Text="Oběd" Style="{StaticResource LabelText}" HorizontalAlignment="Left" />
                                     <TextBlock Grid.Row="2" Grid.Column="4" FontSize="14" HorizontalAlignment="Left">
                                         <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource TimeToHoursAndMinutesRangeConverter}">
+                                            <MultiBinding UpdateSourceTrigger="PropertyChanged" Converter="{StaticResource TimeToHoursAndMinutesRangeConverter}">
                                                 <Binding Path="TimeSetting.LunchStart" />
                                                 <Binding Path="TimeSetting.LunchEnd" />
                                             </MultiBinding>
@@ -196,20 +196,20 @@
 
                                     <!-- Other hours -->
                                     <TextBlock Grid.Row="0" Grid.Column="6" Text="Ostatní hodiny" Style="{StaticResource LabelText}" />
-                                    <TextBlock Grid.Row="2" Grid.Column="6" FontSize="14" Text="{Binding TimeSetting.OtherHours, Converter={StaticResource TimeToTimeInWordsConverter}}" HorizontalAlignment="Left" />
+                                    <TextBlock Grid.Row="2" Grid.Column="6" FontSize="14" Text="{Binding TimeSetting.OtherHours, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeToTimeInWordsConverter}}" HorizontalAlignment="Left" />
 
                                     <!-- Total Worked hours -->
                                     <TextBlock Grid.Row="0" Grid.Column="8" Text="Odpracované hodiny celkem" HorizontalAlignment="Center" Style="{StaticResource LabelText}" />
-                                    <TextBlock Grid.Row="2" Grid.Column="8" Grid.RowSpan="5" FontSize="22" HorizontalAlignment="Center" Text="{Binding TimeSetting.TotalWorkedHours, Converter={StaticResource TimeToTimeInWordsConverter}}" />
+                                    <TextBlock Grid.Row="2" Grid.Column="8" Grid.RowSpan="5" FontSize="22" HorizontalAlignment="Center" Text="{Binding TimeSetting.TotalWorkedHours, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeToTimeInWordsConverter}}" />
 
                                     <!-- Job description - locality -->
                                     <TextBlock Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="5" Text="Popis práce - místo" Style="{StaticResource LabelText}" HorizontalAlignment="Left" />
-                                    <TextBlock Grid.Row="6" Grid.Column="2" FontSize="14" Grid.ColumnSpan="5" Text="{Binding Locality}" TextWrapping="Wrap" />
+                                    <TextBlock Grid.Row="6" Grid.Column="2" FontSize="14" Grid.ColumnSpan="5" Text="{Binding Locality, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
                                 </Grid>
                             </Button>
 
                             <!-- Copy button -->
-                            <Button Grid.Column="2" FontSize="17" Visibility="{Binding CanBeCopiedDown, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=reversed}" Command="{Binding ElementName=ScrollViewer, Path=DataContext.CopyItemDownCommand}" CommandParameter="{Binding Day}" Style="{StaticResource TurquoiseButton}">
+                            <Button Grid.Column="2" FontSize="17" Visibility="{Binding CanBeCopiedDown, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=reversed}" Command="{Binding ElementName=ScrollViewer, Path=DataContext.CopyItemDownCommand}" CommandParameter="{Binding Day}" Style="{StaticResource TurquoiseButton}">
                                 <Rectangle Width="14" Height="17" Fill="White">
                                     <Rectangle.OpacityMask>
                                         <VisualBrush Stretch="Fill" Visual="{StaticResource ArrowDownIcon}" />
@@ -218,7 +218,7 @@
                             </Button>
 
                             <!-- Delete button -->
-                            <Button Grid.Column="4" FontSize="17" Visibility="{Binding CanBeRemoved, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=reversed}" Command="{Binding ElementName=ScrollViewer, Path=DataContext.RemoveItemCommand}" CommandParameter="{Binding Day}" Style="{StaticResource CriticalButton}">
+                            <Button Grid.Column="4" FontSize="17" Visibility="{Binding CanBeRemoved, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=reversed}" Command="{Binding ElementName=ScrollViewer, Path=DataContext.RemoveItemCommand}" CommandParameter="{Binding Day}" Style="{StaticResource CriticalButton}">
                                 <Rectangle Width="14" Height="14" Fill="White">
                                     <Rectangle.OpacityMask>
                                         <VisualBrush Stretch="Fill" Visual="{StaticResource CloseIcon}" />

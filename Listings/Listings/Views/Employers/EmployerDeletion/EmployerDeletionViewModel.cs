@@ -48,7 +48,7 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
 
-        public EmployerDeletionViewModel(IEventAggregator eventAggregator, EmployerFacade employerFacade, Employer employer) : base(eventAggregator, null)
+        public EmployerDeletionViewModel(IEventAggregator eventAggregator, EmployerFacade employerFacade, Employer employer) : base(eventAggregator)
         {
             _employer = employer;
             _employerFacade = employerFacade;

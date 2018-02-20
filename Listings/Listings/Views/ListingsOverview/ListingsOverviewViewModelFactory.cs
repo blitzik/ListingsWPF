@@ -14,6 +14,7 @@ namespace Listings.Views
         private readonly ListingFacade _listingFacade;
         private readonly ListingDetailViewModelFactory _listingDetailViewModelFactory;
 
+
         public ListingsOverviewViewModelFactory(
             IEventAggregator eventAggregator,
             ListingFacade listingFacade,
@@ -27,7 +28,10 @@ namespace Listings.Views
 
         public ListingsOverviewViewModel Create(string windowTitle)
         {
-            return new ListingsOverviewViewModel(_eventAggregator, windowTitle, _listingFacade, _listingDetailViewModelFactory);
+            ListingsOverviewViewModel vm = new ListingsOverviewViewModel(_eventAggregator, _listingFacade);
+            vm.BaseWindowTitle = windowTitle;
+
+            return vm;
         }
     }
 }

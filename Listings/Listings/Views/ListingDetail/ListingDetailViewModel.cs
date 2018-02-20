@@ -12,7 +12,7 @@ using System.Collections.ObjectModel;
 
 namespace Listings.Views
 {
-    public class ListingDetailViewModel : ScreenBaseViewModel
+    public class ListingDetailViewModel : ScreenBaseViewModel, IHandle<ListingMessage>
     {
         private Listing _listing;
         public Listing Listing
@@ -21,7 +21,6 @@ namespace Listings.Views
             set
             {
                 _listing = value;
-                Reset(value);
                 NotifyOfPropertyChange(() => Listing);
             }
         }
@@ -68,7 +67,7 @@ namespace Listings.Views
             get
             {
                 if (_listingDeletionCommand == null) {
-                    _listingDeletionCommand = new DelegateCommand<object>(p => DeleteListing());
+                    _listingDeletionCommand = new DelegateCommand<object>(p => DisplayListingDeletion());
                 }
                 return _listingDeletionCommand;
             }
@@ -141,70 +140,46 @@ namespace Listings.Views
 
 
         private List<DayItem> _dayItems;
-        private ListingItemViewModel _listingItemViewModel;
 
         private readonly ListingFacade _listingFacade;
-        private readonly ListingItemViewModelFactory _listingItemViewModelFactory;
 
 
         public ListingDetailViewModel(
-            Listing listing,
             IEventAggregator eventAggregator,
-            string windowTitle,
-            ListingFacade listingFacade,
-            ListingItemViewModelFactory listingItemViewModelFactory
-        ) : base(eventAggregator, windowTitle)
-        {
+            ListingFacade listingFacade
+        ) : base(eventAggregator) {
+            eventAggregator.Subscribe(this);
+
             _dayItems = new List<DayItem>();
             _listingFacade = listingFacade;
-            _listingItemViewModelFactory = listingItemViewModelFactory;
-
-            Listing = listing;
         }
 
 
-        public delegate void OpenListingEditingHandler(object sender, ListingArgs args);
-        public event OpenListingEditingHandler OnListingEditingClicked;
         private void OpenEditing()
         {
-            OpenListingEditingHandler handler = OnListingEditingClicked;
-            if (handler != null) {
-                handler(this, new ListingArgs(Listing));
-            }
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingEditingViewModel)));
+            EventAggregator.PublishOnUIThread(new ListingMessage(Listing));
         }
 
 
         private void OpenListingItemDetail(int day)
         {
-            if (_listingItemViewModel == null) {
-                _listingItemViewModel = _listingItemViewModelFactory.Create(WindowTitle, new DayItem(Listing, day));
-                _listingItemViewModel.OnListingItemSaved += (object sender, ListingItemArgs args) => {
-                    _dayItems[args.ListingItem.Day - 1].Update(args.ListingItem);
-                };
-            }
-            _eventAggregator.PublishOnUIThread(new DisplayViewMessage(_listingItemViewModel));
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingItemViewModel)));
+            EventAggregator.PublishOnUIThread(new EditDayItemMessage(_dayItems[day - 1]));
         }
 
 
-        public delegate void RemoveListingHandler(object sender, ListingArgs args);
-        public event RemoveListingHandler OnListingDeletionClicked;
-        private void DeleteListing()
+        private void DisplayListingDeletion()
         {
-            RemoveListingHandler handler = OnListingDeletionClicked;
-            if (handler != null) {
-                handler(this, new ListingArgs(Listing));
-            }
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingDeletionViewModel)));
+            EventAggregator.PublishOnUIThread(new ListingMessage(Listing));
         }
 
 
-        public delegate void DisplayListingPdfGenerationHandler(object sender, ListingArgs args);
-        public event DisplayListingPdfGenerationHandler OnListingPdfGenerationClicked;
         private void DisplayPdfGenerationPage()
         {
-            DisplayListingPdfGenerationHandler handler = OnListingPdfGenerationClicked;
-            if (handler != null) {
-                handler(this, new ListingArgs(Listing));
-            }
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingPdfGenerationViewModel)));
+            EventAggregator.PublishOnUIThread(new ListingMessage(Listing));
         }
 
 
@@ -230,7 +205,8 @@ namespace Listings.Views
 
         private void Reset(Listing listing)
         {
-            WindowTitle = string.Format("{0} {1} {2}", Date.Months[12 - listing.Month], listing.Year, string.Format("- {0}", listing.Name));
+            WindowTitle.Text = GenerateWindowTitle(listing);
+            NotifyOfPropertyChange(() => WindowTitle);
 
             _dayItems = PrepareDayItems(listing);
             _weeksInMonth = new List<Week>(PrepareWeeks(_dayItems).Values);
@@ -239,6 +215,12 @@ namespace Listings.Views
             DateTime now = DateTime.Now;
             int currentWeekNumber = Date.GetWeekNumber(now.Year, now.Month, now.Day);
             SelectedWeek = _weeksInMonth.Find(w => w.WeekNumber == currentWeekNumber);
+        }
+
+
+        private string GenerateWindowTitle(Listing listing)
+        {
+            return string.Format("{0} {1} {2}", Date.Months[12 - listing.Month], listing.Year, string.Format("- {0}", listing.Name));
         }
 
 
@@ -277,5 +259,25 @@ namespace Listings.Views
             return weeks;
         }
 
+
+        // -----
+
+
+        protected override void OnActivate()
+        {
+            if (Listing != null) {
+                WindowTitle.Text = GenerateWindowTitle(Listing);
+            }
+        }
+
+
+        // -----
+
+
+        public void Handle(ListingMessage message)
+        {
+            Listing = message.Listing;
+            Reset(Listing);
+        }
     }
 }

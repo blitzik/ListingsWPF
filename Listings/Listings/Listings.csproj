@@ -120,12 +120,12 @@
     <Compile Include="Converters\TimeToIntConverter.cs" />
     <Compile Include="Converters\TimeToTimeInWordsConverter.cs" />
     <Compile Include="Converters\ViewModelToBooleanConverter.cs" />
-    <Compile Include="Domain\BindableObject.cs" />
     <Compile Include="Domain\DayItem.cs" />
     <Compile Include="Domain\DefaultListingPdfReport.cs" />
     <Compile Include="Domain\DefaultListingPdfReportSetting.cs" />
     <Compile Include="Domain\DefaultSettings.cs" />
     <Compile Include="Domain\Employer.cs" />
+    <Compile Include="Domain\PageTitle.cs" />
     <Compile Include="Domain\ResultObject.cs" />
     <Compile Include="Domain\TimeSetting.cs" />
     <Compile Include="Domain\Week.cs" />
@@ -146,13 +146,16 @@
     <Compile Include="Facades\ListingFacade.cs" />
     <Compile Include="Facades\SettingFacade.cs" />
     <Compile Include="Messages\ChangeViewMessage.cs" />
-    <Compile Include="Messages\DisplayViewMessage.cs" />
+    <Compile Include="Messages\EditDayItemMessage.cs" />
+    <Compile Include="Messages\ListingMessage.cs" />
     <Compile Include="Services\Db4oObjectContainerFactory.cs" />
-    <Compile Include="Services\IO\IOpenFileDialog.cs" />
-    <Compile Include="Services\IO\NullFilePathSelector.cs" />
-    <Compile Include="Services\IO\OpenFileDialogPathSelector.cs" />
-    <Compile Include="Services\IO\SaveFileDialogPathSelector.cs" />
+    <Compile Include="Services\IO\ISavingFilePathSelector.cs" />
+    <Compile Include="Services\IO\IOpeningFilePathSelector.cs" />
+    <Compile Include="Services\IO\OpenFilePathSelector.cs" />
+    <Compile Include="Services\IO\SaveFilePathSelector.cs" />
     <Compile Include="Services\ObjectContainerRegistry.cs" />
+    <Compile Include="Services\ViewModelResolver\IViewModelResolver.cs" />
+    <Compile Include="Services\ViewModelResolver\ViewModelResolver.cs" />
     <Compile Include="Views\ConductorOneActiveBaseViewModel.cs" />
     <Compile Include="Views\Employers\EmployersViewModelFactory.cs" />
     <Compile Include="Views\IViewModel.cs" />
@@ -167,9 +170,10 @@
     <Compile Include="Views\ListingPdfGeneration\ListingPdfGenerationViewModelFactory.cs" />
     <Compile Include="Views\ListingsOverview\ListingsOverviewViewModelFactory.cs" />
     <Compile Include="Views\Listing\ListingViewModelFactory.cs" />
-    <Compile Include="Views\ProgressBarWindow\ProgressBarWindow.xaml.cs">
-      <DependentUpon>ProgressBarWindow.xaml</DependentUpon>
+    <Compile Include="Views\ProgressBarWindow\ProgressBarWindowView.xaml.cs">
+      <DependentUpon>ProgressBarWindowView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ProgressBarWindow\ProgressBarWindowViewModel.cs" />
     <Compile Include="Views\Settings\SettingsViewModelFactory.cs" />
     <Compile Include="Views\WorkedTimeSetting\WorkedTimeSettingView.xaml.cs">
       <DependentUpon>WorkedTimeSettingView.xaml</DependentUpon>
@@ -280,7 +284,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ProgressBarWindow\ProgressBarWindow.xaml">
+    <Page Include="Views\ProgressBarWindow\ProgressBarWindowView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

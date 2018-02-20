@@ -2,6 +2,7 @@
 using Listings.Commands;
 using Listings.Domain;
 using Listings.Facades;
+using Listings.Messages;
 using Listings.Utils;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class ListingDeletionViewModel : ScreenBaseViewModel
+    public class ListingDeletionViewModel : ScreenBaseViewModel, IHandle<ListingMessage>
     {
         private Listing _listing;
         public Listing Listing
@@ -21,10 +22,10 @@ namespace Listings.Views
             {
                 _listing = value;
                 if (value == null) {
-                    WindowTitle = BaseWindowTitle;
+                    WindowTitle.Text = BaseWindowTitle;
 
                 } else {
-                    WindowTitle = string.Format("{0} [{1} {2} {3}]", BaseWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));
+                    WindowTitle.Text = string.Format("{0} [{1} {2} {3}]", BaseWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));
                 }
             }
         }
@@ -75,35 +76,37 @@ namespace Listings.Views
 
         private ListingFacade _listingFacade;
 
-        public ListingDeletionViewModel(IEventAggregator eventAggregator, string windowTitle, ListingFacade listingFacade) : base(eventAggregator, windowTitle)
+        public ListingDeletionViewModel(IEventAggregator eventAggregator, ListingFacade listingFacade) : base(eventAggregator)
         {
+            eventAggregator.Subscribe(this);
+            BaseWindowTitle = "Odstranění výčetky";
+
             _listingFacade = listingFacade;            
         }
 
 
-        public delegate void DeletetionListingHandler(object sender, EventArgs args);
-        public event DeletetionListingHandler OnDeletedListing;
         private void DeleteListing()
         {
             _listingFacade.DeleteListing(Listing);
             Listing = null;
             ConfirmationText = null;
 
-            DeletetionListingHandler handler = OnDeletedListing;
-            if (handler != null) {
-                handler(this, EventArgs.Empty);
-            }
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingsOverviewViewModel)));
         }
 
 
-        public delegate void ReturnBackHandler(object sender, EventArgs args);
-        public event ReturnBackHandler OnReturnBackClicked;
         private void ReturnBack()
         {
-            ReturnBackHandler handler = OnReturnBackClicked;
-            if (handler != null) {
-                handler(this, EventArgs.Empty);
-            }
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingDetailViewModel)));
+        }
+
+
+        // -----
+
+
+        public void Handle(ListingMessage message)
+        {
+            Listing = message.Listing;
         }
     }
 }

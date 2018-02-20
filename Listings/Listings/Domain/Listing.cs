@@ -1,4 +1,5 @@
-﻿using Listings.EventArguments;
+﻿using Caliburn.Micro;
+using Listings.EventArguments;
 using Listings.Exceptions;
 using Listings.Utils;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Domain
 {
-    public class Listing : BindableObject
+    public class Listing : PropertyChangedBase
     {
         private string _name;
         public string Name
@@ -22,7 +23,7 @@ namespace Listings.Domain
                 } else {
                     _name = value;
                 }
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => Name);
             }
         }
 
@@ -63,7 +64,7 @@ namespace Listings.Domain
             set
             {
                 _employer = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => Employer);
             }
         }
 
@@ -103,7 +104,7 @@ namespace Listings.Domain
             private set
             {
                 _workedDays = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => WorkedDays);
             }
         }
 
@@ -122,7 +123,7 @@ namespace Listings.Domain
                     OnSummaryTimeChanged?.Invoke(this, _workedHours);
                 }
                 _workedHours = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => WorkedHours);
             }
         }
 
@@ -165,7 +166,7 @@ namespace Listings.Domain
                     OnSummaryTimeChanged?.Invoke(this, _totalWorkedHours);
                 }
                 _totalWorkedHours = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => TotalWorkedHours);
             }
         }
 
@@ -207,7 +208,7 @@ namespace Listings.Domain
             set
             {
                 _hourlyWage = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => HourlyWage);
             }
         }
 

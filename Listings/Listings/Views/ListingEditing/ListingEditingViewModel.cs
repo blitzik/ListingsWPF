@@ -3,9 +3,11 @@ using Listings.Commands;
 using Listings.Domain;
 using Listings.EventArguments;
 using Listings.Facades;
+using Listings.Messages;
 using Listings.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -13,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class ListingEditingViewModel : ScreenBaseViewModel//, IDataErrorInfo
+    public class ListingEditingViewModel : ScreenBaseViewModel, IHandle<ListingMessage>
     {
         private Listing _listing;
         public Listing Listing
@@ -25,7 +27,7 @@ namespace Listings.Views
                 NotifyOfPropertyChange(() => Listing);
                 RefreshEmployers();
 
-                WindowTitle = string.Format("{0} [{1} {2} {3}]", BaseWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));
+                WindowTitle.Text = string.Format("{0} [{1} {2} {3}]", BaseWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));
 
                 _years.Clear();
                 _years.Add(value.Year);
@@ -58,15 +60,15 @@ namespace Listings.Views
         }
 
 
-        private List<int> _years = new List<int>();
-        public List<int> Years
+        private ObservableCollection<int> _years = new ObservableCollection<int>();
+        public ObservableCollection<int> Years
         {
             get { return _years; }
         }
 
 
-        private List<string> _months = new List<string>();
-        public List<string> Months
+        private ObservableCollection<string> _months = new ObservableCollection<string>();
+        public ObservableCollection<string> Months
         {
             get { return _months; }
         }
@@ -211,7 +213,7 @@ namespace Listings.Views
         }
 
 
-        private string _dollars; // wtf? :D
+        private string _dollars; // better name? :D
         public string Dollars
         {
             get { return _dollars; }
@@ -266,8 +268,11 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
         
-        public ListingEditingViewModel(IEventAggregator eventAggregator, string windowTitle, ListingFacade listingFacade, EmployerFacade employerFacade) : base(eventAggregator, windowTitle)
+        public ListingEditingViewModel(IEventAggregator eventAggregator, ListingFacade listingFacade, EmployerFacade employerFacade) : base(eventAggregator)
         {
+            eventAggregator.Subscribe(this);
+            BaseWindowTitle = "Úprava výčetky";
+
             _listingFacade = listingFacade;
             _employerFacade = employerFacade;
 
@@ -282,8 +287,6 @@ namespace Listings.Views
         }
 
 
-        public delegate void ListingSaveHandler(object sender, ListingArgs args);
-        public event ListingSaveHandler OnListingSuccessfullySaved;
         private void SaveListing()
         {
             if (Listing == null) {
@@ -306,51 +309,22 @@ namespace Listings.Views
 
             _listingFacade.Save(Listing);
 
-            ListingSaveHandler handler = OnListingSuccessfullySaved;
-            if (handler != null) {
-                handler(this, new ListingArgs(Listing));
-            }
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingDetailViewModel)));
         }
 
 
-        public delegate void ReturnBackHandler(object sender, ListingArgs args);
-        public event ReturnBackHandler OnReturnBackClicked;
         private void ReturnBack()
         {
-            ReturnBackHandler handler = OnReturnBackClicked;
-            if (handler != null) {
-                handler(this, new ListingArgs(Listing));
-            }
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingDetailViewModel)));
         }
 
 
         // -----
 
 
-        /*public string Error
+        public void Handle(ListingMessage message)
         {
-            get
-            {
-                return null;
-            }
+            Listing = message.Listing;
         }
-
-        public string this[string columnName]
-        {
-            get
-            {
-                switch (columnName) {
-                    case nameof(HourlyWage):
-                        if (!string.IsNullOrEmpty(HourlyWage)) {
-                            if (int.Parse(HourlyWage) < 0) {
-                                return "Hodinová mzda musí být větší než 0";
-                            }
-                        }
-                        break;
-                }
-
-                return string.Empty;
-            }
-        }*/
     }
 }

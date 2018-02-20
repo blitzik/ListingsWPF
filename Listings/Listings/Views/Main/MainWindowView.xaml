@@ -113,7 +113,7 @@
 
 
         <Border Grid.Row="0" Grid.Column="1" Padding="0 10 5 10" Margin="10 0 10 0" BorderBrush="#ccc" BorderThickness="0 0 0 1">
-            <TextBlock Text="{Binding Title, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" FontSize="23" Foreground="#333" FontWeight="Medium" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding Title.Text, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" FontSize="23" Foreground="#333" FontWeight="Medium" VerticalAlignment="Center" />
         </Border>
 
         <Border Grid.Row="1" Grid.Column="1" Padding="10">

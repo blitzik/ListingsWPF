@@ -369,7 +369,7 @@ namespace Listings.Views
         private TimeSetting _lastSetTime;
 
 
-        public WorkedTimeSettingViewModel(IEventAggregator eventAggregator, TimeSetting defaultTimeSettings, TimeSetting timeSetting, int timeTickInMinutes) : base(eventAggregator, null)
+        public WorkedTimeSettingViewModel(IEventAggregator eventAggregator, TimeSetting defaultTimeSettings, TimeSetting timeSetting, int timeTickInMinutes) : base(eventAggregator)
         {
             _defaultTimeSettings = defaultTimeSettings;
             _lastSetTime = timeSetting;
@@ -515,11 +515,6 @@ namespace Listings.Views
             if (OnTimeChanged != null) {
                 OnTimeChanged(this, new WorkedTimeEventArgs(new Time(StartTime), new Time(EndTime), new Time(LunchStart), new Time(LunchEnd), new Time(OtherHours)));
             }
-        }
-
-
-        public void Reset()
-        {
         }
     }
 

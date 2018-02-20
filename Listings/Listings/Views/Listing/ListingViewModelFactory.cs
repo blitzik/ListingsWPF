@@ -11,13 +11,19 @@ namespace Listings.Views
     public class ListingViewModelFactory
     {
         private readonly IEventAggregator _eventAggregator;
+        private readonly ListingDetailViewModelFactory _listingDetailViewModelFactory;
         private readonly ListingFacade _listingFacade;
         private readonly EmployerFacade _employerFacade;
 
 
-        public ListingViewModelFactory(IEventAggregator eventAggregator, ListingFacade listingFacade, EmployerFacade employerFacade)
-        {
+        public ListingViewModelFactory(
+            IEventAggregator eventAggregator,
+            ListingDetailViewModelFactory listingDetailViewModelFactory,
+            ListingFacade listingFacade,
+            EmployerFacade employerFacade
+        ) {
             _eventAggregator = eventAggregator;
+            _listingDetailViewModelFactory = listingDetailViewModelFactory;
             _listingFacade = listingFacade;
             _employerFacade = employerFacade;
         }
@@ -25,7 +31,10 @@ namespace Listings.Views
 
         public ListingViewModel Create(string windowTitle)
         {
-            return new ListingViewModel(_eventAggregator, windowTitle, _listingFacade, _employerFacade);
+            ListingViewModel vm = new ListingViewModel(_eventAggregator, _listingFacade, _employerFacade);
+            vm.BaseWindowTitle = windowTitle;
+
+            return vm;
         }
     }
 }

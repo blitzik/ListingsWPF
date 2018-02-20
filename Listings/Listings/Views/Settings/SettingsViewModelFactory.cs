@@ -16,13 +16,17 @@ namespace Listings.Views
 
         public SettingsViewModelFactory(IEventAggregator eventAggregator, SettingFacade settingFacade)
         {
+            _eventAggregator = eventAggregator;
             _settingFacade = settingFacade;
         }
 
 
         public SettingsViewModel Create(string windowTitle)
         {
-            return new SettingsViewModel(_eventAggregator, windowTitle, _settingFacade);
+            SettingsViewModel vm = new SettingsViewModel(_eventAggregator, _settingFacade);
+            vm.BaseWindowTitle = windowTitle;
+
+            return vm;
         }
     }
 }

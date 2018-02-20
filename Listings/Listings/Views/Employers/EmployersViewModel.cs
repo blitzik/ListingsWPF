@@ -55,9 +55,11 @@ namespace Listings.Views
         }
 
 
-        public EmployersViewModel(IEventAggregator eventAggregator, string windowTitle, EmployerFacade employerFacade) : base(eventAggregator, windowTitle)
+        public EmployersViewModel(IEventAggregator eventAggregator, EmployerFacade employerFacade) : base(eventAggregator)
         {
             _employerFacade = employerFacade;
+
+            BaseWindowTitle = "Správa zaměstnavatelů";
 
             List<Employer> foundEmployers = employerFacade.FindAllEmployers();
             _employers = new ObservableCollection<EmployerItemViewModel>();
@@ -80,7 +82,7 @@ namespace Listings.Views
 
         private EmployerItemViewModel CreateEmployerItemViewModel(Employer employer)
         {
-            EmployerItemViewModel vm = new EmployerItemViewModel(_eventAggregator, _employerFacade, employer);
+            EmployerItemViewModel vm = new EmployerItemViewModel(EventAggregator, _employerFacade, employer);
             vm.OnDeletedEmployer += OnEmployerDeletion;
 
             return vm;

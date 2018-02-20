@@ -1,14 +1,16 @@
 ﻿using Caliburn.Micro;
+using Listings.Domain;
 using Listings.Messages;
+using Listings.Services.ViewModelResolver;
 using System;
 using System.Collections.Generic;
 
 namespace Listings.Views
 {
-    public class MainWindowViewModel : Conductor<IViewModel>.Collection.OneActive, IHandle<DisplayViewMessage>, IHandle<ChangeViewMessage>
+    public class MainWindowViewModel : Conductor<IViewModel>.Collection.OneActive, IHandle<ChangeViewMessage>
     {
-        private string _title;
-        public string Title
+        private PageTitle _title;
+        public PageTitle Title
         {
             get { return _title; }
             private set
@@ -19,30 +21,19 @@ namespace Listings.Views
         }
 
 
+        private IViewModelResolver<IViewModel> _viewModelResolver;
+
         private Dictionary<string, IViewModel> _viewModels;
-
-
-        private ListingsOverviewViewModel _listingsOverviewViewModel;
-        private ListingViewModel _listingViewModel;
-        private EmployersViewModel _employersViewModel;
-        private SettingsViewModel _settingsViewModel;
 
 
         public MainWindowViewModel(
             IEventAggregator eventAggregator,
-            ListingsOverviewViewModelFactory listingsOverviewViewModelFactory,
-            ListingViewModelFactory listingViewModelFactory,
-            EmployersViewModelFactory employersViewModelFactory,
-            SettingsViewModelFactory settingsViewModelFactory
+            IViewModelResolver<IViewModel> viewModelResolver
         ) {
             _viewModels = new Dictionary<string, IViewModel>();
+            _viewModelResolver = viewModelResolver;
 
             eventAggregator.Subscribe(this);
-
-            _listingsOverviewViewModel = listingsOverviewViewModelFactory.Create("Přehled výčetek");
-            _listingViewModel = listingViewModelFactory.Create("Nová výčetka");
-            _employersViewModel = employersViewModelFactory.Create("Správa zaměstnavatelů");
-            _settingsViewModel = settingsViewModelFactory.Create("Nastavení");
 
             DisplayListingsOverview();
         }
@@ -50,25 +41,25 @@ namespace Listings.Views
 
         public void DisplayListingsOverview()
         {
-            ActivateItem(_listingsOverviewViewModel);
+            ActivateItem(GetViewModel(nameof(ListingsOverviewViewModel)));
         }
 
 
         public void DisplayListingCreation()
         {
-            ActivateItem(_listingViewModel);
+            ActivateItem(GetViewModel(nameof(ListingViewModel)));
         }
 
 
         public void DisplayEmployersList()
         {
-            ActivateItem(_employersViewModel);
+            ActivateItem(GetViewModel(nameof(EmployersViewModel)));
         }
 
 
         public void DisplaySettings()
         {
-            ActivateItem(_settingsViewModel);
+            ActivateItem(GetViewModel(nameof(SettingsViewModel)));
         }
 
 
@@ -85,20 +76,29 @@ namespace Listings.Views
 
 
         // -----
-
-
-        public void Handle(DisplayViewMessage message)
-        {
-            ActivateItem(message.ViewModel);
-        }
+       
         
-
         public void Handle(ChangeViewMessage message)
         {
-            if (!_viewModels.ContainsKey(message.ViewModelName)) {
-                throw new Exception("ViewModel with given name does NOT exist. You have to display it by DisplayViewMessage first.");
+            ActivateItem(GetViewModel(message.ViewModelName));
+        }
+
+
+        private IViewModel GetViewModel(string viewModelName)
+        {
+            IViewModel viewModel;
+            if (!_viewModels.ContainsKey(viewModelName)) {
+                viewModel = _viewModelResolver.Resolve(viewModelName);
+                if (viewModel == null) {
+                    throw new Exception("Requested ViewModel does not Exist!");
+                }
+                _viewModels.Add(viewModelName, viewModel);
+
+            } else {
+                viewModel = _viewModels[viewModelName];
             }
-            ActivateItem(_viewModels[message.ViewModelName]);
+
+            return viewModel;
         }
 
     }

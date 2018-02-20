@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Listings.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,8 @@ namespace Listings.Views
         }
 
 
-        protected string _windowTitle;
-        public string WindowTitle
+        protected PageTitle _windowTitle;
+        public PageTitle WindowTitle
         {
             get { return _windowTitle; }
             set
@@ -35,19 +36,23 @@ namespace Listings.Views
             set
             {
                 _baseWindowTitle = value;
-                WindowTitle = value;
+                WindowTitle.Text = value;
             }
         }
 
 
         protected IEventAggregator _eventAggregator;
+        public IEventAggregator EventAggregator
+        {
+            get { return _eventAggregator; }
+        }
 
 
-        public ConductorOneActiveBaseViewModel(IEventAggregator eventAggregator , string windowTitle)
+        public ConductorOneActiveBaseViewModel(IEventAggregator eventAggregator)
         {
             _viewModelName = this.GetType().Name;
-            BaseWindowTitle = windowTitle;
             _eventAggregator = eventAggregator;
+            _windowTitle = new PageTitle();
         }
 
     }

@@ -32,7 +32,7 @@ namespace Listings.Views
             get
             {
                 if (_employerDetailViewModel == null) {
-                    _employerDetailViewModel = new EmployerDetailViewModel(_eventAggregator, _employerFacade, Employer);
+                    _employerDetailViewModel = new EmployerDetailViewModel(EventAggregator, _employerFacade, Employer);
                     _employerDetailViewModel.OnDeletionClicked += (object sender, EventArgs args) => {
                         ChangeView(nameof(EmployerDeletionViewModel));
                     };
@@ -51,7 +51,7 @@ namespace Listings.Views
             get
             {
                 if (_employerDeletionViewModel == null) {
-                    _employerDeletionViewModel = new EmployerDeletionViewModel(_eventAggregator, _employerFacade, Employer);
+                    _employerDeletionViewModel = new EmployerDeletionViewModel(EventAggregator, _employerFacade, Employer);
                     _employerDeletionViewModel.OnDeletedEmployer += (object sender, EventArgs args) => {
                         EmployerDeletionHandler handler = OnDeletedEmployer;
                         if (handler != null) {
@@ -92,7 +92,7 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
 
-        public EmployerItemViewModel(IEventAggregator eventAggregator, EmployerFacade employerFacade, Employer employer) : base(eventAggregator, null)
+        public EmployerItemViewModel(IEventAggregator eventAggregator, EmployerFacade employerFacade, Employer employer) : base(eventAggregator)
         {
             _employer = employer;
             _employerFacade = employerFacade;

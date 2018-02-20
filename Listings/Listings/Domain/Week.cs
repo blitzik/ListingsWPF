@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Domain
 {
-    public class Week : BindableObject
+    public class Week : PropertyChangedBase
     {
         private int _weekNumber;
         public int WeekNumber

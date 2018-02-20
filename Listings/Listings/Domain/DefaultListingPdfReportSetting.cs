@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Domain
 {
-    public class DefaultListingPdfReportSetting : BindableObject
+    public class DefaultListingPdfReportSetting : PropertyChangedBase
     {
         private bool _isOwnerNameVisible;
         public bool IsOwnerNameVisible
@@ -15,7 +16,7 @@ namespace Listings.Domain
             set
             {
                 _isOwnerNameVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => IsOwnerNameVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -27,7 +28,7 @@ namespace Listings.Domain
             set
             {
                 _isEmployerVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => IsEmployerVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -39,7 +40,7 @@ namespace Listings.Domain
             set
             {
                 _isVacationVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => IsVacationVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -51,7 +52,7 @@ namespace Listings.Domain
             set
             {
                 _areOtherHoursVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => AreOtherHoursVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -63,7 +64,7 @@ namespace Listings.Domain
             set
             {
                 _areShortHalfHoursEnabled = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => AreShortHalfHoursEnabled);
                 ProcessOnPropertyChanged();
             }
         }
@@ -75,7 +76,7 @@ namespace Listings.Domain
             set
             {
                 _areWorkedHoursVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => AreWorkedHoursVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -87,7 +88,7 @@ namespace Listings.Domain
             set
             {
                 _areSiknessHours = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => AreSiknessHoursVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -99,7 +100,7 @@ namespace Listings.Domain
             set
             {
                 _areHolidaysHoursVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => AreHolidaysHoursVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -111,7 +112,7 @@ namespace Listings.Domain
             set
             {
                 _areLunchHoursVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => AreLunchHoursVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -123,7 +124,7 @@ namespace Listings.Domain
             set
             {
                 _areTotalWorkedHoursVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => AreTotalWorkedHoursVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -135,7 +136,7 @@ namespace Listings.Domain
             set
             {
                 _isHourlyWageVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => IsHourlyWageVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -147,7 +148,7 @@ namespace Listings.Domain
             set
             {
                 _areVacationDaysVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => AreVacationDaysVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -159,7 +160,7 @@ namespace Listings.Domain
             set
             {
                 _areDietsVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => AreDietsVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -171,7 +172,7 @@ namespace Listings.Domain
             set
             {
                 _arePaidHolidaysVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => ArePaidHolidaysVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -183,7 +184,7 @@ namespace Listings.Domain
             set
             {
                 _areBonusesVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => AreBonusesVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -195,7 +196,7 @@ namespace Listings.Domain
             set
             {
                 _aAreDollarsVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => AreDollarsVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -207,7 +208,7 @@ namespace Listings.Domain
             set
             {
                 _isPrepaymentVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => IsPrepaymentVisible);
                 ProcessOnPropertyChanged();
             }
         }
@@ -219,7 +220,7 @@ namespace Listings.Domain
             set
             {
                 _isSicknessVisible = value;
-                RaisePropertyChanged();
+                NotifyOfPropertyChange(() => IsSicknessVisible);
                 ProcessOnPropertyChanged();
             }
         }

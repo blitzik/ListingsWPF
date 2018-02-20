@@ -24,9 +24,11 @@ namespace Listings.Views
         }
 
 
-        public ListingItemViewModel Create(string windowTitle, DayItem dayItem)
+        public ListingItemViewModel Create(DayItem dayItem)
         {
-            return new ListingItemViewModel(_eventAggregator, windowTitle, dayItem, _listingFacade, _settingFacade);
+            ListingItemViewModel vm = new ListingItemViewModel(_eventAggregator, _listingFacade, _settingFacade);
+
+            return vm;
         }
     }
 }

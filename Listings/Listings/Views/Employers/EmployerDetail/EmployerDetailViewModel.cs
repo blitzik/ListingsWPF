@@ -64,7 +64,7 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
 
-        public EmployerDetailViewModel(IEventAggregator eventAggregator, EmployerFacade employerFacade, Employer employer) : base(eventAggregator, null)
+        public EmployerDetailViewModel(IEventAggregator eventAggregator, EmployerFacade employerFacade, Employer employer) : base(eventAggregator)
         {
             _employer = employer;
             Name = employer.Name;

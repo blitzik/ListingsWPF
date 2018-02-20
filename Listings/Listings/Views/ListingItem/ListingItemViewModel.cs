@@ -17,7 +17,7 @@ using Listings.Messages;
 
 namespace Listings.Views
 {
-    public class ListingItemViewModel : ScreenBaseViewModel
+    public class ListingItemViewModel : ScreenBaseViewModel, IHandle<EditDayItemMessage>
     {
         private string _header;
         public string Header
@@ -89,6 +89,7 @@ namespace Listings.Views
             {
                 _dayItem = value;
                 Reset(value);
+                NotifyOfPropertyChange(() => DayItem);
             }
         }
 
@@ -99,19 +100,21 @@ namespace Listings.Views
         private DefaultSettings _defaultSettings;
 
 
-        public ListingItemViewModel(IEventAggregator eventAggregator, string windowTitle, DayItem dayItem, ListingFacade listingFacade, SettingFacade settingFacade) : base(eventAggregator, windowTitle)
+        public ListingItemViewModel(IEventAggregator eventAggregator, ListingFacade listingFacade, SettingFacade settingFacade) : base(eventAggregator)
         {
+            eventAggregator.Subscribe(this);
+
             _listingFacade = listingFacade;
             _settingFacade = settingFacade;
 
-            DayItem = dayItem;
+            //DayItem = dayItem;
         }
 
 
         private void Reset(DayItem dayItem)
         {
-            string date = CultureInfo.CurrentCulture.TextInfo.ToTitleCase((DateTime.Now).ToLongDateString().ToLower());
-            WindowTitle = String.Format("{0} - {1}", date, dayItem.Listing.Name);
+            string date = CultureInfo.CurrentCulture.TextInfo.ToTitleCase((new DateTime(dayItem.Year, dayItem.Month, dayItem.Day)).ToLongDateString().ToLower());
+            WindowTitle.Text = String.Format("{0} - {1}", date, dayItem.Listing.Name);
             _defaultSettings = _settingFacade.GetDefaultSettings();
 
             if (dayItem.ListingItem != null) {
@@ -126,8 +129,6 @@ namespace Listings.Views
         }
 
 
-        public delegate void ListingItemSavedHandler(object sender, ListingItemArgs args);
-        public event ListingItemSavedHandler OnListingItemSaved;
         private void SaveListingItem()
         {
             ListingItem newItem = _dayItem.Listing.ReplaceItem(
@@ -142,17 +143,24 @@ namespace Listings.Views
 
             _listingFacade.Save(_dayItem.Listing);
 
-            ListingItemSavedHandler handler = OnListingItemSaved;
-            if (handler != null) {
-                handler(this, new ListingItemArgs(newItem));
-            }
+            DayItem.Update(newItem);
+
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingDetailViewModel)));
         }
 
 
         private void ReturnBackToListingDetail()
         {
-            _eventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingDetailViewModel)));
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingDetailViewModel)));
         }
-        
+
+
+        // -----
+
+
+        public void Handle(EditDayItemMessage message)
+        {
+            DayItem = message.DayItem;
+        }
     }
 }

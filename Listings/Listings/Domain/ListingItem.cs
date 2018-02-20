@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Listings.Exceptions;
+using Caliburn.Micro;
 
 namespace Listings.Domain
 {
-    public class ListingItem : BindableObject
+    public class ListingItem : PropertyChangedBase
     {
         private readonly DateTime _date;
         public DateTime Date
