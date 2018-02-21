@@ -39,7 +39,7 @@
                 <Border Padding="15">
                     <StackPanel>
                         <TextBlock Text="Jméno a Příjmení" Style="{StaticResource LabelText}" />
-                        <TextBox Text="{Binding OwnerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="350" MaxLength="30" HorizontalAlignment="Left" Style="{StaticResource DefaultTextBox}" />
+                        <TextBox Text="{Binding PdfSetting.OwnerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="350" MaxLength="30" HorizontalAlignment="Left" Style="{StaticResource DefaultTextBox}" />
                     </StackPanel>
                 </Border>
             </TabItem>

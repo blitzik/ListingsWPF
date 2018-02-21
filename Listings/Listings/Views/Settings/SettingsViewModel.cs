@@ -27,20 +27,6 @@ namespace Listings.Views
         }
 
 
-        private string _ownerName;
-        public string OwnerName
-        {
-            get { return _ownerName; }
-            set
-            {
-                _ownerName = value;
-                NotifyOfPropertyChange(() => OwnerName);
-                CancelChangesCommand.RaiseCanExecuteChanged();
-                SaveSettingsCommand.RaiseCanExecuteChanged();
-            }
-        }
-
-
         private DelegateCommand<object> _saveSettingsCommand;
         public DelegateCommand<object> SaveSettingsCommand
         {
@@ -176,8 +162,6 @@ namespace Listings.Views
         {
             _defaultSetting = _settingFacade.GetDefaultSettings();
 
-            OwnerName = _defaultSetting.OwnerName;
-
             PdfSetting = CreateNewPdfSetting(_defaultSetting.Pdfsetting);
 
             if (_workedTimeViewModel == null) {
@@ -210,10 +194,6 @@ namespace Listings.Views
                 return true;
             }
 
-            if (!string.Equals(_defaultSetting.OwnerName, string.IsNullOrEmpty(OwnerName) ? null : OwnerName)) {
-                return true;
-            }
-
             if (!_pdfSetting.IsEqual(_defaultSetting.Pdfsetting)) {
                 return true;
             }
@@ -233,7 +213,6 @@ namespace Listings.Views
                 new Time(_workedTimeViewModel.LunchEnd),
                 new Time(_workedTimeViewModel.OtherHours)
             );
-            _defaultSetting.OwnerName = string.IsNullOrEmpty(OwnerName) ? null : OwnerName;
             _defaultSetting.TimeTickInMinutes = _workedTimeViewModel.SelectedTimeTickInMinutes;
             _defaultSetting.Pdfsetting.UpdateBy(_pdfSetting);
             
@@ -255,7 +234,6 @@ namespace Listings.Views
         {
             WorkedTimeViewModel.SetTime(_defaultSetting.Time);
             WorkedTimeViewModel.SelectedTimeTickInMinutes = _defaultSetting.TimeTickInMinutes;
-            OwnerName = _defaultSetting.OwnerName;
 
             PdfSetting = CreateNewPdfSetting(_defaultSetting.Pdfsetting);
 

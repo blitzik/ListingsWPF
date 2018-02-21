@@ -1,4 +1,5 @@
-﻿using Listings.Utils;
+﻿using Listings.Domain;
+using Listings.Utils;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
 using System;
@@ -7,73 +8,47 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Listings.Domain
+namespace Listings.Services.Pdf
 {
-    public class DefaultListingPdfReport
+    public class DefaultListingPdfReportFactory : IListingPdfDocumentFactory
     {
-        private Listing _listing;
-
-        private Document _doc;
-        public Document Document
-        {
-            get
-            {
-                PrepareDocument();
-                return _doc;
-            }
-        }
-
-
-        private string _ownerName;
-        public string OwnerName
-        {
-            get { return _ownerName; }
-            set { _ownerName = value; }
-        }
-
-
-        private DefaultListingPdfReportSetting _setting;
-        public DefaultListingPdfReportSetting Setting
-        {
-            get { return _setting; }
-            set { _setting = value; }
-        }
-
-
         private float _tableBordersWidth = 0.75f;
         private Color _tableBordersColor = new Color(51, 51, 51);
 
 
-        public DefaultListingPdfReport(Listing listing)
+        public DefaultListingPdfReportFactory()
         {
-            _listing = listing;
-
-            _setting = new DefaultListingPdfReportSetting();
         }
 
 
-        private Document PrepareDocument()
+        public Document Create(Listing listing, DefaultListingPdfReportSetting settings)
         {
-            _doc = new Document();
+            return CreateDocument(listing, settings);
+        }
 
-            Section section = PrepareDefaultDocumentStyles(_doc);
+
+        private Document CreateDocument(Listing listing, DefaultListingPdfReportSetting settings)
+        {
+            Document doc = new Document();
+
+            Section section = PrepareDefaultDocumentStyles(doc, listing);
 
             // 24 column grid :D
             float sectionWidth = section.PageSetup.PageWidth - section.PageSetup.LeftMargin - section.PageSetup.RightMargin;
             Dictionary<string, float> grid = GetGridColumns(sectionWidth, 24);
 
-            CreateInfoTable(_listing, section, grid);
-            CreateDataTable(_listing, section, grid);
-            CreateHoursSummaryTable(_listing, section, grid);
-            CreateFinalTable(_listing, section, grid);
+            CreateInfoTable(listing, section, settings, grid);
+            CreateDataTable(listing, section, settings, grid);
+            CreateHoursSummaryTable(listing, section, settings, grid);
+            CreateFinalTable(listing, section, settings, grid);
 
-            return _doc;
+            return doc;
         }
 
 
-        private Section PrepareDefaultDocumentStyles(Document doc)
+        private Section PrepareDefaultDocumentStyles(Document doc, Listing listing)
         {
-            doc.Info.Title = string.Format("{0} {1}", Date.Months[12 - _listing.Month], _listing.Year);
+            doc.Info.Title = string.Format("{0} {1}", Date.Months[12 - listing.Month], listing.Year);
             doc.Info.Author = "Evidoo app";
 
             Style style = doc.Styles["Normal"];
@@ -96,7 +71,7 @@ namespace Listings.Domain
         }
 
 
-        private void CreateInfoTable(Listing listing, Section section, Dictionary<string, float> grid)
+        private void CreateInfoTable(Listing listing, Section section, DefaultListingPdfReportSetting settings,  Dictionary<string, float> grid)
         {
             Table table = section.AddTable();
             //table.Borders.Color = new Color(30, 30, 30);
@@ -136,14 +111,14 @@ namespace Listings.Domain
             //row.BottomPadding = 15;
             //row.Cells[0].AddParagraph("abc");
             //row.Cells[1].AddParagraph("abc");
-            row.Cells[2].AddParagraph(Setting.IsEmployerVisible ? (listing.Employer != null ? listing.Employer.Name : string.Empty) : string.Empty);
+            row.Cells[2].AddParagraph(settings.IsEmployerVisible ? (listing.Employer != null ? listing.Employer.Name : string.Empty) : string.Empty);
             row.Cells[2].MergeRight = 2;
             row.Cells[2].Borders.Color = _tableBordersColor;
             row.Cells[2].Borders.Width = _tableBordersWidth;
             row.Cells[2].VerticalAlignment = VerticalAlignment.Center;
             //row.Cells[3].AddParagraph("a");
             //row.Cells[4].AddParagraph("abc");
-            row.Cells[5].AddParagraph(Setting.IsOwnerNameVisible ? (string.IsNullOrEmpty(OwnerName) ? string.Empty : OwnerName) : string.Empty);
+            row.Cells[5].AddParagraph(settings.IsOwnerNameVisible ? (string.IsNullOrEmpty(settings.OwnerName) ? string.Empty : settings.OwnerName) : string.Empty);
             row.Cells[5].MergeRight = 2;
             row.Cells[5].Borders.Color = _tableBordersColor;
             row.Cells[5].Borders.Width = _tableBordersWidth;
@@ -159,7 +134,7 @@ namespace Listings.Domain
         }
 
 
-        private void CreateDataTable(Listing listing, Section section, Dictionary<string, float> grid)
+        private void CreateDataTable(Listing listing, Section section, DefaultListingPdfReportSetting settings, Dictionary<string, float> grid)
         {
             Table table = section.AddTable();
             table.Borders.Color = _tableBordersColor;
@@ -226,10 +201,10 @@ namespace Listings.Domain
                 row.Cells[4].AddParagraph(item.TimeSetting != null ? GetHoursAndMinutesRange(item.TimeSetting.LunchStart, item.TimeSetting.LunchEnd, !item.TimeSetting.HasNoTime, "-") : string.Empty);
                 row.Cells[4].VerticalAlignment = VerticalAlignment.Center;
 
-                row.Cells[5].AddParagraph(item.TimeSetting != null ? GetHoursAndMinutes(item.TimeSetting.WorkedHours, false) : string.Empty);
+                row.Cells[5].AddParagraph(item.TimeSetting != null ? GetHoursAndMinutes(item.TimeSetting.WorkedHours, false, settings.AreShortHalfHoursEnabled) : string.Empty);
                 row.Cells[5].VerticalAlignment = VerticalAlignment.Center;
 
-                row.Cells[6].AddParagraph(item.TimeSetting != null ? GetHoursAndMinutes(item.TimeSetting.OtherHours, false) : string.Empty);
+                row.Cells[6].AddParagraph(item.TimeSetting != null ? GetHoursAndMinutes(item.TimeSetting.OtherHours, false, settings.AreShortHalfHoursEnabled) : string.Empty);
                 row.Cells[6].VerticalAlignment = VerticalAlignment.Center;
             }
 
@@ -241,7 +216,7 @@ namespace Listings.Domain
         }
 
 
-        private void CreateHoursSummaryTable(Listing listing, Section section, Dictionary<string, float> grid)
+        private void CreateHoursSummaryTable(Listing listing, Section section, DefaultListingPdfReportSetting settings, Dictionary<string, float> grid)
         {
             Table table = section.AddTable();
             table.Borders.Width = _tableBordersWidth;
@@ -262,25 +237,25 @@ namespace Listings.Domain
             Row row = table.AddRow();
             row.Height = 14;
             row.Cells[0].AddParagraph("Dovolená");
-            row.Cells[1].AddParagraph(DisplayString(_listing.Vacation, Setting.IsVacationVisible));
+            row.Cells[1].AddParagraph(DisplayString(listing.Vacation, settings.IsVacationVisible));
 
             row.Cells[2].AddParagraph("Ostat. Hod.");
-            row.Cells[3].AddParagraph(DisplayString(GetHoursAndMinutes(_listing.OtherHours, false), Setting.AreOtherHoursVisible));
+            row.Cells[3].AddParagraph(DisplayString(GetHoursAndMinutes(listing.OtherHours, false, settings.AreShortHalfHoursEnabled), settings.AreOtherHoursVisible));
 
             row.Cells[4].AddParagraph("Odprac. hod.");
-            row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(_listing.WorkedHours, false), Setting.AreWorkedHoursVisible));
+            row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(listing.WorkedHours, false, settings.AreShortHalfHoursEnabled), settings.AreWorkedHoursVisible));
 
             // row 2
             row = table.AddRow();
             row.Height = 14;
             row.Cells[0].AddParagraph("Nemoc hod.");
-            row.Cells[1].AddParagraph(DisplayString(_listing.SicknessHours, Setting.AreSiknessHoursVisible));
+            row.Cells[1].AddParagraph(DisplayString(listing.SicknessHours, settings.AreSiknessHoursVisible));
 
             row.Cells[2].AddParagraph("Svátek");
-            row.Cells[3].AddParagraph(DisplayString(_listing.Holiday, Setting.AreHolidaysHoursVisible));
+            row.Cells[3].AddParagraph(DisplayString(listing.Holiday, settings.AreHolidaysHoursVisible));
 
             row.Cells[4].AddParagraph("Obědy");
-            row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(_listing.LunchHours, false), Setting.AreLunchHoursVisible));
+            row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(listing.LunchHours, false, settings.AreShortHalfHoursEnabled), settings.AreLunchHoursVisible));
 
             // row 3
             row = table.AddRow();
@@ -292,7 +267,7 @@ namespace Listings.Domain
             row.Cells[0].MergeRight = 4;
             row.Cells[0].VerticalAlignment = VerticalAlignment.Center;
 
-            p = row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(listing.TotalWorkedHours, false), Setting.AreTotalWorkedHoursVisible));
+            p = row.Cells[5].AddParagraph(DisplayString(GetHoursAndMinutes(listing.TotalWorkedHours, false, settings.AreShortHalfHoursEnabled), settings.AreTotalWorkedHoursVisible));
             p.Format.Font.Size = 16;
             p.Format.Alignment = ParagraphAlignment.Center;
             p.Format.Font.Bold = true;
@@ -306,7 +281,7 @@ namespace Listings.Domain
         }
 
 
-        private void CreateFinalTable(Listing listing, Section section, Dictionary<string, float> grid)
+        private void CreateFinalTable(Listing listing, Section section, DefaultListingPdfReportSetting settings, Dictionary<string, float> grid)
         {
             Table table = section.AddTable();
             table.Borders.Width = _tableBordersWidth;
@@ -324,33 +299,33 @@ namespace Listings.Domain
             p.Format.Font.Bold = true;
             p.Format.Font.Underline = Underline.Single;
 
-            row.Cells[1].AddParagraph(DisplayString(listing.HourlyWage != null ? string.Format("{0} Kč/h", listing.HourlyWage.ToString()) : string.Empty, Setting.IsHourlyWageVisible));
+            row.Cells[1].AddParagraph(DisplayString(listing.HourlyWage != null ? string.Format("{0} Kč/h", listing.HourlyWage.ToString()) : string.Empty, settings.IsHourlyWageVisible));
             row.Cells[2].AddParagraph("Dovolená dni");
-            row.Cells[3].AddParagraph(DisplayString(_listing.VacationDays, Setting.AreVacationDaysVisible));
+            row.Cells[3].AddParagraph(DisplayString(listing.VacationDays, settings.AreVacationDaysVisible));
 
             // row 2
             row = table.AddRow();
             row.Height = 14;
             row.Cells[0].AddParagraph("Diety");
-            row.Cells[1].AddParagraph(DisplayString(_listing.Diets, Setting.AreDietsVisible));
+            row.Cells[1].AddParagraph(DisplayString(listing.Diets, settings.AreDietsVisible));
             row.Cells[2].AddParagraph("Placené svátky");
-            row.Cells[3].AddParagraph(DisplayString(_listing.PaidHolidays, Setting.ArePaidHolidaysVisible));
+            row.Cells[3].AddParagraph(DisplayString(listing.PaidHolidays, settings.ArePaidHolidaysVisible));
 
             // row 3
             row = table.AddRow();
             row.Height = 14;
             row.Cells[0].AddParagraph("Odměny");
-            row.Cells[1].AddParagraph(DisplayString(_listing.Bonuses, Setting.AreBonusesVisible));
+            row.Cells[1].AddParagraph(DisplayString(listing.Bonuses, settings.AreBonusesVisible));
             row.Cells[2].AddParagraph("$");
-            row.Cells[3].AddParagraph(DisplayString(_listing.Dollars, Setting.AreDollarsVisible));
+            row.Cells[3].AddParagraph(DisplayString(listing.Dollars, settings.AreDollarsVisible));
 
             // row 3
             row = table.AddRow();
             row.Height = 14;
             row.Cells[0].AddParagraph("Zálohy");
-            row.Cells[1].AddParagraph(DisplayString(_listing.Prepayment, Setting.IsPrepaymentVisible));
+            row.Cells[1].AddParagraph(DisplayString(listing.Prepayment, settings.IsPrepaymentVisible));
             row.Cells[2].AddParagraph("Nemoc");
-            row.Cells[3].AddParagraph(DisplayString(_listing.Sickness, Setting.IsSicknessVisible));
+            row.Cells[3].AddParagraph(DisplayString(listing.Sickness, settings.IsSicknessVisible));
 
             // row 4
             row = table.AddRow();
@@ -371,14 +346,14 @@ namespace Listings.Domain
         }
 
 
-        private string GetHoursAndMinutes(Time time, bool displayNoTime)
+        private string GetHoursAndMinutes(Time time, bool displayNoTime, bool areShortHalfHoursEnabled)
         {
             string result;
             if (time.TotalSeconds == 0 && displayNoTime == false) {
                 return string.Empty;
             }
 
-            if (_setting.AreShortHalfHoursEnabled && (time.Minutes == 0 || time.Minutes == 30)) {
+            if (areShortHalfHoursEnabled == true && (time.Minutes == 0 || time.Minutes == 30)) {
                 if (time.Minutes == 0) {
                     result = time.Hours.ToString();
                 } else {

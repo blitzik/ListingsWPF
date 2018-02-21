@@ -9,6 +9,19 @@ namespace Listings.Domain
 {
     public class DefaultListingPdfReportSetting : PropertyChangedBase
     {
+        private string _ownerName;
+        public string OwnerName
+        {
+            get { return _ownerName; }
+            set
+            {
+                _ownerName = value;
+                NotifyOfPropertyChange(() => OwnerName);
+                ProcessOnPropertyChanged();
+            }
+        }
+
+
         private bool _isOwnerNameVisible;
         public bool IsOwnerNameVisible
         {
@@ -20,6 +33,7 @@ namespace Listings.Domain
                 ProcessOnPropertyChanged();
             }
         }
+
 
         private bool _isEmployerVisible;
         public bool IsEmployerVisible
@@ -33,6 +47,7 @@ namespace Listings.Domain
             }
         }
 
+
         private bool _isVacationVisible;
         public bool IsVacationVisible
         {
@@ -44,6 +59,7 @@ namespace Listings.Domain
                 ProcessOnPropertyChanged();
             }
         }
+
 
         private bool _areOtherHoursVisible;
         public bool AreOtherHoursVisible
@@ -57,6 +73,7 @@ namespace Listings.Domain
             }
         }
 
+
         private bool _areShortHalfHoursEnabled;
         public bool AreShortHalfHoursEnabled
         {
@@ -68,6 +85,7 @@ namespace Listings.Domain
                 ProcessOnPropertyChanged();
             }
         }
+
 
         private bool _areWorkedHoursVisible;
         public bool AreWorkedHoursVisible
@@ -81,6 +99,7 @@ namespace Listings.Domain
             }
         }
 
+
         private bool _areSiknessHours;
         public bool AreSiknessHoursVisible
         {
@@ -92,6 +111,7 @@ namespace Listings.Domain
                 ProcessOnPropertyChanged();
             }
         }
+
 
         private bool _areHolidaysHoursVisible;
         public bool AreHolidaysHoursVisible
@@ -105,6 +125,7 @@ namespace Listings.Domain
             }
         }
 
+
         private bool _areLunchHoursVisible;
         public bool AreLunchHoursVisible
         {
@@ -116,6 +137,7 @@ namespace Listings.Domain
                 ProcessOnPropertyChanged();
             }
         }
+
 
         private bool _areTotalWorkedHoursVisible;
         public bool AreTotalWorkedHoursVisible
@@ -129,6 +151,7 @@ namespace Listings.Domain
             }
         }
 
+
         private bool _isHourlyWageVisible;
         public bool IsHourlyWageVisible
         {
@@ -140,6 +163,7 @@ namespace Listings.Domain
                 ProcessOnPropertyChanged();
             }
         }
+
 
         private bool _areVacationDaysVisible;
         public bool AreVacationDaysVisible
@@ -153,6 +177,7 @@ namespace Listings.Domain
             }
         }
 
+
         private bool _areDietsVisible;
         public bool AreDietsVisible
         {
@@ -164,6 +189,7 @@ namespace Listings.Domain
                 ProcessOnPropertyChanged();
             }
         }
+
 
         private bool _arePaidHolidaysVisible;
         public bool ArePaidHolidaysVisible
@@ -177,6 +203,7 @@ namespace Listings.Domain
             }
         }
 
+
         private bool _areBonusesVisible;
         public bool AreBonusesVisible
         {
@@ -188,6 +215,7 @@ namespace Listings.Domain
                 ProcessOnPropertyChanged();
             }
         }
+
 
         private bool _aAreDollarsVisible;
         public bool AreDollarsVisible
@@ -201,6 +229,7 @@ namespace Listings.Domain
             }
         }
 
+
         private bool _isPrepaymentVisible;
         public bool IsPrepaymentVisible
         {
@@ -212,6 +241,7 @@ namespace Listings.Domain
                 ProcessOnPropertyChanged();
             }
         }
+
 
         private bool _isSicknessVisible;
         public bool IsSicknessVisible
@@ -240,6 +270,8 @@ namespace Listings.Domain
 
         public void UpdateBy(DefaultListingPdfReportSetting setting)
         {
+            OwnerName = setting.OwnerName;
+
             IsEmployerVisible = setting.IsEmployerVisible;
             IsOwnerNameVisible = setting.IsOwnerNameVisible;
 
@@ -290,6 +322,7 @@ namespace Listings.Domain
 
             DefaultListingPdfReportSetting setting = (DefaultListingPdfReportSetting)obj;
 
+            if (OwnerName != setting.OwnerName) { return false; }
             if (IsEmployerVisible != setting.IsEmployerVisible) { return false; }
             if (IsOwnerNameVisible != setting.IsOwnerNameVisible) { return false; }
 
@@ -317,6 +350,8 @@ namespace Listings.Domain
 
         public void ResetSettings()
         {
+            OwnerName = null;
+
             IsEmployerVisible = true;
             IsOwnerNameVisible = true;
 

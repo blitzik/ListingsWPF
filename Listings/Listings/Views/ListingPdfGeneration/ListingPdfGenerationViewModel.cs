@@ -5,6 +5,7 @@ using Listings.Facades;
 using Listings.Messages;
 using Listings.Services;
 using Listings.Services.IO;
+using Listings.Services.Pdf;
 using Listings.Utils;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
@@ -33,18 +34,9 @@ namespace Listings.Views
                 _listing = value;
 
                 _defaultSettings = _settingFacade.GetDefaultSettings();
-                OwnerName = _defaultSettings.OwnerName;
 
                 ResetSettings();
             }
-        }
-
-
-        private string _ownerName;
-        public string OwnerName
-        {
-            get { return _ownerName; }
-            set { _ownerName = value; NotifyOfPropertyChange(() => OwnerName); }
         }
 
 
@@ -67,7 +59,10 @@ namespace Listings.Views
             get
             {
                 if (_resetSettingsCommand == null) {
-                    _resetSettingsCommand = new DelegateCommand<object>(p => ResetSettings());
+                    _resetSettingsCommand = new DelegateCommand<object>(
+                        p => ResetSettings(),
+                        p => !_defaultSettings.Pdfsetting.IsEqual(_pdfSetting)
+                    );
                 }
                 return _resetSettingsCommand;
             }
@@ -102,13 +97,19 @@ namespace Listings.Views
         private ISavingFilePathSelector _savingFilePathSelector;
         private SettingFacade _settingFacade;
         private IWindowManager _windowManager;
+        private IListingPdfDocumentFactory _listingPdfDocumentFactory;
 
 
         private DefaultSettings _defaultSettings;
 
 
-        public ListingPdfGenerationViewModel(IEventAggregator eventAggregator, SettingFacade settingFacade, IWindowManager windowManager, ISavingFilePathSelector savingFilePathSelector) : base(eventAggregator)
-        {
+        public ListingPdfGenerationViewModel(
+            IEventAggregator eventAggregator,
+            SettingFacade settingFacade,
+            IWindowManager windowManager,
+            ISavingFilePathSelector savingFilePathSelector,
+            IListingPdfDocumentFactory listingPdfDocumentFactory
+        ) : base(eventAggregator) {
             eventAggregator.Subscribe(this);
 
             BaseWindowTitle = "Generování PDF dokumentu";
@@ -116,36 +117,30 @@ namespace Listings.Views
             _settingFacade = settingFacade;
             _windowManager = windowManager;
             _savingFilePathSelector = savingFilePathSelector;
+            _listingPdfDocumentFactory = listingPdfDocumentFactory;
 
             _defaultSettings = settingFacade.GetDefaultSettings();
 
             PdfSetting = new DefaultListingPdfReportSetting(_defaultSettings.Pdfsetting);
+            PdfSetting.OnPropertyChanged += (object sender, EventArgs args) => { ResetSettingsCommand.RaiseCanExecuteChanged(); };
         }
 
 
         private void GeneratePdf()
         {
-            DefaultListingPdfReport report = new DefaultListingPdfReport(Listing);
-            report.OwnerName = OwnerName;
-            report.Setting = _pdfSetting;
-
-            PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(true, PdfSharp.Pdf.PdfFontEmbedding.Always);
-            pdfRenderer.Document = report.Document;
-
             string filePath = _savingFilePathSelector.GetFilePath(string.Format("{0} {1} - {2}", Date.Months[12 - Listing.Month], Listing.Year, Listing.Name), PrepareDialog);
             if (filePath == null) {
-                pdfRenderer = null;
-                report = null;
                 return;
             }
 
             ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel() { Text = "Vytváří se Váš PDF dokument..." };
             Task.Run(() => {
+                Document doc = _listingPdfDocumentFactory.Create(Listing, _pdfSetting);
+
+                PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(true, PdfSharp.Pdf.PdfFontEmbedding.Always);
+                pdfRenderer.Document = doc;
                 pdfRenderer.RenderDocument();
                 pdfRenderer.PdfDocument.Save(filePath);
-
-                pdfRenderer = null;
-                report = null;
 
                 pb.TryClose();
             });
@@ -161,21 +156,8 @@ namespace Listings.Views
         }
 
 
-        private string GetFilePath()
-        {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "_BlitzikListings");
-            if (!Directory.Exists(path)) {
-                Directory.CreateDirectory(path);
-            }
-
-            return path;
-        }
-
-
         private void ResetSettings()
         {
-            OwnerName = _defaultSettings.OwnerName;
-
             PdfSetting.UpdateBy(_defaultSettings.Pdfsetting);
         }
 

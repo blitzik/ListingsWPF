@@ -121,7 +121,7 @@
     <Compile Include="Converters\TimeToTimeInWordsConverter.cs" />
     <Compile Include="Converters\ViewModelToBooleanConverter.cs" />
     <Compile Include="Domain\DayItem.cs" />
-    <Compile Include="Domain\DefaultListingPdfReport.cs" />
+    <Compile Include="Services\Pdf\DefaultListingPdfReportFactory.cs" />
     <Compile Include="Domain\DefaultListingPdfReportSetting.cs" />
     <Compile Include="Domain\DefaultSettings.cs" />
     <Compile Include="Domain\Employer.cs" />
@@ -154,6 +154,7 @@
     <Compile Include="Services\IO\OpenFilePathSelector.cs" />
     <Compile Include="Services\IO\SaveFilePathSelector.cs" />
     <Compile Include="Services\ObjectContainerRegistry.cs" />
+    <Compile Include="Services\Pdf\IListingPdfDocumentFactory.cs" />
     <Compile Include="Services\ViewModelResolver\IViewModelResolver.cs" />
     <Compile Include="Services\ViewModelResolver\ViewModelResolver.cs" />
     <Compile Include="Views\ConductorOneActiveBaseViewModel.cs" />

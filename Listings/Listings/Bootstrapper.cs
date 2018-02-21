@@ -2,6 +2,7 @@
 using Listings.Facades;
 using Listings.Services;
 using Listings.Services.IO;
+using Listings.Services.Pdf;
 using Listings.Services.ViewModelResolver;
 using Listings.Views;
 using System;
@@ -37,6 +38,7 @@ namespace Listings
             _container.Singleton<IViewModelResolver<IViewModel>, ViewModelResolver>();
             _container.Singleton<IOpeningFilePathSelector, OpenFilePathSelector>();
             _container.Singleton<ISavingFilePathSelector, SaveFilePathSelector>();
+            _container.Singleton<IListingPdfDocumentFactory, DefaultListingPdfReportFactory>();
 
             // facades
             _container.Singleton<ListingFacade>();

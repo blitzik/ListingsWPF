@@ -18,16 +18,16 @@
             <Button Content="Zpět na detail výčetky" Command="{Binding ReturnBackCommand}" Margin="0 0 0 30" Width="200" HorizontalAlignment="Left" />
 
             <TextBlock Text="Jméno" Style="{StaticResource LabelText}" />
-            <TextBox Text="{Binding OwnerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="30" Style="{StaticResource DefaultTextBox}" />
+            <TextBox Text="{Binding PdfSetting.OwnerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="30" Style="{StaticResource DefaultTextBox}" />
 
             <Grid Margin="0 15 0 0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="125" />
+                    <ColumnDefinition Width="150" />
                     <ColumnDefinition Width="10" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Content="Reset natavení" Command="{Binding ResetSettingsCommand}" Style="{StaticResource DefaultButton}" />
+                <Button Grid.Column="0" Content="Výchozí nastavení" Command="{Binding ResetSettingsCommand}" Style="{StaticResource DefaultButton}" />
                 <Button Grid.Column="2" Content="Generuj PDF dokument" Command="{Binding GeneratePdfCommand}" Style="{StaticResource PrimaryButton}" />
             </Grid>
         </StackPanel>
