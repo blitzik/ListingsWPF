@@ -9,11 +9,13 @@ using Listings.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 
 namespace Listings.Views
@@ -145,12 +147,23 @@ namespace Listings.Views
 
         private DefaultSettings _defaultSetting;
 
+        private IWindowManager _windowManager;
+        private ISavingFilePathSelector _savingFilePathSelector;
+        private IOpeningFilePathSelector _openingFilePathSelector;
         private SettingFacade _settingFacade;
 
 
-        public SettingsViewModel(IEventAggregator eventAggregator, SettingFacade settingFacade) : base(eventAggregator)
-        {
+        public SettingsViewModel(
+            IEventAggregator eventAggregator,
+            IWindowManager windowManager,
+            SettingFacade settingFacade,
+            ISavingFilePathSelector savingFilePathSelector,
+            IOpeningFilePathSelector openingFilePathSelector
+        ) : base(eventAggregator) {
+            _windowManager = windowManager;
             _settingFacade = settingFacade;
+            _savingFilePathSelector = savingFilePathSelector;
+            _openingFilePathSelector = openingFilePathSelector;
 
             BaseWindowTitle = "Nastavení";
 
@@ -202,8 +215,6 @@ namespace Listings.Views
         }
 
 
-        public delegate void SaveSettingsHandler(object sender, EventArgs args);
-        public event SaveSettingsHandler OnSavedSettings;
         private void SaveSettings()
         {
             _defaultSetting.Time = new TimeSetting(
@@ -220,81 +231,77 @@ namespace Listings.Views
 
             CancelChangesCommand.RaiseCanExecuteChanged();
             SaveSettingsCommand.RaiseCanExecuteChanged();
-
-            SaveSettingsHandler handler = OnSavedSettings;
-            if (handler != null) {
-                handler(this, EventArgs.Empty);
-            }
         }
 
 
-        public delegate void CancelChangesHandler(object sender, EventArgs args);
-        public event CancelChangesHandler OnCanceledChanges;
         private void CancelChanges()
         {
             WorkedTimeViewModel.SetTime(_defaultSetting.Time);
             WorkedTimeViewModel.SelectedTimeTickInMinutes = _defaultSetting.TimeTickInMinutes;
 
             PdfSetting = CreateNewPdfSetting(_defaultSetting.Pdfsetting);
-
-            CancelChangesHandler handler = OnCanceledChanges;
-            if (handler != null) {
-                handler(this, EventArgs.Empty);
-            }
         }
 
 
         private void Browse()
         {
-            //BackupFilePath = _openFileDialogPathSelector.GetFilePath(o => {
-            //    OpenFileDialog d = (OpenFileDialog)o;
-            //    d.DefaultExt = "." + Db4oObjectContainerFactory.DATABASE_EXTENSION;
-            //    d.Filter = "Evidoo data (*.evdo)|*.evdo";
-            //});
+            string filePath = _openingFilePathSelector.GetFilePath(null, obj => {
+                OpenFileDialog d = (OpenFileDialog)obj;
+                d.DefaultExt = "." + Db4oObjectContainerFactory.DATABASE_EXTENSION;
+                d.Filter = "Evidoo data (*.evdo)|*.evdo";
+            });
+            if (filePath == null) {
+                return;
+            }
+
+            BackupFilePath = filePath;
         }
 
 
         private void CreateBackup()
         {
-
             DateTime now = DateTime.Now;
-
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Evidoo data (*.evdo)|*.evdo";
-            saveFileDialog.FileName = string.Format("Záloha dat - {0}-{1}-{2}", now.Day, now.Month, now.Year);
-            if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                ProgressBarWindowView pb = new ProgressBarWindowView();
-                pb.Owner = System.Windows.Application.Current.MainWindow;
-                BackgroundWorker bw = new BackgroundWorker();
-                bw.DoWork += (object sender, DoWorkEventArgs e) => {
-                    _settingFacade.BackupData(saveFileDialog.FileName);
-                };
-                bw.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
-                    pb.Close();
-                };
-                bw.RunWorkerAsync();
-
-                pb.ShowDialog();
+            string filePath = _savingFilePathSelector.GetFilePath(
+                string.Format("Záloha dat - {0}-{1}-{2}", now.Day, now.Month, now.Year),
+                obj => {
+                    SaveFileDialog d = (SaveFileDialog)obj;
+                    d.Filter = "Evidoo data (*.evdo)|*.evdo";
+                }
+            );
+            if (filePath == null) {
+                return;
             }
+
+            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel();
+            Task.Run(() => {
+                _settingFacade.BackupData(filePath);
+                
+                pb.TryClose();
+            });
+
+            _windowManager.ShowDialog(pb);
         }
 
 
-        public delegate void AfterImportBackupHandler(object sender, EventArgs args);
-        public event AfterImportBackupHandler OnAfterBackupImport;
-        private void ImportBackup()
+        private async void ImportBackup()
         {
-            ResultObject ro = _settingFacade.ImportBackup(BackupFilePath);
+            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel();
+            Task<ResultObject> t = Task<ResultObject>.Run(() => {
+                ResultObject r = _settingFacade.ImportBackup(BackupFilePath);
+                pb.TryClose();
+
+                return r;
+            });
+
+            _windowManager.ShowDialog(pb);
+
+            ResultObject ro = await t;
 
             _defaultSetting = _settingFacade.GetDefaultSettings();
             Reset();
 
             BackupFilePath = null;
             ImportDataResultMessage = ro.GetLastMessage();
-
-            AfterImportBackupHandler handler = OnAfterBackupImport;
-            if (handler != null) {
-                handler(this, EventArgs.Empty);
-            }
         }
 
 

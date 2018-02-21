@@ -297,7 +297,6 @@ namespace Listings.Services.Pdf
             row.Height = 14;
             Paragraph p = row.Cells[0].AddParagraph("Základní mzda");
             p.Format.Font.Bold = true;
-            p.Format.Font.Underline = Underline.Single;
 
             row.Cells[1].AddParagraph(DisplayString(listing.HourlyWage != null ? string.Format("{0} Kč/h", listing.HourlyWage.ToString()) : string.Empty, settings.IsHourlyWageVisible));
             row.Cells[2].AddParagraph("Dovolená dni");

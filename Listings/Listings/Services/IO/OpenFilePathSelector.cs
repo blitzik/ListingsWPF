@@ -12,7 +12,9 @@ namespace Listings.Services.IO
         public string GetFilePath(string defaultFilePath, Action<object> modifier)
         {
             OpenFileDialog d = new OpenFileDialog();
-            d.FileName = defaultFilePath;
+            if (!string.IsNullOrEmpty(defaultFilePath)) {
+                d.FileName = defaultFilePath;
+            }
             modifier.Invoke(d);
 
             if (d.ShowDialog() == DialogResult.OK) {
