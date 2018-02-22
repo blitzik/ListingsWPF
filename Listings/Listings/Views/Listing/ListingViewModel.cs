@@ -99,8 +99,6 @@ namespace Listings.Views
             {
                 int result;
                 if (!int.TryParse(value, out result)) {
-                    _hourlyWage = null;
-                    NotifyOfPropertyChange(() => HourlyWage);
                     return;
                 }
 
