@@ -61,11 +61,7 @@ namespace Listings.Views
 
             BaseWindowTitle = "Správa zaměstnavatelů";
 
-            List<Employer> foundEmployers = employerFacade.FindAllEmployers();
             _employers = new ObservableCollection<EmployerItemViewModel>();
-            foreach (Employer e in foundEmployers) {
-                _employers.Add(CreateEmployerItemViewModel(e));
-            }
         }
 
 
@@ -100,8 +96,10 @@ namespace Listings.Views
 
         protected override void OnActivate()
         {
-            foreach (EmployerItemViewModel vm in _employers) {
-                vm.Reset();
+            _employers.Clear();
+            List<Employer> foundEmployers = _employerFacade.FindAllEmployers();
+            foreach (Employer e in foundEmployers) {
+                _employers.Add(CreateEmployerItemViewModel(e));
             }
         }
     }
