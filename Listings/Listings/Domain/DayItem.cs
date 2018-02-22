@@ -167,6 +167,20 @@ namespace Listings.Domain
         }
 
 
+        public bool IsEqual(DayItem dayItem)
+        {
+            // todo check Listing too?
+            if (_listingItem == null || dayItem.ListingItem == null) {
+                return false;
+            }
+
+            if (!_timeSetting.isEqual(dayItem.TimeSetting)) { return false; }
+            if (_locality != dayItem.Locality) { return false; }
+
+            return true;
+        }
+
+
         public void Reset()
         {
             ListingItem = null;

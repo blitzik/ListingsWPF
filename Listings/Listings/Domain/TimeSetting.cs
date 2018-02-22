@@ -126,6 +126,18 @@ namespace Listings.Domain
         }
 
 
+        public bool isEqual(TimeSetting timeSetting)
+        {
+            if (Start != timeSetting.Start) { return false; }
+            if (End != timeSetting.End) { return false; }
+            if (LunchStart != timeSetting.LunchStart) { return false; }
+            if (LunchEnd != timeSetting.LunchEnd) { return false; }
+            if (OtherHours != timeSetting.OtherHours) { return false; }
+
+            return true;
+        }
+
+
         public static void CheckTime(Time start, Time end, Time lunchStart, Time lunchEnd, Time otherHours)
         {
             if (!(start == 0 && end == 0 && lunchStart == 0 && lunchEnd == 0 && otherHours == 0)) {

@@ -195,6 +195,9 @@ namespace Listings.Views
         private void CopyItemDown(int day)
         {
             DayItem dayItem = _dayItems[day - 1];
+            if (_dayItems[day].IsEqual(dayItem)) {
+                return;
+            }
             ListingItem newItem = Listing.ReplaceItem(day + 1, dayItem.Locality, dayItem.ListingItem.TimeSetting);
 
             _dayItems[day].Update(newItem);
