@@ -19,7 +19,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
+            <RowDefinition Height="40" />
             <RowDefinition Height="10" />
             <RowDefinition Height="50" />
             <RowDefinition Height="10" />
@@ -27,42 +27,9 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="Margin" Value="0 0 10 0" />
-                    <Setter Property="Width" Value="125" />
-                </Style>
-            </StackPanel.Resources>
-            <Button Command="{Binding GeneratePdfCommand}" Margin="0 0 10 0" Style="{StaticResource DefaultButton}">
-                <StackPanel Orientation="Horizontal">
-                    <Rectangle Width="12" Height="15" Fill="#333">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{StaticResource PdfIcon}" />
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
-                    <TextBlock Margin="10 0 0 0" Padding="0 0 5 0" Text="Generovat PDF" FontSize="15" />
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding ListingEditCommand}" Margin="0 0 10 0" Style="{StaticResource DefaultButton}">
-                <StackPanel Orientation="Horizontal">
-                    <Rectangle Width="12" Height="15" Fill="#333">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{StaticResource PencilIcon}" />
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
-                    <TextBlock Margin="10 -2 0 0" Padding="0 0 5 0" Text="Upravit" FontSize="15" />
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding ListingDeletionCommand}" Style="{StaticResource CriticalButton}">
-                <StackPanel Orientation="Horizontal">
-                    <Rectangle Width="12" Height="15" Fill="White">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{StaticResource DeleteForeverIcon}" />
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
-                    <TextBlock Margin="10 -2 0 0" Padding="0 0 5 0" Text="Odstranit" FontSize="15" />
-                </StackPanel>
-            </Button>
+            <Button Content="Generovat PDF" Command="{Binding GeneratePdfCommand}" Margin="0 0 10 0" Style="{StaticResource DefaultButton}" />
+            <Button Content="Upravit výčetku" Command="{Binding ListingEditCommand}" Margin="0 0 10 0" Style="{StaticResource DefaultButton}" />
+            <Button Content="Odstranit výčetku" Command="{Binding ListingDeletionCommand}" Style="{StaticResource CriticalButton}" />
         </StackPanel>
 
         <Border Grid.Row="2">
