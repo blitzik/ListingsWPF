@@ -65,6 +65,10 @@ namespace Listings.Views
 
         public override void ActivateItem(IViewModel item)
         {
+            if (ActiveItem == item) {
+                return;
+            }
+
             string typeName = item.GetType().Name;
             if (!_viewModels.ContainsKey(typeName)) {
                 _viewModels.Add(typeName, item);
