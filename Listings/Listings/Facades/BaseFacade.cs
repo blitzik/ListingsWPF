@@ -22,5 +22,11 @@ namespace Listings.Facades
 
             return _dbRegistry.GetByName(name);
         }
+
+
+        public BaseFacade(ObjectContainerRegistry db)
+        {
+            _dbRegistry = db;
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace Listings.Facades
 {
     public class ListingFacade : BaseFacade
     {
-        public ListingFacade(ObjectContainerRegistry dbRegistry)
+        public ListingFacade(ObjectContainerRegistry dbRegistry) : base (dbRegistry)
         {
             _dbRegistry = dbRegistry;
         }
