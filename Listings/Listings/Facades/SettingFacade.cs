@@ -58,27 +58,75 @@ namespace Listings.Facades
         }
 
 
-        public ResultObject ImportBackup(string fileName)
+        public ResultObject ImportBackup(string filePath)
         {
             _dbRegistry.CloseAll();
 
-            string directory = Db4oObjectContainerFactory.GetDatabaseDirectoryPath();
-
-            DateTime now = DateTime.Now;
-
-            string activeDbFilePath = Path.Combine(directory, Db4oObjectContainerFactory.MAIN_DATABASE_FILE_NAME);
-            string lastWorkingBackupPath = Path.Combine(directory, string.Format("lastWorkingBackup.{0}", Db4oObjectContainerFactory.DATABASE_EXTENSION));
-
-            if (File.Exists(activeDbFilePath)) {
-                File.Delete(lastWorkingBackupPath);
-                File.Move(activeDbFilePath, lastWorkingBackupPath);
-            }
-            File.Copy(fileName, activeDbFilePath);
-
             ResultObject ro = new ResultObject(true);
             try {
+                _dbRegistry.Add("temp", (new Db4oObjectContainerFactory()).OpenConnection(filePath));
+                IObjectContainer tempDb = _dbRegistry.GetByName("temp");
+                IEnumerable<DefaultSettings> x = from DefaultSettings s in tempDb where s.ID == "main" select s;
+                DefaultSettings ds = x.FirstOrDefault();
+                if (ds != null && ds.SupportedAppVersions.Contains(Bootstrapper.Version)) {
+                    ro.AddMessage("Import dat proběhl úspěšně!");
+                } else {
+                    ro = new ResultObject(false);
+                    ro.AddMessage("Import nelze provést. Nesouhlasí verze importovaných dat.");
+                }
+
+            } catch (IncompatibleFileFormatException e) {
+                ro = new ResultObject(false);
+                ro.AddMessage("Import dat selhal. Špatný formát souboru.");
+
+            } catch (DatabaseReadOnlyException e) {
+                ro = new ResultObject(false);
+                ro.AddMessage("Import dat selhal. Nelze importovat databázi jen pro čtení.");
+
+            } catch (Exception e) {
+                ro = new ResultObject(false);
+                ro.AddMessage("Zvolená data nelze importovat.");
+            }
+
+            _dbRegistry.CloseAll();
+
+            if (!ro.Success) {
                 _dbRegistry.Add(Db4oObjectContainerFactory.MAIN_DATABASE_NAME, (new Db4oObjectContainerFactory()).Create(Db4oObjectContainerFactory.MAIN_DATABASE_NAME));
-                ro.AddMessage("Import dat proběhl úspěšně!");
+                return ro;
+            }
+            
+            DateTime now = DateTime.Now;
+            string directory = Db4oObjectContainerFactory.GetDatabaseDirectoryPath();
+
+            string activeDbFilePath = Path.Combine(directory, Db4oObjectContainerFactory.MAIN_DATABASE_FILE_NAME);
+
+            string lastWorkingDbFilePath = string.Format("{0}_{1}_{2}_{3}_{4}_{5}.{6}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second, Db4oObjectContainerFactory.DATABASE_EXTENSION);
+            string lastWorkingBackupPath = Path.Combine(directory, lastWorkingDbFilePath);
+
+            File.Move(activeDbFilePath, lastWorkingBackupPath);
+
+            File.Copy(filePath, activeDbFilePath);
+
+            _dbRegistry.Add(Db4oObjectContainerFactory.MAIN_DATABASE_NAME, (new Db4oObjectContainerFactory()).Create(Db4oObjectContainerFactory.MAIN_DATABASE_NAME));
+
+            return ro;
+        }
+
+
+        private ResultObject CreateConnection(string connectionName)
+        {
+            ResultObject ro;
+            try {
+                IObjectContainer db = new Db4oObjectContainerFactory().Create(connectionName);
+                IEnumerable<DefaultSettings> x = from DefaultSettings s in db where s.ID == "main" select s;
+                DefaultSettings ds = x.FirstOrDefault();
+                if (ds != null && ds.SupportedAppVersions.Contains(Bootstrapper.Version)) {
+                    ro = new ResultObject(true, db);
+                    ro.AddMessage("Import dat proběhl úspěšně!");
+                } else {
+                    ro = new ResultObject(false);
+                    ro.AddMessage("Import nelze provést. Nesouhlasí verze importovaných dat.");
+                }
 
             } catch (IncompatibleFileFormatException e) {
                 ro = new ResultObject(false);
@@ -91,12 +139,6 @@ namespace Listings.Facades
             } catch (Exception e) {
                 ro = new ResultObject(false);
                 ro.AddMessage("Při importu dat došlo k chybě.");
-            }
-
-            if (!ro.Success) {
-                File.Delete(activeDbFilePath);
-
-                ImportBackup(lastWorkingBackupPath);
             }
 
             return ro;

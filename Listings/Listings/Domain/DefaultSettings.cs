@@ -16,6 +16,14 @@ namespace Listings.Domain
             get { return _id; }
         }
 
+
+        private List<string> _supportedAppVersions;
+        public List<string> SupportedAppVersions
+        {
+            get { return _supportedAppVersions; }
+        }
+
+
         public delegate void TimeSettingUpdateHandler(object sender, TimeSetting oldSetting, TimeSetting newSetting);
         public event TimeSettingUpdateHandler OnTimeSettingUpdate;
         private TimeSetting _time;
@@ -60,6 +68,7 @@ namespace Listings.Domain
         public DefaultSettings(string identifier)
         {
             _id = identifier;
+            _supportedAppVersions = new List<string>() { "1.0.0" };
 
             Time = new TimeSetting(
                 new Time("06:00"),

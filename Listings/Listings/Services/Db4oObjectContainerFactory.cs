@@ -27,6 +27,12 @@ namespace Listings.Services
         }
 
 
+        public IObjectContainer OpenConnection(string filePath)
+        {
+            return Db4oEmbedded.OpenFile(PrepareConfig(), filePath);
+        }
+
+
         private IEmbeddedConfiguration PrepareConfig()
         {
             IEmbeddedConfiguration config = Db4oEmbedded.NewConfiguration();
