@@ -98,7 +98,7 @@ namespace Listings.Views
             set
             {
                 int result;
-                if (String.IsNullOrEmpty(value)) {
+                if (string.IsNullOrEmpty(value)) {
                     _hourlyWage = null;
                     NotifyOfPropertyChange(() => HourlyWage);
                     return;

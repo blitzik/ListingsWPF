@@ -10,17 +10,13 @@ namespace Listings.Domain
 {
     public class DefaultSettings
     {
+        public const string MAIN_SETTINGS_ID = "main";
+
+
         private readonly string _id;
         public string ID
         {
             get { return _id; }
-        }
-
-
-        private List<string> _supportedAppVersions;
-        public List<string> SupportedAppVersions
-        {
-            get { return _supportedAppVersions; }
         }
 
 
@@ -68,7 +64,6 @@ namespace Listings.Domain
         public DefaultSettings(string identifier)
         {
             _id = identifier;
-            _supportedAppVersions = new List<string>() { "1.0.0" };
 
             Time = new TimeSetting(
                 new Time("06:00"),
