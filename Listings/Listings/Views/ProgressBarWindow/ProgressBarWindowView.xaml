@@ -5,9 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Listings.Views"
         mc:Ignorable="d"
-        Title="ProgressBarWindowView" Height="70" Width="300" WindowStyle="None" ResizeMode="NoResize" WindowState="Normal" WindowStartupLocation="CenterOwner" BorderThickness="1" BorderBrush="#CCC">
-
-
+        Title="ProgressBarWindowView" Height="70" Width="500" WindowStyle="None" ResizeMode="NoResize" WindowState="Normal" WindowStartupLocation="CenterOwner" BorderThickness="1" BorderBrush="#CCC">
+    
     <Border Padding="10">
         <StackPanel>
             <TextBlock Margin="0 0 0 5" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />

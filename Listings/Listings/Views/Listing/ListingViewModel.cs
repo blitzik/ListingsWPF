@@ -98,12 +98,18 @@ namespace Listings.Views
             set
             {
                 int result;
+                if (String.IsNullOrEmpty(value)) {
+                    _hourlyWage = null;
+                    NotifyOfPropertyChange(() => HourlyWage);
+                    return;
+                }
+
                 if (!int.TryParse(value, out result)) {
                     return;
                 }
 
-                if (result <= 0) {
-                    _hourlyWage = null;
+                if (result < 0) {
+                    return;
 
                 } else {
                     _hourlyWage = result;
@@ -169,13 +175,13 @@ namespace Listings.Views
 
             Listing newListing = new Listing(SelectedYear, SelectedMonth);
             newListing.Name = Name;
+            newListing.HourlyWage = _hourlyWage;
+            if (_hourlyWage != null && _hourlyWage <= 0) {
+                HourlyWage = null;
+            }
 
             if (_selectedEmployer != _promptEmployer) {
                 newListing.Employer = _selectedEmployer;
-            }
-
-            if (_hourlyWage != null && _hourlyWage > 0) {
-                newListing.HourlyWage = _hourlyWage;
             }
 
             _listingFacade.Save(newListing);

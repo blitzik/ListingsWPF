@@ -13,6 +13,7 @@ using MigraDoc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -144,7 +145,7 @@ namespace Listings.Views
 
                 pb.TryClose();
             });
-
+            
             _windowManager.ShowDialog(pb);
         }
 

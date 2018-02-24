@@ -16,6 +16,9 @@ namespace Listings
 {
     public class Bootstrapper : BootstrapperBase
     {
+        public static string Version = "1.0.0";
+
+
         private SimpleContainer _container;
 
 
@@ -47,7 +50,6 @@ namespace Listings
 
             // Windows
             _container.Singleton<MainWindowViewModel>();
-            _container.Singleton<ProgressBarWindowViewModel>();
 
             // ViewModels
             _container.Singleton<ListingsOverviewViewModel>(nameof(ListingsOverviewViewModel));

@@ -163,12 +163,18 @@ namespace Listings.Views
             set
             {
                 int result;
+                if (String.IsNullOrEmpty(value)) {
+                    _hourlyWage = null;
+                    NotifyOfPropertyChange(() => HourlyWage);
+                    return;
+                }
+
                 if (!int.TryParse(value, out result)) {
                     return;
                 }
 
-                if (result <= 0) {
-                    _hourlyWage = null;
+                if (result < 0) {
+                    return;
 
                 } else {
                     _hourlyWage = result;
@@ -306,6 +312,10 @@ namespace Listings.Views
             Listing.Sickness = Sickness;
 
             _listingFacade.Save(Listing);
+
+            if (_hourlyWage != null && _hourlyWage <= 0) {
+                HourlyWage = null;
+            }
 
             EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingDetailViewModel)));
         }

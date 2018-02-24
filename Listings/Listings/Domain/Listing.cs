@@ -207,7 +207,11 @@ namespace Listings.Domain
             get { return _hourlyWage; }
             set
             {
-                _hourlyWage = value;
+                if (value != null && value <= 0) {
+                    _hourlyWage = null;
+                } else {
+                    _hourlyWage = value;
+                }
                 NotifyOfPropertyChange(() => HourlyWage);
             }
         }
