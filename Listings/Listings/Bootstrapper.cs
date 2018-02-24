@@ -1,12 +1,18 @@
 ﻿using Caliburn.Micro;
+using Db4objects.Db4o;
+using Db4objects.Db4o.Ext;
+using Db4objects.Db4o.Linq;
+using Listings.Domain;
 using Listings.Facades;
 using Listings.Services;
+using Listings.Services.Backup;
 using Listings.Services.IO;
 using Listings.Services.Pdf;
 using Listings.Services.ViewModelResolver;
 using Listings.Views;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +22,7 @@ namespace Listings
 {
     public class Bootstrapper : BootstrapperBase
     {
-        public static string Version = "1.0.0";
+        public static string Version = "1.0.1";
 
 
         private SimpleContainer _container;
@@ -42,6 +48,7 @@ namespace Listings
             _container.Singleton<IOpeningFilePathSelector, OpenFilePathSelector>();
             _container.Singleton<ISavingFilePathSelector, SaveFilePathSelector>();
             _container.Singleton<IListingPdfDocumentFactory, DefaultListingPdfReportFactory>();
+            _container.Singleton<IBackupImport, BackupImport>();
 
             // facades
             _container.Singleton<ListingFacade>();
@@ -50,6 +57,7 @@ namespace Listings
 
             // Windows
             _container.Singleton<MainWindowViewModel>();
+            _container.Singleton<StartupErrorWindowViewModel>();
 
             // ViewModels
             _container.Singleton<ListingsOverviewViewModel>(nameof(ListingsOverviewViewModel));
@@ -80,9 +88,32 @@ namespace Listings
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
             ObjectContainerRegistry ocr = _container.GetInstance<ObjectContainerRegistry>();
-            ocr.Add(Db4oObjectContainerFactory.MAIN_DATABASE_NAME, _container.GetInstance<Db4oObjectContainerFactory>().Create(Db4oObjectContainerFactory.MAIN_DATABASE_NAME));
 
-            _container.GetInstance<IWindowManager>().ShowWindow(_container.GetInstance<MainWindowViewModel>());
+            ResultObject ro = new ResultObject(true);
+            try {
+                IObjectContainer db = _container.GetInstance<Db4oObjectContainerFactory>().Create(Db4oObjectContainerFactory.MAIN_DATABASE_NAME);
+                do {
+                    IEnumerable<DbVersion> x = from DbVersion v in db where v.ID == DbVersion.UNIQUE_KEY select v;
+                    DbVersion version = x.FirstOrDefault();
+                    if (version == null || !version.SupportedAppVersions.Contains(Bootstrapper.Version)) {
+                        ro = new ResultObject(false);
+                        db.Close();
+                        break;
+                    }
+
+                    ocr.Add(Db4oObjectContainerFactory.MAIN_DATABASE_NAME, db);
+                    _container.GetInstance<IWindowManager>().ShowWindow(_container.GetInstance<MainWindowViewModel>());
+
+                } while (false);
+                
+
+            } catch (Exception ex) {
+                ro = new ResultObject(false);
+            }
+
+            if (!ro.Success) {
+                _container.GetInstance<IWindowManager>().ShowDialog(_container.GetInstance<StartupErrorWindowViewModel>());
+            }
         }
 
 
