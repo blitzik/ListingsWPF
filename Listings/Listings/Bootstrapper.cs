@@ -22,7 +22,7 @@ namespace Listings
 {
     public class Bootstrapper : BootstrapperBase
     {
-        public static string Version = "1.0.1";
+        public static string Version = "1.0.0";
 
 
         private SimpleContainer _container;
