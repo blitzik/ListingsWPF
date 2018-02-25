@@ -26,23 +26,6 @@ namespace Listings.Views
         }
 
 
-        private List<string> _months = new List<string>(Date.Months);
-        public List<string> Months
-        {
-            get { return _months; }
-        }
-
-
-        private List<Employer> _employers;
-        public List<Employer> Employers
-        {
-            get
-            {
-                return _employers;
-            }
-        }
-
-
         private int _selectedYear;
         public int SelectedYear
         {
@@ -55,6 +38,13 @@ namespace Listings.Views
         }
 
 
+        private List<string> _months = new List<string>(Date.Months);
+        public List<string> Months
+        {
+            get { return _months; }
+        }
+
+
         private int _selectedMonth;
         public int SelectedMonth
         {
@@ -63,6 +53,16 @@ namespace Listings.Views
             {
                 _selectedMonth = value;
                 NotifyOfPropertyChange(() => SelectedMonth);
+            }
+        }
+
+
+        private List<Employer> _employers;
+        public List<Employer> Employers
+        {
+            get
+            {
+                return _employers;
             }
         }
 

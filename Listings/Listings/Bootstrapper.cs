@@ -47,7 +47,10 @@ namespace Listings
             _container.Singleton<IViewModelResolver<IViewModel>, ViewModelResolver>();
             _container.Singleton<IOpeningFilePathSelector, OpenFilePathSelector>();
             _container.Singleton<ISavingFilePathSelector, SaveFilePathSelector>();
+            _container.Singleton<IListingSectionFactory, ListingSectionFactory>();
             _container.Singleton<IListingPdfDocumentFactory, DefaultListingPdfReportFactory>();
+            _container.Singleton<IMultipleListingReportFactory, MultipleListingReportFactory>();
+            _container.Singleton<IListingReportGenerator, ListingReportGenerator>();
             _container.Singleton<IBackupImport, BackupImport>();
 
             // facades
@@ -69,6 +72,7 @@ namespace Listings
             _container.Singleton<ListingItemViewModel>(nameof(ListingItemViewModel));
             _container.Singleton<ListingPdfGenerationViewModel>(nameof(ListingPdfGenerationViewModel));
             _container.Singleton<SettingsViewModel>(nameof(SettingsViewModel));
+            _container.Singleton<EmptyListingsGenerationViewModel>(nameof(EmptyListingsGenerationViewModel));
 
 
             // ViewModel's factories

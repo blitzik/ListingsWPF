@@ -17,20 +17,22 @@ namespace Listings.Views
         private readonly IWindowManager _windowManager;
         private readonly ISavingFilePathSelector _savingFilePathSelector;
         private readonly IListingPdfDocumentFactory _listingPdfDocumentFactory;
+        private readonly IListingReportGenerator _listingReportGenerator;
 
-        public ListingPdfGenerationViewModelFactory(IEventAggregator eventAggregator, SettingFacade settingFacade, IWindowManager windowManager, ISavingFilePathSelector savingFilePathSelector, IListingPdfDocumentFactory listingPdfDocumentFactory)
+        public ListingPdfGenerationViewModelFactory(IEventAggregator eventAggregator, SettingFacade settingFacade, IWindowManager windowManager, ISavingFilePathSelector savingFilePathSelector, IListingPdfDocumentFactory listingPdfDocumentFactory, IListingReportGenerator listingReportGenerator)
         {
             _eventAggregator = eventAggregator;
             _settingFacade = settingFacade;
             _windowManager = windowManager;
             _savingFilePathSelector = savingFilePathSelector;
             _listingPdfDocumentFactory = listingPdfDocumentFactory;
+            _listingReportGenerator = listingReportGenerator;
         }
 
 
         public ListingPdfGenerationViewModel Create(string windowTitle)
         {
-            ListingPdfGenerationViewModel vm = new ListingPdfGenerationViewModel(_eventAggregator, _settingFacade, _windowManager, _savingFilePathSelector, _listingPdfDocumentFactory);
+            ListingPdfGenerationViewModel vm = new ListingPdfGenerationViewModel(_eventAggregator, _settingFacade, _windowManager, _savingFilePathSelector, _listingPdfDocumentFactory, _listingReportGenerator);
 
             return vm;
         }

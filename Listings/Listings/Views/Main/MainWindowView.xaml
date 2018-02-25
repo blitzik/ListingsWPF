@@ -109,6 +109,16 @@
                     <TextBlock Margin="10 1 0 0" Text="Nastavení" />
                 </StackPanel>
             </RadioButton>
+            <RadioButton x:Name="DisplayEmptyListingsGeneration" Grid.Row="3" IsChecked="{Binding ActiveItem, Converter={StaticResource ViewModelToBooleanConverter}, ConverterParameter=EmptyListingsGenerationViewModel}">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="17" Height="17" Fill="White">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource EmptyFileIcon}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="10 1 0 0" Text="Prázdné výčetky" />
+                </StackPanel>
+            </RadioButton>
         </StackPanel>
 
 
