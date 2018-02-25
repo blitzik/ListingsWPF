@@ -164,7 +164,6 @@ namespace Listings.Views
             _settingFacade = settingFacade;
             _savingFilePathSelector = savingFilePathSelector;
             _openingFilePathSelector = openingFilePathSelector;
-
             BaseWindowTitle = "Nastavení";
 
             Reset();

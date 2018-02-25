@@ -49,7 +49,7 @@ namespace Listings.Views
             IEventAggregator eventAggregator,
             Db4oObjectContainerFactory dbFactory,
             IWindowManager windowManager
-        ) : base (eventAggregator) {
+        ) : base(eventAggregator) {
             _dbFactory = dbFactory;
             _windowManager = windowManager;
         }
