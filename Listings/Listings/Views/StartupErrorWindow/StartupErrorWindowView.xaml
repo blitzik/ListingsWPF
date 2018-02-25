@@ -20,7 +20,7 @@
                         <Setter Property="TextWrapping" Value="Wrap" />
                     </Style>
                 </StackPanel.Resources>
-                
+
                 <TextBlock>Vaše data nelze načíst do aktuálně nainstalované verze aplikace.</TextBlock>
                 <TextBlock>
                     Nainstalujte prosím odpovídající verzi aplikace nebo klikněte na tlačítko "

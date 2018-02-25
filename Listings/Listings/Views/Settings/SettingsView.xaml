@@ -46,13 +46,7 @@
 
             <TabItem Header="Položka výčetky">
                 <Border Padding="15">
-                    <ContentControl Content="{Binding WorkedTimeViewModel}">
-                        <ContentControl.Resources>
-                            <DataTemplate DataType="{x:Type local:WorkedTimeSettingViewModel}">
-                                <local:WorkedTimeSettingView />
-                            </DataTemplate>
-                        </ContentControl.Resources>
-                    </ContentControl>
+                    <ContentControl x:Name="WorkedTimeViewModel" />
                 </Border>
             </TabItem>
 
@@ -237,7 +231,7 @@
                                 <TextBox Grid.Column="0" Text="{Binding BackupFilePath, UpdateSourceTrigger=PropertyChanged}" />
                                 <Button Grid.Column="2" Content="Vybrat soubor" Command="{Binding BrowseCommand}" />
                             </Grid>
-                            
+
                             <Button Margin="0 15 0 0" Content="Importovat zálohu" Command="{Binding ImportDataCommand}" Style="{StaticResource TurquoiseButton}" />
                         </StackPanel>
 

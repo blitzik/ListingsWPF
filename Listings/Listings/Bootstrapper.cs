@@ -70,8 +70,9 @@ namespace Listings
             _container.Singleton<ListingPdfGenerationViewModel>(nameof(ListingPdfGenerationViewModel));
             _container.Singleton<SettingsViewModel>(nameof(SettingsViewModel));
 
+
             // ViewModel's factories
-            /*_container.Singleton<EmployersViewModelFactory>();
+            _container.Singleton<EmployersViewModelFactory>();
             _container.Singleton<ListingViewModelFactory>();
             _container.Singleton<ListingDeletionViewModelFactory>();
             _container.Singleton<ListingDetailViewModelFactory>();
@@ -79,7 +80,7 @@ namespace Listings
             _container.Singleton<ListingItemViewModelFactory>();
             _container.Singleton<ListingPdfGenerationViewModelFactory>();
             _container.Singleton<ListingsOverviewViewModelFactory>();
-            _container.Singleton<SettingsViewModelFactory>();*/
+            _container.Singleton<SettingsViewModelFactory>();
 
             _container.Instance(_container);
         }

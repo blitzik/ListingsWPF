@@ -122,7 +122,6 @@
     <Compile Include="Converters\ViewModelToBooleanConverter.cs" />
     <Compile Include="Domain\DayItem.cs" />
     <Compile Include="Domain\DbVersion.cs" />
-    <Compile Include="Domain\InternalBackup.cs" />
     <Compile Include="Services\Backup\IBackupImport.cs" />
     <Compile Include="Services\Backup\BackupImport.cs" />
     <Compile Include="Services\Pdf\DefaultListingPdfReportFactory.cs" />
