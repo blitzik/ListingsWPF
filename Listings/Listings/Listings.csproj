@@ -158,10 +158,20 @@
     <Compile Include="Services\IO\SaveFilePathSelector.cs" />
     <Compile Include="Services\ObjectContainerRegistry.cs" />
     <Compile Include="Services\Pdf\IListingPdfDocumentFactory.cs" />
+    <Compile Include="Services\Pdf\IListingReportGenerator.cs" />
+    <Compile Include="Services\Pdf\IListingSectionFactory.cs" />
+    <Compile Include="Services\Pdf\IMultipleListingReportFactory.cs" />
+    <Compile Include="Services\Pdf\ListingReportGenerator.cs" />
+    <Compile Include="Services\Pdf\ListingSectionFactory.cs" />
+    <Compile Include="Services\Pdf\MultipleListingReportFactory.cs" />
     <Compile Include="Services\ViewModelResolver\IViewModelResolver.cs" />
     <Compile Include="Services\ViewModelResolver\ViewModelResolver.cs" />
     <Compile Include="Views\ConductorOneActiveBaseViewModel.cs" />
     <Compile Include="Views\Employers\EmployersViewModelFactory.cs" />
+    <Compile Include="Views\EmptyListingsGeneration\EmptyListingsGenerationView.xaml.cs">
+      <DependentUpon>EmptyListingsGenerationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EmptyListingsGeneration\EmptyListingsGenerationViewModel.cs" />
     <Compile Include="Views\IViewModel.cs" />
     <Compile Include="Views\ListingDeletion\ListingDeletionViewModelFactory.cs" />
     <Compile Include="Views\ListingDetail\ListingDetailViewModelFactory.cs" />
@@ -247,6 +257,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Employers\EmployersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EmptyListingsGeneration\EmptyListingsGenerationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -63,6 +63,12 @@ namespace Listings.Views
         }
 
 
+        public void DisplayEmptyListingsGeneration()
+        {
+            ActivateItem(GetViewModel(nameof(EmptyListingsGenerationViewModel)));
+        }
+
+
         public override void ActivateItem(IViewModel item)
         {
             if (ActiveItem == item) {

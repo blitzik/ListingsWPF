@@ -249,7 +249,7 @@ namespace Listings.Views
                 d.DefaultExt = "." + Db4oObjectContainerFactory.DATABASE_EXTENSION;
                 d.Filter = "Evidoo data (*.evdo)|*.evdo";
             });
-            if (filePath == null) {
+            if (string.IsNullOrEmpty(filePath)) {
                 return;
             }
 
@@ -267,7 +267,7 @@ namespace Listings.Views
                     d.Filter = "Evidoo data (*.evdo)|*.evdo";
                 }
             );
-            if (filePath == null) {
+            if (string.IsNullOrEmpty(filePath)) {
                 return;
             }
 
