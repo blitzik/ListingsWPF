@@ -5,9 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Db4objects.Db4o;
 using Db4objects.Db4o.Config;
+using Db4objects.Db4o.Linq;
 using System.IO;
 using Listings.Domain;
 using Listings.Utils;
+using Db4objects.Db4o.Ext;
+using Db4objects.Db4o.Constraints;
 
 namespace Listings.Services
 {
@@ -21,15 +24,22 @@ namespace Listings.Services
         public IObjectContainer Create(string databaseName)
         {
             string filePath = Path.Combine(GetDatabaseDirectoryPath(), databaseName + "." + DATABASE_EXTENSION);
-            IObjectContainer db = Db4oEmbedded.OpenFile(PrepareConfig(), filePath);
-            
-            return db;
+            return OpenConnection(filePath);
         }
 
 
         public IObjectContainer OpenConnection(string filePath)
         {
-            return Db4oEmbedded.OpenFile(PrepareConfig(), filePath);
+            bool dbExists = File.Exists(filePath);
+            
+            IObjectContainer c = Db4oEmbedded.OpenFile(PrepareConfig(), filePath);
+            if (dbExists == false) {
+                DbVersion version = new DbVersion(DbVersion.UNIQUE_KEY, new List<string>() { Bootstrapper.Version });
+                c.Store(version);
+                c.Commit();
+            }
+
+            return c;
         }
 
 
@@ -45,12 +55,16 @@ namespace Listings.Services
             config.Common.Callbacks = false;
             //config.Common.DetectSchemaChanges = false;
 
+            config.Common.ObjectClass(typeof(DbVersion)).ObjectField("_id").Indexed(true);
+            config.Common.Add(new UniqueFieldValueConstraint(typeof(DbVersion), "_id"));
+
             config.Common.ObjectClass(typeof(Listing)).ObjectField("_year").Indexed(true);
 
             config.Common.ObjectClass(typeof(Listing)).CascadeOnDelete(true);
             config.Common.ObjectClass(typeof(Listing)).ObjectField("_employer").CascadeOnDelete(false);
 
             config.Common.ObjectClass(typeof(DefaultSettings)).ObjectField("_id").Indexed(true);
+            config.Common.Add(new UniqueFieldValueConstraint(typeof(DefaultSettings), "_id"));
 
             config.Common.ObjectClass(typeof(ListingItem)).CascadeOnDelete(true);
 

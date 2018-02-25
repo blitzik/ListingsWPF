@@ -12,7 +12,7 @@ namespace Listings.Facades
 {
     public class EmployerFacade : BaseFacade
     {
-        public EmployerFacade(ObjectContainerRegistry dbRegistry)
+        public EmployerFacade(ObjectContainerRegistry dbRegistry) : base (dbRegistry)
         {
             _dbRegistry = dbRegistry;
         }

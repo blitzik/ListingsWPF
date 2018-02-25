@@ -121,6 +121,10 @@
     <Compile Include="Converters\TimeToTimeInWordsConverter.cs" />
     <Compile Include="Converters\ViewModelToBooleanConverter.cs" />
     <Compile Include="Domain\DayItem.cs" />
+    <Compile Include="Domain\DbVersion.cs" />
+    <Compile Include="Domain\InternalBackup.cs" />
+    <Compile Include="Services\Backup\IBackupImport.cs" />
+    <Compile Include="Services\Backup\BackupImport.cs" />
     <Compile Include="Services\Pdf\DefaultListingPdfReportFactory.cs" />
     <Compile Include="Domain\DefaultListingPdfReportSetting.cs" />
     <Compile Include="Domain\DefaultSettings.cs" />
@@ -176,6 +180,10 @@
     </Compile>
     <Compile Include="Views\ProgressBarWindow\ProgressBarWindowViewModel.cs" />
     <Compile Include="Views\Settings\SettingsViewModelFactory.cs" />
+    <Compile Include="Views\StartupErrorWindow\StartupErrorWindowView.xaml.cs">
+      <DependentUpon>StartupErrorWindowView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StartupErrorWindow\StartupErrorWindowViewModel.cs" />
     <Compile Include="Views\WorkedTimeSetting\WorkedTimeSettingView.xaml.cs">
       <DependentUpon>WorkedTimeSettingView.xaml</DependentUpon>
     </Compile>
@@ -290,6 +298,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Settings\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StartupErrorWindow\StartupErrorWindowView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
