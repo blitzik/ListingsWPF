@@ -10,6 +10,7 @@ using System.IO;
 using Listings.Domain;
 using Listings.Utils;
 using Db4objects.Db4o.Ext;
+using Db4objects.Db4o.Constraints;
 
 namespace Listings.Services
 {
@@ -55,6 +56,7 @@ namespace Listings.Services
             //config.Common.DetectSchemaChanges = false;
 
             config.Common.ObjectClass(typeof(DbVersion)).ObjectField("_id").Indexed(true);
+            config.Common.Add(new UniqueFieldValueConstraint(typeof(DbVersion), "_id"));
 
             config.Common.ObjectClass(typeof(Listing)).ObjectField("_year").Indexed(true);
 
@@ -62,6 +64,7 @@ namespace Listings.Services
             config.Common.ObjectClass(typeof(Listing)).ObjectField("_employer").CascadeOnDelete(false);
 
             config.Common.ObjectClass(typeof(DefaultSettings)).ObjectField("_id").Indexed(true);
+            config.Common.Add(new UniqueFieldValueConstraint(typeof(DefaultSettings), "_id"));
 
             config.Common.ObjectClass(typeof(ListingItem)).CascadeOnDelete(true);
 
