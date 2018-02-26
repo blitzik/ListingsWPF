@@ -188,6 +188,14 @@
       <DependentUpon>ProgressBarWindowView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProgressBarWindow\ProgressBarWindowViewModel.cs" />
+    <Compile Include="Views\ProgressBarWindow\Progress\ProgressView.xaml.cs">
+      <DependentUpon>ProgressView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProgressBarWindow\Progress\ProgressViewModel.cs" />
+    <Compile Include="Views\ProgressBarWindow\Success\SuccessView.xaml.cs">
+      <DependentUpon>SuccessView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProgressBarWindow\Success\SuccessViewModel.cs" />
     <Compile Include="Views\Settings\SettingsViewModelFactory.cs" />
     <Compile Include="Views\StartupErrorWindow\StartupErrorWindowView.xaml.cs">
       <DependentUpon>StartupErrorWindowView.xaml</DependentUpon>
@@ -307,6 +315,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProgressBarWindow\ProgressBarWindowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProgressBarWindow\Progress\ProgressView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProgressBarWindow\Success\SuccessView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

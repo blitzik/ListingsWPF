@@ -271,10 +271,13 @@ namespace Listings.Views
                 return;
             }
 
-            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel();
-            Task.Run(() => {
+            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel(EventAggregator);
+            Task.Run(async () => {
                 _settingFacade.BackupData(filePath);
-                
+
+                pb.Success = true;
+                await Task.Delay(pb.ResultIconDelay);
+
                 pb.TryClose();
             });
 
@@ -284,9 +287,13 @@ namespace Listings.Views
 
         private async void ImportBackup()
         {
-            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel();
-            Task<ResultObject> t = Task<ResultObject>.Run(() => {
+            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel(EventAggregator);
+            Task<ResultObject> t = Task<ResultObject>.Run(async () => {
                 ResultObject r = _settingFacade.ImportBackup(BackupFilePath);
+
+                pb.Success = true;
+                await Task.Delay(pb.ResultIconDelay);
+
                 pb.TryClose();
 
                 return r;

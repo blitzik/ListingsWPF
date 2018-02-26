@@ -8,9 +8,6 @@
         Title="ProgressBarWindowView" Height="70" Width="500" WindowStyle="None" ResizeMode="NoResize" WindowState="Normal" WindowStartupLocation="CenterOwner" BorderThickness="1" BorderBrush="#CCC">
     
     <Border Padding="10">
-        <StackPanel>
-            <TextBlock Margin="0 0 0 5" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
-            <ProgressBar Height="25" Minimum="0" Maximum="100" IsIndeterminate="True" />
-        </StackPanel>
+        <ContentControl x:Name="ActiveItem" />
     </Border>
 </Window>

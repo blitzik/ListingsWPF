@@ -88,8 +88,8 @@ namespace Listings.Views
                 return;
             }
 
-            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel();
-            Task.Run(() => {
+            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel(EventAggregator);
+            Task.Run(async () => {
                 List<Listing> list = new List<Listing>();
                 for (int month = 0; month < 12; month++) {
                     list.Add(new Listing(SelectedYear, month + 1));
@@ -97,6 +97,9 @@ namespace Listings.Views
 
                 Document doc = _multipleListingReportFactory.Create(list, new DefaultListingPdfReportSetting());
                 _listingReportGenerator.Save(filePath, doc);
+
+                pb.Success = true;
+                await Task.Delay(pb.ResultIconDelay);
 
                 pb.TryClose();
             });
