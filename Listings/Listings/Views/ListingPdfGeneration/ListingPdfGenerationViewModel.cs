@@ -136,10 +136,13 @@ namespace Listings.Views
                 return;
             }
 
-            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel() { Text = "Vytváří se Váš PDF dokument..." };
-            Task.Run(() => {
+            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel(EventAggregator) { Text = "Vytváří se Váš PDF dokument..." };
+            Task.Run(async () => {
                 Document doc = _listingPdfDocumentFactory.Create(Listing, _pdfSetting);
-                _listingReportGenerator.Save(filePath, doc);                
+                _listingReportGenerator.Save(filePath, doc);
+
+                pb.Success = true;
+                await Task.Delay(pb.ResultIconDelay);
 
                 pb.TryClose();
             });

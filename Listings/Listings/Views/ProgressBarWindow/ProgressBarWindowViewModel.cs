@@ -7,23 +7,82 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class ProgressBarWindowViewModel : Screen
+    public class ProgressBarWindowViewModel : ConductorOneActiveBaseViewModel
     {
-        private string _text;
         public string Text
         {
-            get { return _text; }
+            get { return ProgressViewModel.Text; }
             set
             {
-                _text = value;
-                NotifyOfPropertyChange(() => Text);
+                ProgressViewModel.Text = value;
             }
         }
 
 
-        public ProgressBarWindowViewModel()
+        private ProgressViewModel _progressViewModel;
+        public ProgressViewModel ProgressViewModel
         {
-            Text = "Probíhá zpracování Vašeho požadavku";
+            get
+            {
+                if (_progressViewModel == null) {
+                    _progressViewModel = new ProgressViewModel(EventAggregator);
+                }
+                return _progressViewModel;
+            }
+        }
+
+
+        private SuccessViewModel _successViewModel;
+        public SuccessViewModel SuccessViewModel
+        {
+            get
+            {
+                if (_successViewModel == null) {
+                    _successViewModel = new SuccessViewModel(EventAggregator);
+                }
+                return _successViewModel;
+            }
+        }
+
+
+        private bool? _success;
+        public bool? Success
+        {
+            get { return _success; }
+            set
+            {
+                _success = value;
+                if (value == null) {
+                    ActivateItem(ProgressViewModel);
+
+                } else if (value == true) {
+                    ActivateItem(SuccessViewModel);
+
+                } else {
+                    // todo
+                }
+            }
+        }
+
+
+        private int _resultIconDelay;
+        public int ResultIconDelay
+        {
+            get { return _resultIconDelay; }
+            set { _resultIconDelay = value; }
+        }
+
+
+        public ProgressBarWindowViewModel(IEventAggregator eventAggregator) : base(eventAggregator)
+        {
+            Success = null;
+            ResultIconDelay = 500;
+        }
+
+
+        protected override void OnActivate()
+        {
+            Success = null;
         }
     }
 }
