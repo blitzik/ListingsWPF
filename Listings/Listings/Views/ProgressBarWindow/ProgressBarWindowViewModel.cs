@@ -76,7 +76,7 @@ namespace Listings.Views
         public ProgressBarWindowViewModel(IEventAggregator eventAggregator) : base(eventAggregator)
         {
             Success = null;
-            ResultIconDelay = 500;
+            ResultIconDelay = 750;
         }
 
 

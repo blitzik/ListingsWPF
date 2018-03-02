@@ -29,7 +29,7 @@ namespace Listings.Services.Backup
                 IObjectContainer db = _factory.OpenConnection(importFilePath);
                 IEnumerable<DbVersion> x = from DbVersion v in db where v.ID == DbVersion.UNIQUE_KEY select v;
                 DbVersion version = x.FirstOrDefault();
-                if (version != null && version.SupportedAppVersions.Contains(Bootstrapper.Version)) {
+                if (version != null && Bootstrapper.SUPPORTED_DBS.Contains(version.Version)) {
                     ro = new ResultObject(true, db);
                     ro.AddMessage("Import dat proběhl úspěšně!");
                 } else {
@@ -60,7 +60,7 @@ namespace Listings.Services.Backup
 
             string activeDbFilePath = Path.Combine(appDBDirectory, activeDBName + "." + activeDBExtension);
 
-            string oldDbBackupFileName = string.Format("backup_{0}_{1}_{2}_{3}_{4}_{5}_v{6}.{7}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second, Bootstrapper.Version.Replace(".", "-"), activeDBExtension);
+            string oldDbBackupFileName = string.Format("backup_{0}_{1}_{2}_{3}_{4}_{5}_v{6}.{7}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second, Bootstrapper.APP_VERSION.Replace(".", "-"), activeDBExtension);
             string lastWorkingDbBackupPath = Path.Combine(appDBDirectory, oldDbBackupFileName);
 
             File.Move(activeDbFilePath, lastWorkingDbBackupPath);
