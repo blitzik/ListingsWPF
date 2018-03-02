@@ -184,6 +184,10 @@
     <Compile Include="Views\ListingPdfGeneration\ListingPdfGenerationViewModelFactory.cs" />
     <Compile Include="Views\ListingsOverview\ListingsOverviewViewModelFactory.cs" />
     <Compile Include="Views\Listing\ListingViewModelFactory.cs" />
+    <Compile Include="Views\ProgressBarWindow\Failure\FailureView.xaml.cs">
+      <DependentUpon>FailureView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProgressBarWindow\Failure\FailureViewModel.cs" />
     <Compile Include="Views\ProgressBarWindow\ProgressBarWindowView.xaml.cs">
       <DependentUpon>ProgressBarWindowView.xaml</DependentUpon>
     </Compile>
@@ -311,6 +315,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Listing\ListingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProgressBarWindow\Failure\FailureView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
