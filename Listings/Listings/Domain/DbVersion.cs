@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Listings.Domain
 {
     /// <summary>
-    /// Contains versions of application that can work with this database
+    /// Contains version of database
     /// </summary>
     public class DbVersion
     {
@@ -21,17 +21,17 @@ namespace Listings.Domain
         }
 
 
-        private List<string> _supportedAppVersions;
-        public List<string> SupportedAppVersions
+        private readonly string _version;
+        public string Version
         {
-            get { return _supportedAppVersions; }
+            get { return _version; }
         }
 
 
-        public DbVersion(string id, List<string> supportedAppVersions)
+        public DbVersion(string id, string version)
         {
             _id = id;
-            _supportedAppVersions = supportedAppVersions;
+            _version = version;
         }
     }
 }

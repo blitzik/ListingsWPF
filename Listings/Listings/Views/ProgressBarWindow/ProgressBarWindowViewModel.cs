@@ -45,6 +45,19 @@ namespace Listings.Views
         }
 
 
+        private FailureViewModel _failureViewModel;
+        public FailureViewModel FailureViewModel
+        {
+            get
+            {
+                if (_failureViewModel == null) {
+                    _failureViewModel = new FailureViewModel(EventAggregator);
+                }
+                return _failureViewModel;
+            }
+        }
+
+
         private bool? _success;
         public bool? Success
         {
@@ -59,7 +72,7 @@ namespace Listings.Views
                     ActivateItem(SuccessViewModel);
 
                 } else {
-                    // todo
+                    ActivateItem(FailureViewModel);
                 }
             }
         }
@@ -76,7 +89,7 @@ namespace Listings.Views
         public ProgressBarWindowViewModel(IEventAggregator eventAggregator) : base(eventAggregator)
         {
             Success = null;
-            ResultIconDelay = 500;
+            ResultIconDelay = 750;
         }
 
 

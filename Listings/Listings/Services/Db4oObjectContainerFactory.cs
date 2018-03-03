@@ -34,7 +34,7 @@ namespace Listings.Services
             
             IObjectContainer c = Db4oEmbedded.OpenFile(PrepareConfig(), filePath);
             if (dbExists == false) {
-                DbVersion version = new DbVersion(DbVersion.UNIQUE_KEY, new List<string>() { Bootstrapper.Version });
+                DbVersion version = new DbVersion(DbVersion.UNIQUE_KEY, Bootstrapper.APP_VERSION);
                 c.Store(version);
                 c.Commit();
             }

@@ -22,7 +22,8 @@ namespace Listings
 {
     public class Bootstrapper : BootstrapperBase
     {
-        public static string Version = "1.0.0";
+        public static readonly string APP_VERSION = "1.0.0";
+        public static readonly List<string> SUPPORTED_DBS = new List<string>() { APP_VERSION };
 
 
         private SimpleContainer _container;
@@ -100,7 +101,7 @@ namespace Listings
                 do {
                     IEnumerable<DbVersion> x = from DbVersion v in db where v.ID == DbVersion.UNIQUE_KEY select v;
                     DbVersion version = x.FirstOrDefault();
-                    if (version == null || !version.SupportedAppVersions.Contains(Bootstrapper.Version)) {
+                    if (version == null || !SUPPORTED_DBS.Contains(version.Version)) {
                         ro = new ResultObject(false);
                         db.Close();
                         break;

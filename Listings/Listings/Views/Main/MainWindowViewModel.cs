@@ -21,6 +21,12 @@ namespace Listings.Views
         }
 
 
+        public string AppVersion
+        {
+            get { return Bootstrapper.APP_VERSION; }
+        }
+
+
         private IViewModelResolver<IViewModel> _viewModelResolver;
 
         private Dictionary<string, IViewModel> _viewModels;

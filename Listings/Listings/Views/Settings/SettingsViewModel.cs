@@ -291,7 +291,7 @@ namespace Listings.Views
             Task<ResultObject> t = Task<ResultObject>.Run(async () => {
                 ResultObject r = _settingFacade.ImportBackup(BackupFilePath);
 
-                pb.Success = true;
+                pb.Success = r.Success;
                 await Task.Delay(pb.ResultIconDelay);
 
                 pb.TryClose();
