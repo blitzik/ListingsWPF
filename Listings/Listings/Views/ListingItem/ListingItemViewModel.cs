@@ -143,6 +143,7 @@ namespace Listings.Views
             string date = CultureInfo.CurrentCulture.TextInfo.ToTitleCase((new DateTime(dayItem.Year, dayItem.Month, dayItem.Day)).ToLongDateString().ToLower());
             WindowTitle.Text = String.Format("{0} - {1}", date, dayItem.Listing.Name);
             _defaultSettings = _settingFacade.GetDefaultSettings();
+            Locality = null;
 
             if (dayItem.ListingItem != null) {
                 ListingItem l = dayItem.ListingItem;
@@ -154,13 +155,7 @@ namespace Listings.Views
                 WorkedTimeViewModel = new WorkedTimeSettingViewModel(_eventAggregator, _defaultSettings.Time, _defaultSettings.Time, _defaultSettings.TimeTickInMinutes);
             }
 
-            Locality = null;
-            Localities.Clear();
-            foreach (ListingItem item in dayItem.Listing.Items.Values) {
-                if (!string.IsNullOrEmpty(item.Locality) && !Localities.Contains(item.Locality)) {
-                    Localities.Add(item.Locality);
-                }
-            }
+            Localities = new ObservableCollection<string>(dayItem.Localities);
         }
 
 

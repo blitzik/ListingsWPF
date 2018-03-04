@@ -22,8 +22,11 @@ namespace Listings
 {
     public class Bootstrapper : BootstrapperBase
     {
-        public static readonly string APP_VERSION = "1.0.0";
-        public static readonly List<string> SUPPORTED_DBS = new List<string>() { APP_VERSION };
+        public static readonly string APP_VERSION = "1.0.1";
+        public static readonly List<string> SUPPORTED_DBS = new List<string>() {
+            "1.0.0",
+            APP_VERSION
+        };
 
 
         private SimpleContainer _container;
@@ -111,7 +114,10 @@ namespace Listings
                     _container.GetInstance<IWindowManager>().ShowWindow(_container.GetInstance<MainWindowViewModel>());
 
                 } while (false);
-                
+
+
+            } catch (DatabaseFileLockedException ex) { // todo
+                System.Windows.Application.Current.Shutdown();
 
             } catch (Exception ex) {
                 ro = new ResultObject(false);
