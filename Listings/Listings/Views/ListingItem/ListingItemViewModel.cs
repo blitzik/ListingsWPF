@@ -155,7 +155,12 @@ namespace Listings.Views
                 WorkedTimeViewModel = new WorkedTimeSettingViewModel(_eventAggregator, _defaultSettings.Time, _defaultSettings.Time, _defaultSettings.TimeTickInMinutes);
             }
 
-            Localities = new ObservableCollection<string>(dayItem.Localities);
+            Localities.Clear();
+            foreach (ListingItem i in dayItem.Listing.Items.Values) {
+                if (!string.IsNullOrEmpty(i.Locality) && !Localities.Contains(i.Locality)) {
+                    _localities.Add(i.Locality);
+                }
+            }
         }
 
 

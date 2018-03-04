@@ -130,13 +130,6 @@ namespace Listings.Domain
         }
 
 
-        private List<string> _localities;
-        public List<string> Localities
-        {
-            get { return _localities; }
-        }
-
-
         public DayItem(Listing listing, int day)
         {
             _listing = listing;
@@ -151,13 +144,6 @@ namespace Listings.Domain
                 _listingItem = item;
                 Locality = item.Locality;
                 _timeSetting = item.TimeSetting;
-            }
-
-            _localities = new List<string>();
-            foreach (ListingItem i in listing.Items.Values) {
-                if (!string.IsNullOrEmpty(i.Locality) && !Localities.Contains(i.Locality)) {
-                    _localities.Add(i.Locality);
-                }
             }
         }
 
