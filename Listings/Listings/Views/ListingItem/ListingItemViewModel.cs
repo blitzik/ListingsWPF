@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Listings.Messages;
+using System.Collections.ObjectModel;
 
 namespace Listings.Views
 {
@@ -94,6 +95,31 @@ namespace Listings.Views
         }
 
 
+        private ObservableCollection<string> _localities;
+        public ObservableCollection<string> Localities
+        {
+            get { return _localities; }
+            set
+            {
+                _localities = value;
+                NotifyOfPropertyChange(() => Localities);
+            }
+        }
+
+
+        private string _selectedLocality;
+        public string SelectedLocality
+        {
+            get { return _selectedLocality; }
+            set
+            {
+                _selectedLocality = value;
+                _locality = value;
+                NotifyOfPropertyChange(() => SelectedLocality);
+            }
+        }
+
+
         private ListingFacade _listingFacade;
         private SettingFacade _settingFacade;
         
@@ -107,6 +133,7 @@ namespace Listings.Views
             _listingFacade = listingFacade;
             _settingFacade = settingFacade;
 
+            Localities = new ObservableCollection<string>();
             //DayItem = dayItem;
         }
 
@@ -125,6 +152,14 @@ namespace Listings.Views
 
             } else {
                 WorkedTimeViewModel = new WorkedTimeSettingViewModel(_eventAggregator, _defaultSettings.Time, _defaultSettings.Time, _defaultSettings.TimeTickInMinutes);
+            }
+
+            Locality = null;
+            Localities.Clear();
+            foreach (ListingItem item in dayItem.Listing.Items.Values) {
+                if (!string.IsNullOrEmpty(item.Locality) && !Localities.Contains(item.Locality)) {
+                    Localities.Add(item.Locality);
+                }
             }
         }
 
