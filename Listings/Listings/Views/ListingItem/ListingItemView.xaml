@@ -38,7 +38,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Popis práce - místo" Style="{StaticResource LabelText}" />
-            <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding Locality, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="40" HorizontalContentAlignment="Left" Style="{StaticResource DefaultTextBox}" />
+            <ComboBox Grid.Row="2" Grid.Column="0" IsEditable="True" Text="{Binding Locality, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Localities, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedLocality, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DefaultComboBox}" />
         </Grid>
 
         <Button Grid.Column="2" Content="Uložit položku" Command="{Binding SaveListingItemCommand}" Width="150" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Right" />
