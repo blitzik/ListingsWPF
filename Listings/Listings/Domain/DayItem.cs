@@ -130,6 +130,12 @@ namespace Listings.Domain
         }
 
 
+        public HashSet<string> Localities
+        {
+            get { return _listing.Localities; }
+        }
+
+
         public DayItem(Listing listing, int day)
         {
             _listing = listing;
