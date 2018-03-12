@@ -32,7 +32,14 @@ namespace Evidoo
 
                     string extractedFilesPath = Path.Combine(updateTempDirectoryPath, "new");
                     ZipFile.ExtractToDirectory(downloadedUpdatePath, extractedFilesPath);
-                    ReplaceFiles(extractedFilesPath, appBasepath, Path.Combine(appBasepath, "backup"));
+
+                    string backupDirectoryPath = Path.Combine(appBasepath, "backup");
+                    if (Directory.Exists(backupDirectoryPath)) {
+                        Directory.Delete(backupDirectoryPath, true);
+                    } else {
+                        Directory.CreateDirectory(backupDirectoryPath);
+                    }
+                    ReplaceFiles(extractedFilesPath, appBasepath, backupDirectoryPath);
 
                 } catch (InvalidDataException idex) {
                     if (Directory.Exists(updateTempDirectoryPath)) {
@@ -50,11 +57,6 @@ namespace Evidoo
         {
             // [F:\dev\c#\Listings\Listings\Launcher\bin\Debug\update\new]\folder\file.dll - source
             // [F:\dev\c#\Listings\Listings\Launcher\bin\Debug]\file.dll - destination
-            if (Directory.Exists(backupPathForOriginalDirectory)) {
-                Directory.Delete(backupPathForOriginalDirectory, true);
-            } else {
-                Directory.CreateDirectory(backupPathForOriginalDirectory);
-            }
             IEnumerable<string> filePaths = ScanDirectory(sourceDirectoryPath);
             foreach (string sourceFilePath in filePaths) {
                 FileInfo sourceFile = new FileInfo(sourceFilePath);
