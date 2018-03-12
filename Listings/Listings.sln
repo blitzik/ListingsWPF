@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Listings", "Listings\Listin
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{6C99991B-B4F9-4D93-B46A-169DF5BE9558}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evidoo", "Evidoo\Evidoo.csproj", "{8DD27744-DD02-4329-89A6-EBD3D5550BBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{B44B531D-071E-4CE4-84C4-0D313D18C0B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6C99991B-B4F9-4D93-B46A-169DF5BE9558}.Debug|Any CPU.ActiveCfg = Debug
 		{6C99991B-B4F9-4D93-B46A-169DF5BE9558}.Release|Any CPU.ActiveCfg = Release
+		{8DD27744-DD02-4329-89A6-EBD3D5550BBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DD27744-DD02-4329-89A6-EBD3D5550BBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DD27744-DD02-4329-89A6-EBD3D5550BBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DD27744-DD02-4329-89A6-EBD3D5550BBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

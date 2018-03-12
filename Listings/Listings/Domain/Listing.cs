@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Db4objects.Db4o;
 using Listings.EventArguments;
 using Listings.Exceptions;
 using Listings.Utils;
@@ -171,6 +172,23 @@ namespace Listings.Domain
         }
 
 
+        [Transient]
+        private HashSet<string> _localities;
+        public HashSet<string> Localities
+        {
+            get
+            {
+                if (_localities == null) {
+                    _localities = new HashSet<string>();
+                    foreach (ListingItem i in Items.Values) {
+                        _localities.Add(i.Locality);
+                    }
+                }
+                return _localities;
+            }
+        }
+
+
         // ----- Summary hours
 
 
@@ -300,6 +318,8 @@ namespace Listings.Domain
             OtherHours += newItem.TimeSetting.OtherHours;
             TotalWorkedHours += newItem.TimeSetting.TotalWorkedHours;
 
+            Localities.Add(locality);
+
             return newItem;
         }
 
@@ -332,6 +352,8 @@ namespace Listings.Domain
             TotalWorkedHours += newItem.TimeSetting.TotalWorkedHours - oldItem.TimeSetting.TotalWorkedHours;
 
             _items[day] = newItem;
+
+            Localities.Add(locality);
 
             return newItem;
         }

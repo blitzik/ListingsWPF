@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using Listings.Utils;
 using System;
+using System.Collections.Generic;
 
 namespace Listings.Domain
 {
@@ -126,6 +127,12 @@ namespace Listings.Domain
         public Listing Listing
         {
             get { return _listing; }
+        }
+
+
+        public HashSet<string> Localities
+        {
+            get { return _listing.Localities; }
         }
 
 
