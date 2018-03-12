@@ -65,9 +65,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EvidooApp\EvidooApp.csproj">
+    <ProjectReference Include="..\Listings\Listings.csproj">
       <Project>{b44b531d-071e-4ce4-84c4-0d313d18c0b9}</Project>
-      <Name>EvidooApp</Name>
+      <Name>Listings</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -24,13 +24,13 @@ namespace Evidoo
             Thread t = new Thread(() => {
                 AppDomainSetup setup = new AppDomainSetup()
                 {
-                    ApplicationName = "Evidoo",
+                    ApplicationName = "Listings",
                     ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
                     ShadowCopyFiles = true.ToString(),
-                    CachePath = Path.Combine(appBasePath, "app")
+                    CachePath = Path.Combine(appBasePath, "sc_listings")
                 };
-                _evidooAppDomain = AppDomain.CreateDomain("EvidooDomain", null, setup);
-                _evidooAppDomain.ExecuteAssembly("Evidoo.exe");
+                _evidooAppDomain = AppDomain.CreateDomain("ListingsDomain", null, setup);
+                _evidooAppDomain.ExecuteAssembly("Listings.exe");
 
                 ApplicationTerminatedHandler handler = OnApplicationTermination;
                 if (handler != null) {

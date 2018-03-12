@@ -25,7 +25,7 @@ namespace Evidoo
                     Directory.Delete(updateTempDirectoryPath, true);
                 }
                 Directory.CreateDirectory(updateTempDirectoryPath);
-                client.Headers["security-token-code"] = "abc"; //localManifest.AccessToken;
+                client.Headers["security-token-code"] = localManifest.AccessToken;
                 try {
                     string downloadedUpdatePath = Path.Combine(updateTempDirectoryPath, "current.zip");
                     client.DownloadFile(localManifest.PayloadUri, downloadedUpdatePath);
