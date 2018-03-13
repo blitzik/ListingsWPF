@@ -19,18 +19,17 @@ namespace Evidoo
         public void Start()
         {
             string appBasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string updateBasepath = Path.Combine(appBasePath, "update");
-
             Thread t = new Thread(() => {
+                string listingsApppath = Path.Combine(appBasePath, "Listings");
                 AppDomainSetup setup = new AppDomainSetup()
                 {
                     ApplicationName = "Listings",
-                    ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
+                    ApplicationBase = listingsApppath,
                     ShadowCopyFiles = true.ToString(),
                     CachePath = Path.Combine(appBasePath, "sc_listings")
                 };
                 _evidooAppDomain = AppDomain.CreateDomain("ListingsDomain", null, setup);
-                _evidooAppDomain.ExecuteAssembly("Listings.exe");
+                _evidooAppDomain.ExecuteAssembly(Path.Combine(listingsApppath, "Listings.exe"));
 
                 ApplicationTerminatedHandler handler = OnApplicationTermination;
                 if (handler != null) {

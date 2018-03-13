@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -28,6 +29,7 @@ namespace Listings
             APP_VERSION
         };
 
+        static Mutex mutex = new Mutex(false, "34515d3d-cdda-4d87-aa0c-eeaab04ba20a");
 
         private SimpleContainer _container;
 
@@ -96,6 +98,10 @@ namespace Listings
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
+            if (!mutex.WaitOne(TimeSpan.FromSeconds(1), false) || AppDomain.CurrentDomain.IsDefaultAppDomain() == true) {
+                System.Windows.Application.Current.Shutdown();
+            }
+
             ObjectContainerRegistry ocr = _container.GetInstance<ObjectContainerRegistry>();
 
             ResultObject ro = new ResultObject(true);

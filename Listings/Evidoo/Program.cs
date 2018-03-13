@@ -42,7 +42,7 @@ namespace Evidoo
             while (_isAppFinished == false) {
                 if (nextUpdateCheckTime <= DateTimeOffset.Now.ToUnixTimeSeconds()) {
                     if (versionChecker.IsNewVersionAvailable(localManifestFilePath)) {
-                        updater.UpdateApp(localManifestFilePath, appBasePath, updateBasePath);
+                        //updater.UpdateApp(localManifestFilePath, appBasePath, updateBasePath);
                     }
                     nextUpdateCheckTime = DateTimeOffset.Now.ToUnixTimeSeconds() + updateCheckTick;
                 }
