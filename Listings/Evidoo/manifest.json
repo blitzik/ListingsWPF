@@ -1,6 +1,5 @@
 ﻿{
-	"version": "1.0.1",
-	"remoteManifestUri": "https://update.vycetky.eu",
-	"accessToken": "f4963c8a-8a6f-4d0a-b54b-4c0ab3b1141e",
-	"payloadUri": "https://update.vycetky.eu/op"
+  "version": "1.0.0.0",
+  "currentVersionCheckUrl": "https://update.vycetky.eu",
+  "patchUrl": "https://update.vycetky.eu/op"
 }

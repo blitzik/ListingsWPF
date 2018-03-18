@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -22,12 +23,7 @@ namespace Listings
 {
     public class Bootstrapper : BootstrapperBase
     {
-        public static readonly string APP_VERSION = "1.0.1";
-        public static readonly List<string> SUPPORTED_DBS = new List<string>() {
-            "1.0.0",
-            APP_VERSION
-        };
-
+        static Mutex mutex = new Mutex(false, "34515d3d-cdda-4d87-aa0c-eeaab04ba20a");
 
         private SimpleContainer _container;
 
@@ -64,7 +60,7 @@ namespace Listings
 
             // Windows
             _container.Singleton<MainWindowViewModel>();
-            _container.Singleton<StartupErrorWindowViewModel>();
+            _container.PerRequest<StartupErrorWindowViewModel>();
 
             // ViewModels
             _container.Singleton<ListingsOverviewViewModel>(nameof(ListingsOverviewViewModel));
@@ -96,35 +92,32 @@ namespace Listings
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
+            if (!mutex.WaitOne(TimeSpan.FromSeconds(1), false) || AppDomain.CurrentDomain.IsDefaultAppDomain() == true) {
+                System.Windows.Application.Current.Shutdown();
+            }
+
             ObjectContainerRegistry ocr = _container.GetInstance<ObjectContainerRegistry>();
 
             ResultObject ro = new ResultObject(true);
             try {
                 IObjectContainer db = _container.GetInstance<Db4oObjectContainerFactory>().Create(Db4oObjectContainerFactory.MAIN_DATABASE_NAME);
-                do {
-                    IEnumerable<DbVersion> x = from DbVersion v in db where v.ID == DbVersion.UNIQUE_KEY select v;
-                    DbVersion version = x.FirstOrDefault();
-                    if (version == null || !SUPPORTED_DBS.Contains(version.Version)) {
-                        ro = new ResultObject(false);
-                        db.Close();
-                        break;
-                    }
 
-                    ocr.Add(Db4oObjectContainerFactory.MAIN_DATABASE_NAME, db);
-                    _container.GetInstance<IWindowManager>().ShowWindow(_container.GetInstance<MainWindowViewModel>());
+                ocr.Add(Db4oObjectContainerFactory.MAIN_DATABASE_NAME, db);
+                _container.GetInstance<IWindowManager>().ShowWindow(_container.GetInstance<MainWindowViewModel>());
 
-                } while (false);
-
-
-            } catch (DatabaseFileLockedException ex) { // todo
-                System.Windows.Application.Current.Shutdown();
+            } catch (DatabaseFileLockedException ex) {
+                ro = new ResultObject(false);
+                ro.AddMessage("Nelze načíst Vaše data. Soubor je využíván jiným procesem.");
 
             } catch (Exception ex) {
                 ro = new ResultObject(false);
+                ro.AddMessage("Při spouštění aplikace došlo k neočekávané chybě");
             }
 
             if (!ro.Success) {
-                _container.GetInstance<IWindowManager>().ShowDialog(_container.GetInstance<StartupErrorWindowViewModel>());
+                StartupErrorWindowViewModel errw = _container.GetInstance<StartupErrorWindowViewModel>();
+                errw.Text = ro.GetLastMessage();
+                _container.GetInstance<IWindowManager>().ShowDialog(errw);
             }
         }
 

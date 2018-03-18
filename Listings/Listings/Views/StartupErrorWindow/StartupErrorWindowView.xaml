@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Listings.Views"
         mc:Ignorable="d"
-        Title="Chyba při spouštění aplikace" ResizeMode="NoResize" Width="550" Height="350" FontSize="18">
+        Title="Evidoo - Chyba při spouštění aplikace" ResizeMode="NoResize" Width="600" SizeToContent="Height" FontSize="18">
       
     <Grid>
         <Grid.ColumnDefinitions>
@@ -21,23 +21,9 @@
                     </Style>
                 </StackPanel.Resources>
 
-                <TextBlock>Vaše data nelze načíst do aktuálně nainstalované verze aplikace.</TextBlock>
-                <TextBlock>
-                    Nainstalujte prosím odpovídající verzi aplikace nebo klikněte na tlačítko "
-                    <Bold>Založit novou databázi</Bold>", které založí novou databázi s výchozími daty.
-                </TextBlock>
-                <TextBlock>Po vytvoření nové databáze spusťte aplikaci znovu.</TextBlock>
-                
-                <Grid Margin="0 50 0 0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="10" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                <TextBlock Margin="0 0 0 20" TextWrapping="Wrap" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <Button Grid.Column="0"  Content="Založit novou databázi" Command="{Binding OpenAppAnywayCommand}" Height="35" />
-                    <Button Grid.Column="2"  Content="Konec" Command="{Binding CloseAppCommand}" Width="150" Height="35" HorizontalAlignment="Right" />
-                </Grid>
+                <Button Content="Ok" Command="{Binding CloseAppCommand}" Width="150" Height="35" HorizontalAlignment="Right" />
             </StackPanel>
         </Border>
     </Grid>

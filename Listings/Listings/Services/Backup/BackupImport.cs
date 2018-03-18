@@ -8,6 +8,7 @@ using Db4objects.Db4o;
 using Db4objects.Db4o.Linq;
 using Db4objects.Db4o.Ext;
 using System.IO;
+using System.Reflection;
 
 namespace Listings.Services.Backup
 {
@@ -27,15 +28,9 @@ namespace Listings.Services.Backup
             ResultObject ro;
             try {
                 IObjectContainer db = _factory.OpenConnection(importFilePath);
-                IEnumerable<DbVersion> x = from DbVersion v in db where v.ID == DbVersion.UNIQUE_KEY select v;
-                DbVersion version = x.FirstOrDefault();
-                if (version != null && Bootstrapper.SUPPORTED_DBS.Contains(version.Version)) {
-                    ro = new ResultObject(true, db);
-                    ro.AddMessage("Import dat proběhl úspěšně!");
-                } else {
-                    ro = new ResultObject(false);
-                    ro.AddMessage("Import nelze provést. Nesouhlasí verze importovaných dat.");
-                }
+
+                ro = new ResultObject(true, db);
+                ro.AddMessage("Import dat proběhl úspěšně!");
 
                 db.Close();
 
@@ -60,7 +55,7 @@ namespace Listings.Services.Backup
 
             string activeDbFilePath = Path.Combine(appDBDirectory, activeDBName + "." + activeDBExtension);
 
-            string oldDbBackupFileName = string.Format("backup_{0}_{1}_{2}_{3}_{4}_{5}_v{6}.{7}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second, Bootstrapper.APP_VERSION.Replace(".", "-"), activeDBExtension);
+            string oldDbBackupFileName = string.Format("backup_{0}_{1}_{2}_{3}_{4}_{5}_v{6}.{7}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second, Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", "-"), activeDBExtension);
             string lastWorkingDbBackupPath = Path.Combine(appDBDirectory, oldDbBackupFileName);
 
             File.Move(activeDbFilePath, lastWorkingDbBackupPath);

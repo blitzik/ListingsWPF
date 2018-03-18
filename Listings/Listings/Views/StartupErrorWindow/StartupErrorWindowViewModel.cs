@@ -16,6 +16,18 @@ namespace Listings.Views
 {
     public class StartupErrorWindowViewModel : ScreenBaseViewModel
     {
+        private string _text;
+        public string Text
+        {
+            get { return _text; }
+            set
+            {
+                _text = value;
+                NotifyOfPropertyChange(() => Text);
+            }
+        }
+
+
         private DelegateCommand<object> _closeAppCommand;
         public DelegateCommand<object> CloseAppCommand
         {
@@ -27,48 +39,14 @@ namespace Listings.Views
                 return _closeAppCommand;
             }
         }
-
-
-        private DelegateCommand<object> _openAppAnywayCommand;
-        public DelegateCommand<object> OpenAppAnywayCommand
-        {
-            get
-            {
-                if (_openAppAnywayCommand == null) {
-                    _openAppAnywayCommand = new DelegateCommand<object>(p => CreateDefaultConnection());
-                }
-                return _openAppAnywayCommand;
-            }
-        }
-
+        
 
         private readonly Db4oObjectContainerFactory _dbFactory;
         private readonly IWindowManager _windowManager;
 
         public StartupErrorWindowViewModel(
-            IEventAggregator eventAggregator,
-            Db4oObjectContainerFactory dbFactory,
-            IWindowManager windowManager
+            IEventAggregator eventAggregator
         ) : base(eventAggregator) {
-            _dbFactory = dbFactory;
-            _windowManager = windowManager;
-        }
-
-
-        private void CreateDefaultConnection()
-        {
-            string directory = Db4oObjectContainerFactory.GetDatabaseDirectoryPath();
-
-            string activeDbFilePath = Path.Combine(directory, (Db4oObjectContainerFactory.MAIN_DATABASE_NAME + "." + (Db4oObjectContainerFactory.DATABASE_EXTENSION)));
-
-            DateTime now = DateTime.Now;
-            string oldDbBackupFileName = string.Format("before_default_{0}_{1}_{2}_{3}_{4}_{5}.{6}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second, Db4oObjectContainerFactory.DATABASE_EXTENSION);
-
-            File.Move(activeDbFilePath, Path.Combine(directory, oldDbBackupFileName));
-
-            // we do not need to create new database here, because new database will be created at the start of the application
-
-            TryClose();
         }
     }
 }

@@ -9,37 +9,111 @@ using System.Threading.Tasks;
 
 namespace Evidoo
 {
-    public class Application
+    public enum ApplicationState
     {
-        private AppDomain _evidooAppDomain;
+        PREPARED,
+        STARTED,
+        FINISHED
+    }
 
 
-        public delegate void ApplicationTerminatedHandler(object sender, EventArgs args);
-        public event ApplicationTerminatedHandler OnApplicationTermination;
-        public void Start()
+    public class Application : IApplication
+    {
+        private AppDomain _appDomain;
+        public AppDomain AppDomain
         {
-            string appBasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string updateBasepath = Path.Combine(appBasePath, "update");
+            get { return _appDomain; }
+        }
 
+
+        private string _appDomainName;
+        public string AppDomainName
+        {
+            get { return _appDomainName; }
+        }
+
+
+        private string _appName;
+        public string AppName
+        {
+            get { return _appName; }
+        }
+
+
+        private bool _shadowCopyFiles;
+        public bool ShadowCopyFiles
+        {
+            get { return _shadowCopyFiles; }
+        }
+
+
+        private ApplicationState _state;
+        public ApplicationState State
+        {
+            get { return _state; }
+        }
+
+
+        private string _defaultBasePath;
+        private string _appBasePath;
+        private string _shadowCopiesDirectory;
+        private string _appExecutable;
+
+
+
+        private Thread _t;
+
+
+        public Application(string appName, bool shadowCopyFiles)
+        {
+            _appName = appName;
+            _shadowCopyFiles = shadowCopyFiles;
+            _appDomainName = string.Format("{0}Domain", appName);
+
+            _defaultBasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            _appBasePath = Path.Combine(Path.Combine(_defaultBasePath, "bin"), _appName);
+            _shadowCopiesDirectory = Path.Combine(_defaultBasePath, "sc");
+            _appExecutable = Path.Combine(_appBasePath, string.Format("{0}.exe", _appName));
+
+            _t = PrepareThread();
+
+            _state = ApplicationState.PREPARED;
+        }
+
+
+        public delegate void TerminatedApplicationHandler(object sender, EventArgs args);
+        public event TerminatedApplicationHandler OnTerminatedApplication;
+        private Thread PrepareThread()
+        {
             Thread t = new Thread(() => {
-                AppDomainSetup setup = new AppDomainSetup()
-                {
-                    ApplicationName = "Listings",
-                    ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
-                    ShadowCopyFiles = true.ToString(),
-                    CachePath = Path.Combine(appBasePath, "sc_listings")
-                };
-                _evidooAppDomain = AppDomain.CreateDomain("ListingsDomain", null, setup);
-                _evidooAppDomain.ExecuteAssembly("Listings.exe");
+                string appPath = Path.Combine(_defaultBasePath, AppName);
+                AppDomainSetup setup = new AppDomainSetup() { ApplicationName = AppName };
+                setup.ShadowCopyFiles = ShadowCopyFiles.ToString();
+                setup.ApplicationBase = appPath;
+                if (ShadowCopyFiles == true) {
+                    setup.CachePath = Path.Combine(_shadowCopiesDirectory, AppName);
+                }
+                _appDomain = AppDomain.CreateDomain(AppDomainName, null, setup);
+                _appDomain.ExecuteAssembly(_appExecutable);
 
-                ApplicationTerminatedHandler handler = OnApplicationTermination;
+                _state = ApplicationState.FINISHED;
+                TerminatedApplicationHandler handler = OnTerminatedApplication;
                 if (handler != null) {
                     handler(this, EventArgs.Empty);
                 }
             });
-            t.SetApartmentState(ApartmentState.STA);
-            t.IsBackground = true;
-            t.Start();
+
+            return t;
+        }
+
+
+        public void Start(Action<Thread> threadModifier)
+        {
+            if (threadModifier != null) {
+                threadModifier.Invoke(_t);
+            }
+            _state = ApplicationState.STARTED;
+            _t.Start();
         }
 
     }
