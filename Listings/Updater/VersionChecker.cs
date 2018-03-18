@@ -11,35 +11,36 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Evidoo
+namespace Updater
 {
     public class VersionChecker
     {
-        public bool IsNewVersionAvailable(string localManifestFilePath)
+        public const string ACCESS_TOKEN = "f4963c8a-8a6f-4d0a-b54b-4c0ab3b1141e";
+        public const string REMOTE_MANIFEST_BASE_URI = "https://update.vycetky.eu/manifest";
+
+
+        public VersionChecker()
         {
-            if (!File.Exists(localManifestFilePath)) {
-                return false;
-            }
+        }
 
+
+        public bool IsNewVersionAvailable(Manifest localManifest)
+        {
             try {
-                string localManifestJson = File.ReadAllText(localManifestFilePath);
-                Manifest localManifest = JsonConvert.DeserializeObject<Manifest>(JToken.Parse(localManifestJson).ToString());
-
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(localManifest.RemoteManifestUri);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(localManifest.CurrentVersionCheckUrl);
                 request.Method = "GET";
                 request.ContentType = "application/json";
-                request.Headers["security-token-code"] = localManifest.AccessToken;
+                request.Headers["security-token-code"] = ACCESS_TOKEN;
                 try {
                     using (System.IO.Stream s = request.GetResponse().GetResponseStream()) {
                         using (System.IO.StreamReader sr = new System.IO.StreamReader(s)) {
                             string msg = sr.ReadToEnd();
                             ServerMessage m = JsonConvert.DeserializeObject<ServerMessage>(JToken.Parse(msg).ToString());
-                            Manifest remoteManifest = JsonConvert.DeserializeObject<Manifest>(JToken.Parse(m.Message).ToString());
                             if (!m.Code.Equals("0")) {
                                 return false;
 
                             } else {
-                                if (!remoteManifest.HasVersionHigherThan(localManifest)) {
+                                if (localManifest.Compare(m.Message) >= 0) {
                                     return false;
                                 }
                             }
@@ -58,6 +59,24 @@ namespace Evidoo
                 return false;
             }
 
+            return true;
+        }
+
+
+        public bool DownloadManifestFile(string localManifestFilePath)
+        {
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
+            string manifestUri = string.Format("{0}?v={1}", REMOTE_MANIFEST_BASE_URI, version.ToString());
+            try {
+                using (WebClient client = new WebClient()) {
+                    client.Headers["security-token-code"] = ACCESS_TOKEN;
+                    client.DownloadFile(manifestUri, localManifestFilePath);
+                }
+
+            } catch (WebException we) {
+                return false;
+            }
+            
             return true;
         }
     }

@@ -4,6 +4,7 @@ using Listings.Messages;
 using Listings.Services.ViewModelResolver;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Listings.Views
 {
@@ -23,7 +24,7 @@ namespace Listings.Views
 
         public string AppVersion
         {
-            get { return Bootstrapper.APP_VERSION; }
+            get { return Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
         }
 
 
