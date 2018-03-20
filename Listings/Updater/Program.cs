@@ -34,7 +34,7 @@ namespace Updater
             Updater updater = new Updater();
 
             bool manifestExists;
-            do {
+            while (true) {
                 try {
                     manifestExists = File.Exists(localManifestFilePath);
                     if (!manifestExists) {
@@ -72,7 +72,7 @@ namespace Updater
                     continue;
                 }
 
-            } while (true);
+            }
         }
     }
 }
