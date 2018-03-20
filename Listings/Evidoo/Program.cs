@@ -55,14 +55,11 @@ namespace Evidoo
                 }
             });
 
-            while (true) {
-                if (listingsApp.State == ApplicationState.FINISHED && !Directory.Exists(updateBaseDir)) {
-                    AppDomain.Unload(updaterApp.AppDomain);
-                    break;
-                }
-                
+            while (listingsApp.State != ApplicationState.FINISHED || Directory.Exists(updateBaseDir)) {
                 Thread.Sleep(5000);
             }
+
+            AppDomain.Unload(updaterApp.AppDomain);
         }
     }
 }
