@@ -81,7 +81,7 @@ namespace Evidoo
         }
 
 
-        public delegate void TerminatedApplicationHandler();
+        public delegate void TerminatedApplicationHandler(object sender, EventArgs args);
         public event TerminatedApplicationHandler OnTerminatedApplication;
         private Thread PrepareThread()
         {
@@ -99,7 +99,7 @@ namespace Evidoo
                 _state = ApplicationState.FINISHED;
                 TerminatedApplicationHandler handler = OnTerminatedApplication;
                 if (handler != null) {
-                    handler();
+                    handler(this, EventArgs.Empty);
                 }
             });
 
