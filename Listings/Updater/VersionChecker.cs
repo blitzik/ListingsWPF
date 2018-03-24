@@ -31,30 +31,25 @@ namespace Updater
                 request.Method = "GET";
                 request.ContentType = "application/json";
                 request.Headers["security-token-code"] = ACCESS_TOKEN;
-                try {
-                    using (System.IO.Stream s = request.GetResponse().GetResponseStream()) {
-                        using (System.IO.StreamReader sr = new System.IO.StreamReader(s)) {
-                            string msg = sr.ReadToEnd();
-                            ServerMessage m = JsonConvert.DeserializeObject<ServerMessage>(JToken.Parse(msg).ToString());
-                            if (!m.Code.Equals("0")) {
-                                return false;
+               
+                using (System.IO.Stream s = request.GetResponse().GetResponseStream()) {
+                    using (System.IO.StreamReader sr = new System.IO.StreamReader(s)) {
+                        string msg = sr.ReadToEnd();
+                        ServerMessage m = JsonConvert.DeserializeObject<ServerMessage>(JToken.Parse(msg).ToString());
+                        if (!m.Code.Equals("0")) {
+                            return false;
 
-                            } else {
-                                if (localManifest.Compare(m.Message) >= 0) {
-                                    return false;
-                                }
+                        } else {
+                            if (localManifest.Compare(m.Message) >= 0) {
+                                return false;
                             }
                         }
                     }
-                } catch (WebException we) {
-                    return false;
                 }
-            } catch (FileNotFoundException fnfe) {
-                return false;
 
-            } catch (IOException ioe) {
+            } catch (WebException we) {
                 return false;
-
+            
             } catch (JsonException je) {
                 return false;
             }

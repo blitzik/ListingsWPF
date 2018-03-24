@@ -25,37 +25,9 @@ namespace Listings.Views
             {
                 _listing = value;
                 NotifyOfPropertyChange(() => Listing);
-                RefreshEmployers();
+                WindowTitle.Text = string.Format("{0} [{1} {2} {3}]", BaseWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));             
 
-                WindowTitle.Text = string.Format("{0} [{1} {2} {3}]", BaseWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));
-
-                _years.Clear();
-                _years.Add(value.Year);
-                _months.Clear();
-                _months.Add(Date.Months[12 - value.Month]);
-                SelectedYear = 0;
-                SelectedMonth = 0;
-
-
-                if (value.Employer == null || !_employers.Exists(e => e == value.Employer)) {
-                    SelectedEmployer = _promptEmployer;
-                } else {
-                    SelectedEmployer = value.Employer;
-                }
-
-                Name = value.Name;
-                HourlyWage = value.HourlyWage == null ? null : value.HourlyWage.ToString();
-
-                Vacation = Listing.Vacation;
-                Holiday = Listing.Holiday;
-                SicknessHours = Listing.SicknessHours;
-                VacationDays = Listing.VacationDays;
-                Diets = Listing.Diets;
-                PaidHolidays = Listing.PaidHolidays;
-                Bonuses = Listing.Bonuses;
-                Dollars = Listing.Dollars;
-                Prepayment = Listing.Prepayment;
-                Sickness = Listing.Sickness;
+                Reset(value);
             }
         }
 
@@ -136,7 +108,7 @@ namespace Listings.Views
         public string Vacation
         {
             get { return _vacation; }
-            set { _vacation = value; }
+            set { _vacation = value; NotifyOfPropertyChange(() => Vacation); }
         }
 
 
@@ -144,7 +116,7 @@ namespace Listings.Views
         public string Holiday
         {
             get { return _holiday; }
-            set { _holiday = value; }
+            set { _holiday = value; NotifyOfPropertyChange(() => Holiday); }
         }
 
 
@@ -152,7 +124,7 @@ namespace Listings.Views
         public string SicknessHours
         {
             get { return _sicknessHours; }
-            set { _sicknessHours = value; }
+            set { _sicknessHours = value; NotifyOfPropertyChange(() => SicknessHours); }
         }
 
 
@@ -189,7 +161,7 @@ namespace Listings.Views
         public string VacationDays
         {
             get { return _vacationDays; }
-            set { _vacationDays = value; }
+            set { _vacationDays = value; NotifyOfPropertyChange(() => VacationDays); }
         }
 
 
@@ -197,7 +169,7 @@ namespace Listings.Views
         public string Diets
         {
             get { return _diets; }
-            set { _diets = value; }
+            set { _diets = value; NotifyOfPropertyChange(() => Diets); }
         }
 
 
@@ -205,7 +177,7 @@ namespace Listings.Views
         public string PaidHolidays
         {
             get { return _paidHolidays; }
-            set { _paidHolidays = value; }
+            set { _paidHolidays = value; NotifyOfPropertyChange(() => PaidHolidays); }
         }
 
 
@@ -213,7 +185,7 @@ namespace Listings.Views
         public string Bonuses
         {
             get { return _bonuses; }
-            set { _bonuses = value; }
+            set { _bonuses = value; NotifyOfPropertyChange(() => Bonuses); }
         }
 
 
@@ -221,7 +193,7 @@ namespace Listings.Views
         public string Dollars
         {
             get { return _dollars; }
-            set { _dollars = value; }
+            set { _dollars = value; NotifyOfPropertyChange(() => Dollars); }
         }
 
 
@@ -229,7 +201,7 @@ namespace Listings.Views
         public string Prepayment
         {
             get { return _prepayment; }
-            set { _prepayment = value; }
+            set { _prepayment = value; NotifyOfPropertyChange(() => Prepayment); }
         }
 
 
@@ -237,7 +209,7 @@ namespace Listings.Views
         public string Sickness
         {
             get { return _sickness; }
-            set { _sickness = value; }
+            set { _sickness = value; NotifyOfPropertyChange(() => Sickness); }
         }
 
 
@@ -288,6 +260,8 @@ namespace Listings.Views
         {
             _employers = _employerFacade.FindAllEmployers();
             _employers.Insert(0, _promptEmployer);
+
+            NotifyOfPropertyChange(() => Employers);
         }
 
 
@@ -327,12 +301,56 @@ namespace Listings.Views
         }
 
 
+        private void Reset(Listing listing)
+        {
+            RefreshEmployers();
+
+            _years.Clear();
+            _years.Add(listing.Year);
+            _months.Clear();
+            _months.Add(Date.Months[12 - listing.Month]);
+
+            SelectedYear = 0;
+            SelectedMonth = 0;
+
+
+            if (listing.Employer == null || !_employers.Exists(e => e == listing.Employer)) {
+                SelectedEmployer = _promptEmployer;
+            } else {
+                SelectedEmployer = listing.Employer;
+            }
+
+            Name = listing.Name;
+            HourlyWage = listing.HourlyWage == null ? null : listing.HourlyWage.ToString();
+
+            Vacation = Listing.Vacation;
+            Holiday = Listing.Holiday;
+            SicknessHours = Listing.SicknessHours;
+            VacationDays = Listing.VacationDays;
+            Diets = Listing.Diets;
+            PaidHolidays = Listing.PaidHolidays;
+            Bonuses = Listing.Bonuses;
+            Dollars = Listing.Dollars;
+            Prepayment = Listing.Prepayment;
+            Sickness = Listing.Sickness;
+        }
+
+
+
         // -----
 
 
         public void Handle(ListingMessage message)
         {
             Listing = message.Listing;
+        }
+
+
+        protected override void OnActivate()
+        {
+            if (Listing != null) {
+                Reset(Listing);
+            }
         }
     }
 }
