@@ -60,7 +60,7 @@ namespace Evidoo
                     AppDomain.Unload(updaterApp.AppDomain);
                     break;
                 }
-                
+
                 Thread.Sleep(5000);
             }
         }

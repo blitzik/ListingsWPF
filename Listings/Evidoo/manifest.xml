@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Manifest>
+  <Version>1.0.0.0</Version>
+  <CurrentVersionCheckUrl>https://update.vycetky.eu</CurrentVersionCheckUrl>
+  <PatchUrl>https://update.vycetky.eu/op</PatchUrl>
+</Manifest>
