@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Listings.Views"
              xmlns:converters="clr-namespace:Listings.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="700">
+             d:DesignHeight="500" d:DesignWidth="1200">
 
     <UserControl.Resources>
         <converters:MonthNameToIntConverter x:Key="MonthNameToIntConverter" />
@@ -40,6 +40,8 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="10" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="10" />
                     <ColumnDefinition Width="0.5*" />
@@ -63,11 +65,21 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
 
-                <Border Grid.Row="0" Grid.Column="2" Background="#FFF" BorderBrush="#FFABADB3" BorderThickness="1">
+                <Button Grid.Row="0" Grid.Column="2" Command="{Binding ExpandItemsCommand}" Style="{StaticResource DefaultButton}" ToolTip="Zobrazit položky celého měsíce">
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="20" Height="20" Fill="#333">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource ListIcon}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </StackPanel>
+                </Button>
+
+                <Border Grid.Row="0" Grid.Column="4" Background="#FFF" BorderBrush="#FFABADB3" BorderThickness="1">
                     <TextBlock Text="{Binding Listing.TotalWorkedHours, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeToTimeInWordsConverter}}" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Border>
 
-                <Border Grid.Row="0" Grid.Column="4" Background="#FFF" BorderBrush="#FFABADB3" BorderThickness="1">
+                <Border Grid.Row="0" Grid.Column="6" Background="#FFF" BorderBrush="#FFABADB3" BorderThickness="1">
                     <TextBlock FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <TextBlock.Text>
                             <MultiBinding UpdateSourceTrigger="PropertyChanged" StringFormat="{}{0} / {1} dní">

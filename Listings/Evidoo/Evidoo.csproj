@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="Application.cs" />
     <Compile Include="ApplicationsLauncher.cs" />
-    <Compile Include="DirectoryEqualizer.cs" />
     <Compile Include="IApplication.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

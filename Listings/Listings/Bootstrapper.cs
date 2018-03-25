@@ -126,6 +126,8 @@ namespace Listings
         {
             ObjectContainerRegistry ocr = _container.GetInstance<ObjectContainerRegistry>();
             ocr.CloseAll();
+
+            mutex.ReleaseMutex();
         }
 
 

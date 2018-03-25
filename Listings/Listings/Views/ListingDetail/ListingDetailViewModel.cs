@@ -38,6 +38,7 @@ namespace Listings.Views
                     DisplayableItems = new ObservableCollection<DayItem>(value.DayItems);
                 }
                 NotifyOfPropertyChange(() => SelectedWeek);
+                ExpandItemsCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -139,6 +140,22 @@ namespace Listings.Views
         }
 
 
+        private DelegateCommand<object> _expandItemsCommand;
+        public DelegateCommand<object> ExpandItemsCommand
+        {
+            get
+            {
+                if (_expandItemsCommand == null) {
+                    _expandItemsCommand = new DelegateCommand<object>(
+                        p => ExpandItems(),
+                        p => SelectedWeek != null
+                    );
+                }
+                return _expandItemsCommand;
+            }
+        }
+
+
         private List<DayItem> _dayItems;
 
         private readonly ListingFacade _listingFacade;
@@ -203,6 +220,12 @@ namespace Listings.Views
             _dayItems[day].Update(newItem);
 
             _listingFacade.Save(Listing);
+        }
+
+
+        private void ExpandItems()
+        {
+            SelectedWeek = null;
         }
 
 

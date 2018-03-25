@@ -22,9 +22,10 @@ namespace Listings.Views
         }
 
 
+        private string _version;
         public string AppVersion
         {
-            get { return Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
+            get { return _version; }
         }
 
 
@@ -36,11 +37,14 @@ namespace Listings.Views
         public MainWindowViewModel(
             IEventAggregator eventAggregator,
             IViewModelResolver<IViewModel> viewModelResolver
-        ) {
+        )
+        {
             _viewModels = new Dictionary<string, IViewModel>();
             _viewModelResolver = viewModelResolver;
 
             eventAggregator.Subscribe(this);
+
+            _version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
             DisplayListingsOverview();
         }
@@ -93,8 +97,8 @@ namespace Listings.Views
 
 
         // -----
-       
-        
+
+
         public void Handle(ChangeViewMessage message)
         {
             ActivateItem(GetViewModel(message.ViewModelName));
