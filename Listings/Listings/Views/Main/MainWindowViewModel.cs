@@ -22,10 +22,9 @@ namespace Listings.Views
         }
 
 
-        private string _version;
         public string AppVersion
         {
-            get { return _version; }
+            get { return Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
         }
 
 
@@ -42,9 +41,6 @@ namespace Listings.Views
             _viewModelResolver = viewModelResolver;
 
             eventAggregator.Subscribe(this);
-
-            Version v = Assembly.GetExecutingAssembly().GetName().Version;
-            _version = string.Format("{0}.{1}", v.Major, v.Minor);
 
             DisplayListingsOverview();
         }
