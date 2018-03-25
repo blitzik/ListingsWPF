@@ -80,6 +80,8 @@ namespace Updater
             t.Start();
 
             t.Join();
+
+            mutex.ReleaseMutex();
         }
 
 

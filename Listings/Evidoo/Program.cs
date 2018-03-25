@@ -63,6 +63,8 @@ namespace Evidoo
 
                 Thread.Sleep(5000);
             }
+
+            mutex.ReleaseMutex();
         }
     }
 }
