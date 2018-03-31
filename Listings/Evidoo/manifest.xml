@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Manifest>
   <Version>1.1.3.0</Version>
-  <CurrentVersionCheckUrl>https://update.vycetky.eu</CurrentVersionCheckUrl>
-  <PatchUrl>https://update.vycetky.eu/op</PatchUrl>
+  <CurrentVersionCheckUrl>http://127.0.0.1/subdom/update/www</CurrentVersionCheckUrl>
+  <PatchUrl>http://127.0.0.1/subdom/update/www/op</PatchUrl>
 </Manifest>
