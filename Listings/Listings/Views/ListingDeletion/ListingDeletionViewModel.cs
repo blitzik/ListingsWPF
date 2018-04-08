@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class ListingDeletionViewModel : ScreenBaseViewModel, IHandle<ListingMessage>
+    public class ListingDeletionViewModel : BaseScreen, IHandle<ListingMessage>
     {
         private Listing _listing;
         public Listing Listing
@@ -76,12 +76,17 @@ namespace Listings.Views
 
         private ListingFacade _listingFacade;
 
-        public ListingDeletionViewModel(IEventAggregator eventAggregator, ListingFacade listingFacade) : base(eventAggregator)
+        public ListingDeletionViewModel(ListingFacade listingFacade)
         {
-            eventAggregator.Subscribe(this);
             BaseWindowTitle = "Odstranění výčetky";
 
             _listingFacade = listingFacade;            
+        }
+
+
+        protected override void OnInitialize()
+        {
+            EventAggregator.Subscribe(this);
         }
 
 

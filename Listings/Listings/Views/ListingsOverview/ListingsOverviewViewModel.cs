@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 
 namespace Listings.Views
 {
-    public class ListingsOverviewViewModel : ScreenBaseViewModel
+    public class ListingsOverviewViewModel : BaseScreen
     {
         private DelegateCommand<Listing> _openListingCommand;
         public DelegateCommand<Listing> OpenListingCommand
@@ -69,9 +69,8 @@ namespace Listings.Views
 
 
         public ListingsOverviewViewModel(
-            IEventAggregator eventAggregator,
             ListingFacade listingFacade
-        ) : base(eventAggregator) {
+        ) {
             BaseWindowTitle = "Přehled výčetek";
             _listingFacade = listingFacade;
             Listings = new ObservableCollection<Listing>(listingFacade.FindListings(DateTime.Now.Year));

@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace Listings.Views
 {
-    public class EmptyListingsGenerationViewModel : ScreenBaseViewModel
+    public class EmptyListingsGenerationViewModel : BaseScreen
     {
         private List<int> _years;
         public List<int> Years
@@ -55,12 +55,11 @@ namespace Listings.Views
 
 
         public EmptyListingsGenerationViewModel(
-            IEventAggregator eventAggregator,
             IWindowManager windowManager,
             ISavingFilePathSelector savingFilePathSelector,
             IMultipleListingReportFactory multipleListingReportFactory,
             IListingReportGenerator listingReportGenerator
-        ) : base(eventAggregator) {
+        ) {
             BaseWindowTitle = "Generování prázných výčetek";
             SelectedYear = DateTime.Now.Year;
 
@@ -88,7 +87,7 @@ namespace Listings.Views
                 return;
             }
 
-            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel(EventAggregator);
+            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel();
             Task.Run(async () => {
                 List<Listing> list = new List<Listing>();
                 for (int month = 0; month < 12; month++) {

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class WorkedTimeSettingViewModel : ScreenBaseViewModel
+    public class WorkedTimeSettingViewModel : BaseScreen
     {
         private int _startTime;
         public int StartTime
@@ -369,7 +369,7 @@ namespace Listings.Views
         private TimeSetting _lastSetTime;
 
 
-        public WorkedTimeSettingViewModel(IEventAggregator eventAggregator, TimeSetting defaultTimeSettings, TimeSetting timeSetting, int timeTickInMinutes) : base(eventAggregator)
+        public WorkedTimeSettingViewModel(TimeSetting defaultTimeSettings, TimeSetting timeSetting, int timeTickInMinutes)
         {
             _defaultTimeSettings = defaultTimeSettings;
             _lastSetTime = timeSetting;

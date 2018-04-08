@@ -1,16 +1,13 @@
 ﻿using Caliburn.Micro;
 using Listings.Domain;
 using Listings.Messages;
-using Listings.Services.ViewModelResolver;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace Listings.Views
 {
-    public class MainWindowViewModel : Conductor<IViewModel>.Collection.OneActive, IHandle<ChangeViewMessage>
+    public class MainWindowViewModel : BaseConductorOneActive, IHandle<ChangeViewMessage>
     {
-        private PageTitle _title;
+        private PageTitle _title = new PageTitle();
         public PageTitle Title
         {
             get { return _title; }
@@ -29,71 +26,47 @@ namespace Listings.Views
         }
 
 
-        private IViewModelResolver<IViewModel> _viewModelResolver;
-
-        private Dictionary<string, IViewModel> _viewModels;
-
-
-        public MainWindowViewModel(
-            IEventAggregator eventAggregator,
-            IViewModelResolver<IViewModel> viewModelResolver
-        )
+        public MainWindowViewModel()
         {
-            _viewModels = new Dictionary<string, IViewModel>();
-            _viewModelResolver = viewModelResolver;
-
-            eventAggregator.Subscribe(this);
-
             _version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
 
+
+        protected override void OnInitialize()
+        {
+            EventAggregator.Subscribe(this);
             DisplayListingsOverview();
         }
 
 
         public void DisplayListingsOverview()
         {
-            ActivateItem(GetViewModel(nameof(ListingsOverviewViewModel)));
+            DisplayView(nameof(ListingsOverviewViewModel));
         }
 
 
         public void DisplayListingCreation()
         {
-            ActivateItem(GetViewModel(nameof(ListingViewModel)));
+            DisplayView(nameof(ListingViewModel));
         }
 
 
         public void DisplayEmployersList()
         {
-            ActivateItem(GetViewModel(nameof(EmployersViewModel)));
+            DisplayView(nameof(EmployersViewModel));
         }
 
 
         public void DisplaySettings()
         {
-            ActivateItem(GetViewModel(nameof(SettingsViewModel)));
+            DisplayView(nameof(SettingsViewModel));
         }
 
 
         public void DisplayEmptyListingsGeneration()
         {
-            ActivateItem(GetViewModel(nameof(EmptyListingsGenerationViewModel)));
-        }
-
-
-        public override void ActivateItem(IViewModel item)
-        {
-            if (ActiveItem == item) {
-                return;
-            }
-
-            string typeName = item.GetType().Name;
-            if (!_viewModels.ContainsKey(typeName)) {
-                _viewModels.Add(typeName, item);
-            }
-
-            Title = item.WindowTitle;
-            base.ActivateItem(item);
-        }
+            DisplayView(nameof(EmptyListingsGenerationViewModel));
+        }        
 
 
         // -----
@@ -105,22 +78,16 @@ namespace Listings.Views
         }
 
 
-        private IViewModel GetViewModel(string viewModelName)
+        // -----
+
+
+        public override void ActivateItem(IViewModel item)
         {
-            IViewModel viewModel;
-            if (!_viewModels.ContainsKey(viewModelName)) {
-                viewModel = _viewModelResolver.Resolve(viewModelName);
-                if (viewModel == null) {
-                    throw new Exception("Requested ViewModel does not Exist!");
-                }
-                _viewModels.Add(viewModelName, viewModel);
+            Title = item.WindowTitle;
 
-            } else {
-                viewModel = _viewModels[viewModelName];
-            }
-
-            return viewModel;
+            base.ActivateItem(item);
         }
+
 
     }
 }

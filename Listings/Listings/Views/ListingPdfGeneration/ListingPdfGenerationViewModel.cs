@@ -24,7 +24,7 @@ using System.Windows.Forms;
 
 namespace Listings.Views
 {
-    public class ListingPdfGenerationViewModel : ScreenBaseViewModel, IHandle<ListingMessage>
+    public class ListingPdfGenerationViewModel : BaseScreen, IHandle<ListingMessage>
     {
         private Listing _listing;
         public Listing Listing
@@ -105,15 +105,12 @@ namespace Listings.Views
 
 
         public ListingPdfGenerationViewModel(
-            IEventAggregator eventAggregator,
             SettingFacade settingFacade,
             IWindowManager windowManager,
             ISavingFilePathSelector savingFilePathSelector,
             IListingPdfDocumentFactory listingPdfDocumentFactory,
             IListingReportGenerator listingReportGenerator
-        ) : base(eventAggregator) {
-            eventAggregator.Subscribe(this);
-
+        ) {
             BaseWindowTitle = "Generování PDF dokumentu";
 
             _settingFacade = settingFacade;
@@ -129,6 +126,12 @@ namespace Listings.Views
         }
 
 
+        protected override void OnInitialize()
+        {
+            EventAggregator.Subscribe(this);
+        }
+
+
         private void GeneratePdf()
         {
             string filePath = _savingFilePathSelector.GetFilePath(string.Format("{0} {1} - {2}", Date.Months[12 - Listing.Month], Listing.Year, Listing.Name), PrepareDialog);
@@ -136,7 +139,7 @@ namespace Listings.Views
                 return;
             }
 
-            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel(EventAggregator) { Text = "Vytváří se Váš PDF dokument..." };
+            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel() { Text = "Vytváří se Váš PDF dokument..." };
             Task.Run(async () => {
                 Document doc = _listingPdfDocumentFactory.Create(Listing, _pdfSetting);
                 _listingReportGenerator.Save(filePath, doc);

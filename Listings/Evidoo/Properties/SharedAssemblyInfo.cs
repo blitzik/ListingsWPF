@@ -25,5 +25,5 @@ using System.Windows;
  So, if your app its on 3.2.1.0. You know you're at the alpha stage of the 3.2 version. And so on. 
 */
 
-[assembly: AssemblyVersion("1.1.3.0")]
-[assembly: AssemblyFileVersion("1.1.3.0")]
+[assembly: AssemblyVersion("1.2.3.0")]
+[assembly: AssemblyFileVersion("1.2.3.0")]

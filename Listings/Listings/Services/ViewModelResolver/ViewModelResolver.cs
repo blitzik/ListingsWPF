@@ -1,10 +1,6 @@
 ﻿using Caliburn.Micro;
 using Listings.Views;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Listings.Services.ViewModelResolver
 {
@@ -21,7 +17,12 @@ namespace Listings.Services.ViewModelResolver
 
         public IViewModel Resolve(string viewModel)
         {
-           return (IViewModel)_container.GetInstance(Type.GetType(viewModel), viewModel);
+            IViewModel vm = _container.GetInstance(Type.GetType(viewModel), viewModel) as IViewModel;
+            if (vm != null) {
+                _container.BuildUp(vm);
+            }
+
+            return vm;
         }
     }
 }

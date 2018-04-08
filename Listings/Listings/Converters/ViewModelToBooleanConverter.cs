@@ -17,7 +17,7 @@ namespace Listings.Converters
                 return Binding.DoNothing;
             }
 
-            ScreenBaseViewModel viewModel = (ScreenBaseViewModel)value;
+            BaseScreen viewModel = (BaseScreen)value;
             string checkValue = viewModel.GetType().Name;
             string targetValue = (string)parameter;
 

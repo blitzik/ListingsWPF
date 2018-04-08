@@ -7,9 +7,9 @@ using Caliburn.Micro;
 
 namespace Listings.Views
 {
-    public class SuccessViewModel : ScreenBaseViewModel
+    public class SuccessViewModel : BaseScreen
     {
-        public SuccessViewModel(IEventAggregator eventAggregator) : base(eventAggregator)
+        public SuccessViewModel()
         {
         }
     }

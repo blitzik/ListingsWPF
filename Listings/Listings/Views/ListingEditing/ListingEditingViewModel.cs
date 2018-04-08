@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class ListingEditingViewModel : ScreenBaseViewModel, IHandle<ListingMessage>
+    public class ListingEditingViewModel : BaseScreen, IHandle<ListingMessage>
     {
         private Listing _listing;
         public Listing Listing
@@ -244,15 +244,20 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
         
-        public ListingEditingViewModel(IEventAggregator eventAggregator, ListingFacade listingFacade, EmployerFacade employerFacade) : base(eventAggregator)
+        public ListingEditingViewModel(ListingFacade listingFacade, EmployerFacade employerFacade)
         {
-            eventAggregator.Subscribe(this);
             BaseWindowTitle = "Úprava výčetky";
 
             _listingFacade = listingFacade;
             _employerFacade = employerFacade;
 
             _selectedEmployer = _promptEmployer;
+        }
+
+
+        protected override void OnInitialize()
+        {
+            EventAggregator.Subscribe(this);
         }
 
 

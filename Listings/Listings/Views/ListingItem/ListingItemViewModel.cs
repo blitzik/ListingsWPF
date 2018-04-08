@@ -18,7 +18,7 @@ using System.Collections.ObjectModel;
 
 namespace Listings.Views
 {
-    public class ListingItemViewModel : ScreenBaseViewModel, IHandle<EditDayItemMessage>
+    public class ListingItemViewModel : BaseScreen, IHandle<EditDayItemMessage>
     {
         private string _header;
         public string Header
@@ -126,15 +126,19 @@ namespace Listings.Views
         private DefaultSettings _defaultSettings;
 
 
-        public ListingItemViewModel(IEventAggregator eventAggregator, ListingFacade listingFacade, SettingFacade settingFacade) : base(eventAggregator)
+        public ListingItemViewModel(ListingFacade listingFacade, SettingFacade settingFacade)
         {
-            eventAggregator.Subscribe(this);
-
             _listingFacade = listingFacade;
             _settingFacade = settingFacade;
 
             Localities = new ObservableCollection<string>();
             //DayItem = dayItem;
+        }
+
+
+        protected override void OnInitialize()
+        {
+            EventAggregator.Subscribe(this);
         }
 
 
@@ -149,10 +153,10 @@ namespace Listings.Views
                 ListingItem l = dayItem.ListingItem;
                 Locality = l.Locality;
 
-                WorkedTimeViewModel = new WorkedTimeSettingViewModel(_eventAggregator, _defaultSettings.Time, l.TimeSetting, _defaultSettings.TimeTickInMinutes);
+                WorkedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSettings.Time, l.TimeSetting, _defaultSettings.TimeTickInMinutes);
 
             } else {
-                WorkedTimeViewModel = new WorkedTimeSettingViewModel(_eventAggregator, _defaultSettings.Time, _defaultSettings.Time, _defaultSettings.TimeTickInMinutes);
+                WorkedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSettings.Time, _defaultSettings.Time, _defaultSettings.TimeTickInMinutes);
             }
 
             Localities = new ObservableCollection<string>(dayItem.Localities);

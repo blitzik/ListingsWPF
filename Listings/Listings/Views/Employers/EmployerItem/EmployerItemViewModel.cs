@@ -1,19 +1,14 @@
-﻿using Caliburn.Micro;
-using Listings.Commands;
+﻿using Listings.Commands;
 using Listings.Domain;
 using Listings.Facades;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class EmployerItemViewModel : ScreenBaseViewModel
+    public class EmployerItemViewModel : BaseScreen
     {
-        private ScreenBaseViewModel _currentViewModel;
-        public ScreenBaseViewModel CurrentViewModel
+        private BaseScreen _currentViewModel;
+        public BaseScreen CurrentViewModel
         {
             get { return _currentViewModel; }
             set
@@ -32,7 +27,7 @@ namespace Listings.Views
             get
             {
                 if (_employerDetailViewModel == null) {
-                    _employerDetailViewModel = new EmployerDetailViewModel(EventAggregator, _employerFacade, Employer);
+                    _employerDetailViewModel = new EmployerDetailViewModel(_employerFacade, Employer);
                     _employerDetailViewModel.OnDeletionClicked += (object sender, EventArgs args) => {
                         ChangeView(nameof(EmployerDeletionViewModel));
                     };
@@ -51,7 +46,7 @@ namespace Listings.Views
             get
             {
                 if (_employerDeletionViewModel == null) {
-                    _employerDeletionViewModel = new EmployerDeletionViewModel(EventAggregator, _employerFacade, Employer);
+                    _employerDeletionViewModel = new EmployerDeletionViewModel(_employerFacade, Employer);
                     _employerDeletionViewModel.OnDeletedEmployer += (object sender, EventArgs args) => {
                         EmployerDeletionHandler handler = OnDeletedEmployer;
                         if (handler != null) {
@@ -92,7 +87,7 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
 
-        public EmployerItemViewModel(IEventAggregator eventAggregator, EmployerFacade employerFacade, Employer employer) : base(eventAggregator)
+        public EmployerItemViewModel(EmployerFacade employerFacade, Employer employer)
         {
             _employer = employer;
             _employerFacade = employerFacade;

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class EmployersViewModel : ScreenBaseViewModel
+    public class EmployersViewModel : BaseScreen
     {
         private EmployerFacade _employerFacade;
 
@@ -55,7 +55,7 @@ namespace Listings.Views
         }
 
 
-        public EmployersViewModel(IEventAggregator eventAggregator, EmployerFacade employerFacade) : base(eventAggregator)
+        public EmployersViewModel(EmployerFacade employerFacade)
         {
             _employerFacade = employerFacade;
 
@@ -78,7 +78,7 @@ namespace Listings.Views
 
         private EmployerItemViewModel CreateEmployerItemViewModel(Employer employer)
         {
-            EmployerItemViewModel vm = new EmployerItemViewModel(EventAggregator, _employerFacade, employer);
+            EmployerItemViewModel vm = new EmployerItemViewModel(_employerFacade, employer);
             vm.OnDeletedEmployer += OnEmployerDeletion;
 
             return vm;

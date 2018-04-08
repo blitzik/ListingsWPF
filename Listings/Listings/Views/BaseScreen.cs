@@ -2,22 +2,17 @@
 using Listings.Domain;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public abstract class ConductorOneActiveBaseViewModel : Conductor<IViewModel>.Collection.OneActive, IViewModel
+    public abstract class BaseScreen : Screen, IViewModel
     {
-        protected string _viewModelName;
-        public string ViewModelName
-        {
-            get { return _viewModelName; }
-        }
-
-
-        protected PageTitle _windowTitle;
+        protected PageTitle _windowTitle = new PageTitle();
         public PageTitle WindowTitle
         {
             get { return _windowTitle; }
@@ -41,19 +36,12 @@ namespace Listings.Views
         }
 
 
-        protected IEventAggregator _eventAggregator;
+        // property injection
+        private IEventAggregator _eventAggregator;
         public IEventAggregator EventAggregator
         {
             get { return _eventAggregator; }
+            set { _eventAggregator = value; }
         }
-
-
-        public ConductorOneActiveBaseViewModel(IEventAggregator eventAggregator)
-        {
-            _viewModelName = this.GetType().Name;
-            _eventAggregator = eventAggregator;
-            _windowTitle = new PageTitle();
-        }
-
     }
 }

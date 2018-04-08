@@ -12,7 +12,7 @@ using System.Collections.ObjectModel;
 
 namespace Listings.Views
 {
-    public class ListingDetailViewModel : ScreenBaseViewModel, IHandle<ListingMessage>
+    public class ListingDetailViewModel : BaseScreen, IHandle<ListingMessage>
     {
         private Listing _listing;
         public Listing Listing
@@ -162,13 +162,16 @@ namespace Listings.Views
 
 
         public ListingDetailViewModel(
-            IEventAggregator eventAggregator,
             ListingFacade listingFacade
-        ) : base(eventAggregator) {
-            eventAggregator.Subscribe(this);
-
+        ) {
             _dayItems = new List<DayItem>();
             _listingFacade = listingFacade;
+        }
+
+
+        protected override void OnInitialize()
+        {
+            EventAggregator.Subscribe(this);
         }
 
 
