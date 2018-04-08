@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Caliburn.Micro;
-
-namespace Listings.Views
+﻿namespace Listings.Views
 {
-    public class ProgressViewModel : ScreenBaseViewModel
+    public class ProgressViewModel : BaseScreen
     {
         private string _text;
         public string Text
@@ -21,7 +14,7 @@ namespace Listings.Views
         }
 
 
-        public ProgressViewModel(IEventAggregator eventAggregator) : base(eventAggregator)
+        public ProgressViewModel()
         {
             Text = "Probíhá zpracování Vašeho požadavku";
         }

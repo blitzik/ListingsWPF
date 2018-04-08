@@ -1,19 +1,15 @@
 ﻿using Caliburn.Micro;
 using Listings.Commands;
 using Listings.Domain;
-using Listings.EventArguments;
 using Listings.Facades;
 using Listings.Messages;
 using Listings.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class ListingViewModel : ScreenBaseViewModel
+    public class ListingViewModel : BaseScreen
     {
         private ListingFacade _listingFacade;
         private EmployerFacade _employerFacade;
@@ -135,7 +131,7 @@ namespace Listings.Views
         }
 
 
-        public ListingViewModel(IEventAggregator eventAggregator, ListingFacade listingFacade, EmployerFacade employerFacade) : base(eventAggregator)
+        public ListingViewModel(ListingFacade listingFacade, EmployerFacade employerFacade)
         {
             _listingFacade = listingFacade;
             _employerFacade = employerFacade;

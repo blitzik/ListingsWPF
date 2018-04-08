@@ -20,7 +20,7 @@ using System.Windows.Forms;
 
 namespace Listings.Views
 {
-    public class SettingsViewModel : ScreenBaseViewModel
+    public class SettingsViewModel : BaseScreen
     {
         private WorkedTimeSettingViewModel _workedTimeViewModel;
         public WorkedTimeSettingViewModel WorkedTimeViewModel
@@ -154,12 +154,11 @@ namespace Listings.Views
 
 
         public SettingsViewModel(
-            IEventAggregator eventAggregator,
             IWindowManager windowManager,
             SettingFacade settingFacade,
             ISavingFilePathSelector savingFilePathSelector,
             IOpeningFilePathSelector openingFilePathSelector
-        ) : base(eventAggregator) {
+        ) {
             _windowManager = windowManager;
             _settingFacade = settingFacade;
             _savingFilePathSelector = savingFilePathSelector;
@@ -177,7 +176,7 @@ namespace Listings.Views
             PdfSetting = CreateNewPdfSetting(_defaultSetting.Pdfsetting);
 
             if (_workedTimeViewModel == null) {
-                _workedTimeViewModel = new WorkedTimeSettingViewModel(_eventAggregator, _defaultSetting.Time, _defaultSetting.Time, _defaultSetting.TimeTickInMinutes);
+                _workedTimeViewModel = new WorkedTimeSettingViewModel(_defaultSetting.Time, _defaultSetting.Time, _defaultSetting.TimeTickInMinutes);
                 _workedTimeViewModel.OnTimeChanged += (object sender, WorkedTimeEventArgs args) =>
                 {
                     CancelChangesCommand.RaiseCanExecuteChanged();
@@ -271,7 +270,7 @@ namespace Listings.Views
                 return;
             }
 
-            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel(EventAggregator);
+            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel();
             Task.Run(async () => {
                 _settingFacade.BackupData(filePath);
 
@@ -287,7 +286,7 @@ namespace Listings.Views
 
         private async void ImportBackup()
         {
-            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel(EventAggregator);
+            ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel();
             Task<ResultObject> t = Task<ResultObject>.Run(async () => {
                 ResultObject r = _settingFacade.ImportBackup(BackupFilePath);
 

@@ -173,24 +173,16 @@
     <Compile Include="Services\Pdf\MultipleListingReportFactory.cs" />
     <Compile Include="Services\ViewModelResolver\IViewModelResolver.cs" />
     <Compile Include="Services\ViewModelResolver\ViewModelResolver.cs" />
-    <Compile Include="Views\ConductorOneActiveBaseViewModel.cs" />
-    <Compile Include="Views\Employers\EmployersViewModelFactory.cs" />
+    <Compile Include="Views\BaseConductorOneActive.cs" />
     <Compile Include="Views\EmptyListingsGeneration\EmptyListingsGenerationView.xaml.cs">
       <DependentUpon>EmptyListingsGenerationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EmptyListingsGeneration\EmptyListingsGenerationViewModel.cs" />
     <Compile Include="Views\IViewModel.cs" />
-    <Compile Include="Views\ListingDeletion\ListingDeletionViewModelFactory.cs" />
-    <Compile Include="Views\ListingDetail\ListingDetailViewModelFactory.cs" />
-    <Compile Include="Views\ListingEditing\ListingEditingViewModelFactory.cs" />
-    <Compile Include="Views\ListingItem\ListingItemViewModelFactory.cs" />
     <Compile Include="Views\ListingPdfGeneration\ListingPdfGenerationView.xaml.cs">
       <DependentUpon>ListingPdfGenerationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ListingPdfGeneration\ListingPdfGenerationViewModel.cs" />
-    <Compile Include="Views\ListingPdfGeneration\ListingPdfGenerationViewModelFactory.cs" />
-    <Compile Include="Views\ListingsOverview\ListingsOverviewViewModelFactory.cs" />
-    <Compile Include="Views\Listing\ListingViewModelFactory.cs" />
     <Compile Include="Views\ProgressBarWindow\Failure\FailureView.xaml.cs">
       <DependentUpon>FailureView.xaml</DependentUpon>
     </Compile>
@@ -207,7 +199,6 @@
       <DependentUpon>SuccessView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProgressBarWindow\Success\SuccessViewModel.cs" />
-    <Compile Include="Views\Settings\SettingsViewModelFactory.cs" />
     <Compile Include="Views\StartupErrorWindow\StartupErrorWindowView.xaml.cs">
       <DependentUpon>StartupErrorWindowView.xaml</DependentUpon>
     </Compile>
@@ -251,7 +242,7 @@
     </Compile>
     <Compile Include="Views\ListingItem\ListingItemViewModel.cs" />
     <Compile Include="Views\ListingsOverview\ListingsOverviewViewModel.cs" />
-    <Compile Include="Views\ScreenBaseViewModel.cs" />
+    <Compile Include="Views\BaseScreen.cs" />
     <Compile Include="Views\ListingsOverview\ListingsOverviewView.xaml.cs">
       <DependentUpon>ListingsOverviewView.xaml</DependentUpon>
     </Compile>

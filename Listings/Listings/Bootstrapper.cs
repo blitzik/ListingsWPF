@@ -1,7 +1,6 @@
 ﻿using Caliburn.Micro;
 using Db4objects.Db4o;
 using Db4objects.Db4o.Ext;
-using Db4objects.Db4o.Linq;
 using Listings.Domain;
 using Listings.Facades;
 using Listings.Services;
@@ -12,11 +11,7 @@ using Listings.Services.ViewModelResolver;
 using Listings.Views;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Listings
@@ -75,17 +70,6 @@ namespace Listings
             _container.Singleton<EmptyListingsGenerationViewModel>(nameof(EmptyListingsGenerationViewModel));
 
 
-            // ViewModel's factories
-            _container.Singleton<EmployersViewModelFactory>();
-            _container.Singleton<ListingViewModelFactory>();
-            _container.Singleton<ListingDeletionViewModelFactory>();
-            _container.Singleton<ListingDetailViewModelFactory>();
-            _container.Singleton<ListingEditingViewModelFactory>();
-            _container.Singleton<ListingItemViewModelFactory>();
-            _container.Singleton<ListingPdfGenerationViewModelFactory>();
-            _container.Singleton<ListingsOverviewViewModelFactory>();
-            _container.Singleton<SettingsViewModelFactory>();
-
             _container.Instance(_container);
         }
 
@@ -103,7 +87,9 @@ namespace Listings
                 IObjectContainer db = _container.GetInstance<Db4oObjectContainerFactory>().Create(Db4oObjectContainerFactory.MAIN_DATABASE_NAME);
 
                 ocr.Add(Db4oObjectContainerFactory.MAIN_DATABASE_NAME, db);
-                _container.GetInstance<IWindowManager>().ShowWindow(_container.GetInstance<MainWindowViewModel>());
+                var vm = _container.GetInstance<MainWindowViewModel>();
+                _container.BuildUp(vm);
+                _container.GetInstance<IWindowManager>().ShowWindow(vm);
 
             } catch (DatabaseFileLockedException ex) {
                 ro = new ResultObject(false);

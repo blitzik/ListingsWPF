@@ -1,20 +1,8 @@
-﻿using Caliburn.Micro;
-using Db4objects.Db4o;
-using Db4objects.Db4o.Linq;
-using Listings.Commands;
-using Listings.Domain;
-using Listings.Facades;
-using Listings.Services;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Listings.Commands;
 
 namespace Listings.Views
 {
-    public class StartupErrorWindowViewModel : ScreenBaseViewModel
+    public class StartupErrorWindowViewModel : BaseScreen
     {
         private string _text;
         public string Text
@@ -41,12 +29,8 @@ namespace Listings.Views
         }
         
 
-        private readonly Db4oObjectContainerFactory _dbFactory;
-        private readonly IWindowManager _windowManager;
-
-        public StartupErrorWindowViewModel(
-            IEventAggregator eventAggregator
-        ) : base(eventAggregator) {
+        public StartupErrorWindowViewModel()
+        {
         }
     }
 }

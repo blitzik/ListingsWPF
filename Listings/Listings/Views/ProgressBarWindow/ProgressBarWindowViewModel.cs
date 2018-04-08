@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class ProgressBarWindowViewModel : ConductorOneActiveBaseViewModel
+    public class ProgressBarWindowViewModel : BaseConductorOneActive
     {
         public string Text
         {
@@ -25,7 +25,7 @@ namespace Listings.Views
             get
             {
                 if (_progressViewModel == null) {
-                    _progressViewModel = new ProgressViewModel(EventAggregator);
+                    _progressViewModel = new ProgressViewModel();
                 }
                 return _progressViewModel;
             }
@@ -38,7 +38,7 @@ namespace Listings.Views
             get
             {
                 if (_successViewModel == null) {
-                    _successViewModel = new SuccessViewModel(EventAggregator);
+                    _successViewModel = new SuccessViewModel();
                 }
                 return _successViewModel;
             }
@@ -51,7 +51,7 @@ namespace Listings.Views
             get
             {
                 if (_failureViewModel == null) {
-                    _failureViewModel = new FailureViewModel(EventAggregator);
+                    _failureViewModel = new FailureViewModel();
                 }
                 return _failureViewModel;
             }
@@ -86,7 +86,7 @@ namespace Listings.Views
         }
 
 
-        public ProgressBarWindowViewModel(IEventAggregator eventAggregator) : base(eventAggregator)
+        public ProgressBarWindowViewModel()
         {
             Success = null;
             ResultIconDelay = 750;

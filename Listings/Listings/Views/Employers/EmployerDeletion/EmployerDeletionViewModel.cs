@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class EmployerDeletionViewModel : ScreenBaseViewModel
+    public class EmployerDeletionViewModel : BaseScreen
     {
         private Employer _employer;
         public Employer Employer
@@ -48,7 +48,7 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
 
-        public EmployerDeletionViewModel(IEventAggregator eventAggregator, EmployerFacade employerFacade, Employer employer) : base(eventAggregator)
+        public EmployerDeletionViewModel(EmployerFacade employerFacade, Employer employer)
         {
             _employer = employer;
             _employerFacade = employerFacade;

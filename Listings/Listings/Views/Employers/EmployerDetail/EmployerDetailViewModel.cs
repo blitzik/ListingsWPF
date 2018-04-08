@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Views
 {
-    public class EmployerDetailViewModel : ScreenBaseViewModel
+    public class EmployerDetailViewModel : BaseScreen
     {
         private string _name;
         public string Name
@@ -64,7 +64,7 @@ namespace Listings.Views
         private EmployerFacade _employerFacade;
 
 
-        public EmployerDetailViewModel(IEventAggregator eventAggregator, EmployerFacade employerFacade, Employer employer) : base(eventAggregator)
+        public EmployerDetailViewModel(EmployerFacade employerFacade, Employer employer)
         {
             _employer = employer;
             Name = employer.Name;
