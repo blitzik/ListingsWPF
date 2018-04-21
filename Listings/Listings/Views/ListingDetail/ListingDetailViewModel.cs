@@ -170,24 +170,12 @@ namespace Listings.Views
         }
 
 
-        protected override void OnInitialize()
-        {
-            base.OnInitialize();
-
-            // instantiation of viewmodels that will get Listing as a message from EventAggregator
-            // These viewmodels need to be created before ListingMessage is sent, otherwise IHandle handler is  NOT called
-            // because the viewmodel does not exist yet or if it exists, the IHandle handler is called
-            // before OnActivation lifecycle method (in which the viewmodels' reset mechanism is called)
-            
-            ViewModelResolver.Resolve(nameof(ListingEditingViewModel));
-            ViewModelResolver.Resolve(nameof(ListingItemViewModel));
-            ViewModelResolver.Resolve(nameof(ListingDeletionViewModel));
-            ViewModelResolver.Resolve(nameof(ListingPdfGenerationViewModel));
-        }
-
-
         private void OpenEditing()
         {
+            // we need to create view model first before we can send a message to it
+            // second time and on the resolver(SimpleContainer precisely) wont create new one(it is declared as Singleton)
+            ViewModelResolver.Resolve(nameof(ListingEditingViewModel));
+
             EventAggregator.PublishOnUIThread(new ListingMessage(Listing));
             EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingEditingViewModel)));
         }
@@ -195,6 +183,8 @@ namespace Listings.Views
 
         private void OpenListingItemDetail(int day)
         {
+            ViewModelResolver.Resolve(nameof(ListingItemViewModel));
+
             EventAggregator.PublishOnUIThread(new EditDayItemMessage(_dayItems[day - 1]));
             EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingItemViewModel)));
         }
@@ -202,6 +192,8 @@ namespace Listings.Views
 
         private void DisplayListingDeletion()
         {
+            ViewModelResolver.Resolve(nameof(ListingDeletionViewModel));
+
             EventAggregator.PublishOnUIThread(new ListingMessage(Listing));
             EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingDeletionViewModel)));
         }
@@ -209,6 +201,8 @@ namespace Listings.Views
 
         private void DisplayPdfGenerationPage()
         {
+            ViewModelResolver.Resolve(nameof(ListingPdfGenerationViewModel));
+
             EventAggregator.PublishOnUIThread(new ListingMessage(Listing));
             EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingPdfGenerationViewModel)));
         }
