@@ -10,7 +10,7 @@ namespace Listings.Messages
     /// <summary>
     /// Message that navigates to an existing ViewModel
     /// </summary>
-    public class ChangeViewMessage
+    public class ChangeViewMessage : IEventAggregatorMessage
     {
         private string _viewModelName;
         public string ViewModelName

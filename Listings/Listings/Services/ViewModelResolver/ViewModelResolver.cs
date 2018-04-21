@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using Listings.Views;
 using System;
+using System.Collections;
 
 namespace Listings.Services.ViewModelResolver
 {

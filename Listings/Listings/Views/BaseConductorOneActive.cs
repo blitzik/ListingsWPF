@@ -37,7 +37,11 @@ namespace Listings.Views
         public IEventAggregator EventAggregator
         {
             get { return _eventAggregator; }
-            set { _eventAggregator = value; }
+            set
+            {
+                _eventAggregator = value;
+                _eventAggregator.Subscribe(this);
+            }
         }
 
 
@@ -50,24 +54,6 @@ namespace Listings.Views
         }
 
 
-        protected Dictionary<string, IViewModel> _viewModels = new Dictionary<string, IViewModel>();
-
-
-        public override void ActivateItem(IViewModel item)
-        {
-            if (ActiveItem == item) {
-                return;
-            }
-
-            string typeName = item.GetType().Name;
-            if (!_viewModels.ContainsKey(typeName)) {
-                _viewModels.Add(typeName, item);
-            }
-
-            base.ActivateItem(item);
-        }
-
-
         protected void DisplayView(string viewModelName)
         {
             ActivateItem(GetViewModel(viewModelName));
@@ -76,16 +62,9 @@ namespace Listings.Views
 
         protected IViewModel GetViewModel(string viewModelName)
         {
-            IViewModel viewModel;
-            if (!_viewModels.ContainsKey(viewModelName)) {
-                viewModel = _viewModelResolver.Resolve(viewModelName);
-                if (viewModel == null) {
-                    throw new Exception("Requested ViewModel does not Exist!");
-                }
-                _viewModels.Add(viewModelName, viewModel);
-
-            } else {
-                viewModel = _viewModels[viewModelName];
+            IViewModel viewModel = _viewModelResolver.Resolve(viewModelName);
+            if (viewModel == null) {
+                throw new Exception("Requested ViewModel does not Exist!");
             }
 
             return viewModel;

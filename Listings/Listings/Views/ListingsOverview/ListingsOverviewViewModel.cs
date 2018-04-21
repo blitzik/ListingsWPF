@@ -97,6 +97,8 @@ namespace Listings.Views
 
         protected override void OnActivate()
         {
+            base.OnActivate();
+
             LoadListings(SelectedYear);
         }
     }

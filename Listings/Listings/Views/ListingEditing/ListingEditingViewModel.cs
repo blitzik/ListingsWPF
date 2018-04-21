@@ -25,9 +25,6 @@ namespace Listings.Views
             {
                 _listing = value;
                 NotifyOfPropertyChange(() => Listing);
-                WindowTitle.Text = string.Format("{0} [{1} {2} {3}]", BaseWindowTitle, Date.Months[12 - value.Month], value.Year, string.Format("- {0}", value.Name));             
-
-                Reset(value);
             }
         }
 
@@ -255,10 +252,23 @@ namespace Listings.Views
         }
 
 
-        protected override void OnInitialize()
+        protected override void OnActivate()
         {
-            EventAggregator.Subscribe(this);
+            base.OnActivate();
+
+            if (Listing != null) {
+                Reset(Listing);
+            }
         }
+
+
+        public void Handle(ListingMessage message)
+        {
+            Listing = message.Listing;
+        }
+
+
+        // -----
 
 
         private void RefreshEmployers()
@@ -308,6 +318,8 @@ namespace Listings.Views
 
         private void Reset(Listing listing)
         {
+            WindowTitle.Text = string.Format("{0} [{1} {2} {3}]", BaseWindowTitle, Date.Months[12 - listing.Month], listing.Year, string.Format("- {0}", listing.Name));
+
             RefreshEmployers();
 
             _years.Clear();
@@ -340,22 +352,5 @@ namespace Listings.Views
             Sickness = Listing.Sickness;
         }
 
-
-
-        // -----
-
-
-        public void Handle(ListingMessage message)
-        {
-            Listing = message.Listing;
-        }
-
-
-        protected override void OnActivate()
-        {
-            if (Listing != null) {
-                Reset(Listing);
-            }
-        }
     }
 }

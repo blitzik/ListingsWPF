@@ -34,7 +34,8 @@ namespace Listings.Views
 
         protected override void OnInitialize()
         {
-            EventAggregator.Subscribe(this);
+            base.OnInitialize();
+
             DisplayListingsOverview();
         }
 

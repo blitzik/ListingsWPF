@@ -5,6 +5,7 @@ using Listings.EventArguments;
 using Listings.Exceptions;
 using Listings.Facades;
 using Listings.Messages;
+using Listings.Services.ViewModelResolver;
 using Listings.Utils;
 using System;
 using System.Collections.Generic;
@@ -171,35 +172,45 @@ namespace Listings.Views
 
         protected override void OnInitialize()
         {
-            EventAggregator.Subscribe(this);
+            base.OnInitialize();
+
+            // instantiation of viewmodels that will get Listing as a message from EventAggregator
+            // These viewmodels need to be created before ListingMessage is sent, otherwise IHandle handler is  NOT called
+            // because the viewmodel does not exist yet or if it exists, the IHandle handler is called
+            // before OnActivation lifecycle method (in which the viewmodels' reset mechanism is called)
+            
+            ViewModelResolver.Resolve(nameof(ListingEditingViewModel));
+            ViewModelResolver.Resolve(nameof(ListingItemViewModel));
+            ViewModelResolver.Resolve(nameof(ListingDeletionViewModel));
+            ViewModelResolver.Resolve(nameof(ListingPdfGenerationViewModel));
         }
 
 
         private void OpenEditing()
         {
-            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingEditingViewModel)));
             EventAggregator.PublishOnUIThread(new ListingMessage(Listing));
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingEditingViewModel)));
         }
 
 
         private void OpenListingItemDetail(int day)
         {
-            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingItemViewModel)));
             EventAggregator.PublishOnUIThread(new EditDayItemMessage(_dayItems[day - 1]));
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingItemViewModel)));
         }
 
 
         private void DisplayListingDeletion()
         {
-            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingDeletionViewModel)));
             EventAggregator.PublishOnUIThread(new ListingMessage(Listing));
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingDeletionViewModel)));
         }
 
 
         private void DisplayPdfGenerationPage()
         {
-            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingPdfGenerationViewModel)));
             EventAggregator.PublishOnUIThread(new ListingMessage(Listing));
+            EventAggregator.PublishOnUIThread(new ChangeViewMessage(nameof(ListingPdfGenerationViewModel)));
         }
 
 
@@ -294,6 +305,8 @@ namespace Listings.Views
 
         protected override void OnActivate()
         {
+            base.OnActivate();
+
             if (Listing != null) {
                 WindowTitle.Text = GenerateWindowTitle(Listing);
             }

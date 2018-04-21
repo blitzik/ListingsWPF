@@ -84,12 +84,6 @@ namespace Listings.Views
         }
 
 
-        protected override void OnInitialize()
-        {
-            EventAggregator.Subscribe(this);
-        }
-
-
         private void DeleteListing()
         {
             _listingFacade.DeleteListing(Listing);
