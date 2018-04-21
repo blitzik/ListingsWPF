@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Listings.Messages
 {
-    public class ListingMessage
+    public class ListingMessage : IEventAggregatorMessage
     {
         private readonly Listing _listing;
         public Listing Listing

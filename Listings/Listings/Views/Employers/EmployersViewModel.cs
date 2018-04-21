@@ -96,6 +96,8 @@ namespace Listings.Views
 
         protected override void OnActivate()
         {
+            base.OnActivate();
+
             _employers.Clear();
             List<Employer> foundEmployers = _employerFacade.FindAllEmployers();
             foreach (Employer e in foundEmployers) {

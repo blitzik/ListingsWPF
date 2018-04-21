@@ -37,7 +37,11 @@ namespace Listings.Views
         public IEventAggregator EventAggregator
         {
             get { return _eventAggregator; }
-            set { _eventAggregator = value; }
+            set
+            {
+                _eventAggregator = value;
+                _eventAggregator.Subscribe(this);
+            }
         }
 
 

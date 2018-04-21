@@ -136,12 +136,6 @@ namespace Listings.Views
         }
 
 
-        protected override void OnInitialize()
-        {
-            EventAggregator.Subscribe(this);
-        }
-
-
         private void Reset(DayItem dayItem)
         {
             string date = CultureInfo.CurrentCulture.TextInfo.ToTitleCase((new DateTime(dayItem.Year, dayItem.Month, dayItem.Day)).ToLongDateString().ToLower());

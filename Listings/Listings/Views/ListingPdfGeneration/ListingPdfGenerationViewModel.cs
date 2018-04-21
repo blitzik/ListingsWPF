@@ -33,10 +33,6 @@ namespace Listings.Views
             set
             {
                 _listing = value;
-
-                _defaultSettings = _settingFacade.GetDefaultSettings();
-
-                ResetSettings();
             }
         }
 
@@ -126,9 +122,12 @@ namespace Listings.Views
         }
 
 
-        protected override void OnInitialize()
+        protected override void OnActivate()
         {
-            EventAggregator.Subscribe(this);
+            base.OnActivate();
+
+            _defaultSettings = _settingFacade.GetDefaultSettings();
+            ResetSettings();
         }
 
 
