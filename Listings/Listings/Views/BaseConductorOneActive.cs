@@ -60,6 +60,16 @@ namespace Listings.Views
         }
 
 
+        public override void ActivateItem(IViewModel item)
+        {
+            if (ActiveItem == item) {
+                return;
+            }
+
+            base.ActivateItem(item);
+        }
+
+
         protected IViewModel GetViewModel(string viewModelName)
         {
             IViewModel viewModel = _viewModelResolver.Resolve(viewModelName);

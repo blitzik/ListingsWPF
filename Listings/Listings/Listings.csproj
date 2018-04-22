@@ -118,9 +118,9 @@
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Comparers\SortIntDescending.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\IntToMonthNameConverter.cs" />
     <Compile Include="Converters\IntToTimeConverter.cs" />
     <Compile Include="Converters\InverseBooleansToBooleanConverter.cs" />
-    <Compile Include="Converters\MonthNameToIntConverter.cs" />
     <Compile Include="Converters\NegateBoolConverter.cs" />
     <Compile Include="Converters\TimeToHoursAndMinutesConverter.cs" />
     <Compile Include="Converters\TimeToHoursAndMinutesRangeConverter.cs" />
