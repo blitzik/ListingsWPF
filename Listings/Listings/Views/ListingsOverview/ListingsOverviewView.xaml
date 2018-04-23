@@ -12,7 +12,7 @@
         <converters:TimeToTimeInWordsConverter x:Key="TimeToTimeInWordsConverter" />
     </UserControl.Resources>
        
-    <Grid x:Name="TopElement">
+    <Grid Name="TopElement">
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
             <RowDefinition Height="10" />
@@ -49,10 +49,16 @@
                         <GroupStyle.HeaderTemplate>
                             <DataTemplate>
                                 <Border Margin="0 20 0 20" BorderBrush="#CCC" BorderThickness="0 0 0 1">
-                                    <TextBlock Text="{Binding Path=Name, Converter={StaticResource IntToMonthNameConverter}}"
-                                               FontSize="26"
+                                    <TextBlock FontSize="26"
                                                Foreground="#34495e"
-                                               FontWeight="Bold" />
+                                               FontWeight="Bold">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding Path="Name" Converter="{StaticResource IntToMonthNameConverter}" />
+                                                <Binding ElementName="TopElement" Path="DataContext.SelectedYear" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                 </Border>
                             </DataTemplate>
                         </GroupStyle.HeaderTemplate>
