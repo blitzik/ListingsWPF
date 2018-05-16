@@ -86,6 +86,9 @@
     <Reference Include="PdfSharp.Charting, Version=1.32.2602.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
       <HintPath>..\packages\PDFsharp-MigraDoc-GDI.1.32.3879.0\lib\net20\PdfSharp.Charting.dll</HintPath>
     </Reference>
+    <Reference Include="PerstNetGenerics">
+      <HintPath>..\..\..\..\Perst4.NET\bin\PerstNetGenerics.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -172,6 +175,7 @@
     <Compile Include="Services\Pdf\ListingReportGenerator.cs" />
     <Compile Include="Services\Pdf\ListingSectionFactory.cs" />
     <Compile Include="Services\Pdf\MultipleListingReportFactory.cs" />
+    <Compile Include="Services\Root.cs" />
     <Compile Include="Services\ViewModelResolver\IViewModelResolver.cs" />
     <Compile Include="Services\ViewModelResolver\ViewModelResolver.cs" />
     <Compile Include="Views\BaseConductorOneActive.cs" />
