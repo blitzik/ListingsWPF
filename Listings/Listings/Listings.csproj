@@ -175,6 +175,7 @@
     <Compile Include="Services\Pdf\ListingReportGenerator.cs" />
     <Compile Include="Services\Pdf\ListingSectionFactory.cs" />
     <Compile Include="Services\Pdf\MultipleListingReportFactory.cs" />
+    <Compile Include="Services\PerstStorageFactory.cs" />
     <Compile Include="Services\Root.cs" />
     <Compile Include="Services\ViewModelResolver\IViewModelResolver.cs" />
     <Compile Include="Services\ViewModelResolver\ViewModelResolver.cs" />
