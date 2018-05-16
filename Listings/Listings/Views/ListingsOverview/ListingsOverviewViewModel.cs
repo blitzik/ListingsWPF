@@ -7,6 +7,8 @@ using Listings.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace Listings.Views
 {
@@ -26,12 +28,14 @@ namespace Listings.Views
         }
 
 
-        private ObservableCollection<Listing> _listings;
-        public ObservableCollection<Listing> Listings
+        private ICollectionView _listings;
+        public ICollectionView Listings
         {
             get { return _listings; }
             set {
                 _listings = value;
+                value.GroupDescriptions.Add(new PropertyGroupDescription("Month"));
+
                 NotifyOfPropertyChange(() => Listings);
             }
         }
@@ -73,7 +77,7 @@ namespace Listings.Views
         ) {
             BaseWindowTitle = "Přehled výčetek";
             _listingFacade = listingFacade;
-            Listings = new ObservableCollection<Listing>(listingFacade.FindListings(DateTime.Now.Year));
+            Listings = CollectionViewSource.GetDefaultView(listingFacade.FindListings(DateTime.Now.Year));
 
             _selectedYear = DateTime.Now.Year;
         }
@@ -81,7 +85,7 @@ namespace Listings.Views
 
         private void LoadListings(int year)
         {
-            Listings = new ObservableCollection<Listing>(_listingFacade.FindListings(year));
+            Listings = CollectionViewSource.GetDefaultView(_listingFacade.FindListings(year));
         }
 
 

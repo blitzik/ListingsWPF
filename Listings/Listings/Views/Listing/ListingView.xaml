@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="1000">
     <UserControl.Resources>
-        <converters:MonthNameToIntConverter x:Key="MonthNameToIntConverter" />
+        <converters:IntToMonthNameConverter x:Key="IntToMonthNameConverter" />
     </UserControl.Resources>
 
     <StackPanel>
@@ -44,7 +44,7 @@
                       Padding="8"
                       FontSize="17"
                       ItemsSource="{Binding Months}"
-                      SelectedItem="{Binding SelectedMonth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MonthNameToIntConverter}}" />
+                      SelectedItem="{Binding SelectedMonth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntToMonthNameConverter}}" />
 
             <TextBlock Grid.Row="2" Grid.Column="0" Margin="0 10 0 0" Text="Zaměstnavatel" Style="{StaticResource LabelText}" />
             <ComboBox Grid.Row="3"

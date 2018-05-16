@@ -9,7 +9,7 @@ using System.Windows.Data;
 
 namespace Listings.Converters
 {
-    public class MonthNameToIntConverter : IValueConverter
+    public class IntToMonthNameConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

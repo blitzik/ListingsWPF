@@ -9,7 +9,6 @@
              d:DesignHeight="500" d:DesignWidth="1200">
 
     <UserControl.Resources>
-        <converters:MonthNameToIntConverter x:Key="MonthNameToIntConverter" />
         <converters:TimeToHoursAndMinutesRangeConverter x:Key="TimeToHoursAndMinutesRangeConverter" />
         <converters:TimeToHoursAndMinutesConverter x:Key="TimeToHoursAndMinutesConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
