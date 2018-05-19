@@ -10,31 +10,31 @@ using Listings.Services;
 
 namespace Listings.Facades
 {
-    public class EmployerFacade : BaseFacade
+    public class EmployerFacade// : BaseFacade
     {
-        public EmployerFacade(ObjectContainerRegistry dbRegistry) : base (dbRegistry)
+        public EmployerFacade(ObjectContainerRegistry dbRegistry)// : base (dbRegistry)
         {
-            _dbRegistry = dbRegistry;
+            //_dbRegistry = dbRegistry;
         }
 
 
         public void Save(Employer employer)
         {
-            Db().Store(employer);
-            Db().Commit();
+            //Db().Store(employer);
+            //Db().Commit();
         }
 
 
         public void Delete(Employer employer)
         {
-            Db().Delete(employer);
-            Db().Commit();
+            //Db().Delete(employer);
+            //Db().Commit();
         }
 
 
         public List<Employer> FindAllEmployers(string order = "DESC")
         {
-            IEnumerable<Employer> employers;
+            /*IEnumerable<Employer> employers;
             switch (order.ToLower()) {
                 case "ASC":
                     employers = from Employer e in Db() orderby e.CreatedAt ascending select e;
@@ -43,9 +43,9 @@ namespace Listings.Facades
                 default:
                     employers = from Employer e in Db() orderby e.CreatedAt descending select e;
                     break;
-            }
+            }*/
             
-            return employers.ToList<Employer>();
+            return new List<Employer>();
         }
     }
 }

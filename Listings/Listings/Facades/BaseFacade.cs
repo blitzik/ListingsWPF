@@ -1,5 +1,6 @@
 ﻿using Db4objects.Db4o;
 using Listings.Services;
+using Perst;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,23 +11,23 @@ namespace Listings.Facades
 {
     abstract public class BaseFacade
     {
-        protected ObjectContainerRegistry _dbRegistry;
+        protected Storage _storage;
         protected string _databaseName = Db4oObjectContainerFactory.MAIN_DATABASE_NAME;
 
 
-        protected IObjectContainer Db(string name = null)
+        public BaseFacade(Storage db)
+        {
+            _storage = db;
+        }
+
+
+        /*protected IObjectContainer Db(string name = null)
         {
             if (string.IsNullOrEmpty(name)) {
                 return _dbRegistry.GetByName(_databaseName);
             }
 
             return _dbRegistry.GetByName(name);
-        }
-
-
-        public BaseFacade(ObjectContainerRegistry db)
-        {
-            _dbRegistry = db;
-        }
+        }*/
     }
 }

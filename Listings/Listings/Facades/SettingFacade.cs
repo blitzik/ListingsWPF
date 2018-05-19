@@ -15,13 +15,13 @@ using System.Threading.Tasks;
 
 namespace Listings.Facades
 {
-    public class SettingFacade : BaseFacade
+    public class SettingFacade// : BaseFacade
     {
         private readonly Db4oObjectContainerFactory _dbFactory;
         private IBackupImport _backupImport;
 
 
-        public SettingFacade(Db4oObjectContainerFactory dbFactory, ObjectContainerRegistry dbRegistry, IBackupImport backupImport) : base (dbRegistry)
+        public SettingFacade(Db4oObjectContainerFactory dbFactory, ObjectContainerRegistry dbRegistry, IBackupImport backupImport)// : base (dbRegistry)
         {
             _dbFactory = dbFactory;
             _backupImport = backupImport;
@@ -30,23 +30,23 @@ namespace Listings.Facades
 
         public void SaveDefaultSetting(DefaultSettings setting)
         {
-            Db().Store(setting);
-            Db().Commit();
+            //Db().Store(setting);
+            //Db().Commit();
         }
 
 
         public DefaultSettings GetDefaultSettings()
         {
-            IEnumerable<DefaultSettings> x = from DefaultSettings ds in Db() where ds.ID == "main" select ds;
-            DefaultSettings settings = x.FirstOrDefault();
-            if (settings == null) {
+            //IEnumerable<DefaultSettings> x = from DefaultSettings ds in Db() where ds.ID == "main" select ds;
+            DefaultSettings settings/* = x.FirstOrDefault()*/;
+            //if (settings == null) {
                 settings = new DefaultSettings(DefaultSettings.MAIN_SETTINGS_ID);
-                SaveDefaultSetting(settings);
-            }
+                //SaveDefaultSetting(settings);
+            //}
 
-            Db().Activate(settings, 4);
+            //Db().Activate(settings, 4);
 
-            settings.OnTimeSettingUpdate += OnTimeSettingUpdate;
+            //settings.OnTimeSettingUpdate += OnTimeSettingUpdate;
             
             return settings;
         }
@@ -54,23 +54,23 @@ namespace Listings.Facades
 
         private void OnTimeSettingUpdate(object sender, TimeSetting oldSetting, TimeSetting newSetting)
         {
-            Db().Delete(oldSetting);
+            //Db().Delete(oldSetting);
         }
 
 
         public void BackupData(string filePath)
         {
-            Db().Ext().Backup(filePath);
+            //Db().Ext().Backup(filePath);
         }
 
 
         public ResultObject ImportBackup(string filePath)
         {
-            _dbRegistry.CloseAll();
+            //_dbRegistry.CloseAll();
 
             ResultObject ro = _backupImport.Import(filePath, Db4oObjectContainerFactory.GetDatabaseDirectoryPath(), Db4oObjectContainerFactory.MAIN_DATABASE_NAME, Db4oObjectContainerFactory.DATABASE_EXTENSION);
 
-            _dbRegistry.Add(Db4oObjectContainerFactory.MAIN_DATABASE_NAME, _dbFactory.Create(Db4oObjectContainerFactory.MAIN_DATABASE_NAME));
+            //_dbRegistry.Add(Db4oObjectContainerFactory.MAIN_DATABASE_NAME, _dbFactory.Create(Db4oObjectContainerFactory.MAIN_DATABASE_NAME));
 
             return ro;
         }

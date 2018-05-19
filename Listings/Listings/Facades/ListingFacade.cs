@@ -11,36 +11,37 @@ using Listings.EventArguments;
 using Listings.Utils;
 using Db4objects.Db4o.Ext;
 using Listings.Services;
+using Perst;
 
 namespace Listings.Facades
 {
     public class ListingFacade : BaseFacade
     {
-        public ListingFacade(ObjectContainerRegistry dbRegistry) : base (dbRegistry)
+        public ListingFacade(Storage db) : base (db)
         {
-            _dbRegistry = dbRegistry;
+            //_dbRegistry = dbRegistry;
         }
 
 
         public void Save(Listing listing)
         {
-            Db().Store(listing);
-            Db().Commit();
+            //Db().Store(listing);
+            //Db().Commit();
         }
 
 
         public List<Listing> FindAllListings()
         {
-            IEnumerable<Listing> listings = from Listing l in Db() select l;
+            //IEnumerable<Listing> listings = from Listing l in Db() select l;
 
-            return new List<Listing>(listings);
+            return new List<Listing>();
         }
 
 
         private delegate int ListingsComparisonHandler(Listing l1, Listing l2);
         public List<Listing> FindListings(int year, string order = "DESC")
         {
-            ListingsComparisonHandler comparer = LoadInASC;
+            /*ListingsComparisonHandler comparer = LoadInASC;
             switch (order) {
                 case "DESC":
                     comparer = LoadInDESC;
@@ -57,28 +58,28 @@ namespace Listings.Facades
                 l.OnReplacedListingItem += OnChangedListingItem;
                 l.OnRemovedListingItem += OnChangedListingItem;
                 l.OnSummaryTimeChanged += OnTimeChanged;
-            }
+            }*/
 
-            return new List<Listing>(listings);
+            return new List<Listing>();
         }
 
 
         private void OnChangedListingItem(object sender, ListingItemArgs args)
         {
-            Db().Delete(args.ListingItem);
+            //Db().Delete(args.ListingItem);
         }
 
 
         private void OnTimeChanged(object sender, Time time)
         {
-            Db().Delete(time);
+            //Db().Delete(time);
         }
 
 
         public void DeleteListing(Listing listing)
         {
-            Db().Delete(listing);
-            Db().Commit();
+            //Db().Delete(listing);
+            //Db().Commit();
         }
 
 
@@ -96,29 +97,29 @@ namespace Listings.Facades
 
         public void Activate(Listing listing, int depth)
         {
-            Db().Activate(listing, depth);
+            //Db().Activate(listing, depth);
         }
 
 
         public void RefreshListing(Listing listing)
         {
-            Db().Ext().Refresh(listing, 4);
+            //Db().Ext().Refresh(listing, 4);
         }
 
 
         // -----
 
 
-        public Dictionary<string, int> DisplayStats()
+        /*public Dictionary<string, int> DisplayStats()
         {
             IEnumerable<Listing> list = from Listing l in Db() where l.Month == 5 && l.Year == 2013 select l;
 
-            /*Random r = new Random();
-            for (int i = 0; i < 100000; i++) {
-                Listing l = new Listing(r.Next(2010, 2019), r.Next(1, 13));
-                Db().Store(l);
-            }
-            Db().Commit();*/
+            //Random r = new Random();
+            //for (int i = 0; i < 100000; i++) {
+            //    Listing l = new Listing(r.Next(2010, 2019), r.Next(1, 13));
+            //    Db().Store(l);
+            //}
+            //Db().Commit();
 
 
             Dictionary<string, int> stats = new Dictionary<string, int>();
@@ -132,7 +133,7 @@ namespace Listings.Facades
             stats.Add("DefaultListingPdfReportSetting", (from DefaultListingPdfReportSetting l in Db() select l).Count());
 
             return stats;
-        }
+        }*/
 
     }
 }
