@@ -12,22 +12,23 @@ namespace Listings.Facades
     abstract public class BaseFacade
     {
         protected Storage _storage;
-        protected string _databaseName = Db4oObjectContainerFactory.MAIN_DATABASE_NAME;
+        protected Storage Storage
+        {
+            get { return _storage; }
+        }
+
+
+        protected Root _root;
+        protected Root Root
+        {
+            get { return _root; }
+        }
 
 
         public BaseFacade(Storage db)
         {
             _storage = db;
+            _root = db.Root as Root;
         }
-
-
-        /*protected IObjectContainer Db(string name = null)
-        {
-            if (string.IsNullOrEmpty(name)) {
-                return _dbRegistry.GetByName(_databaseName);
-            }
-
-            return _dbRegistry.GetByName(name);
-        }*/
     }
 }

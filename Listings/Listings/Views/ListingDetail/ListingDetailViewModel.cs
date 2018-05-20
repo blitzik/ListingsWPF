@@ -213,7 +213,7 @@ namespace Listings.Views
             Listing.RemoveItemByDay(day);
             _dayItems[day - 1].Reset();
 
-            _listingFacade.Save(Listing);
+            _listingFacade.Update(Listing);
         }
 
 
@@ -227,7 +227,7 @@ namespace Listings.Views
 
             _dayItems[day].Update(newItem);
 
-            _listingFacade.Save(Listing);
+            _listingFacade.Update(Listing);
         }
 
 
@@ -260,8 +260,6 @@ namespace Listings.Views
 
         private List<DayItem> PrepareDayItems(Listing listing)
         {
-            _listingFacade.Activate(listing, 5);
-
             List<DayItem> dayItems = new List<DayItem>();
 
             DateTime now = DateTime.Now;

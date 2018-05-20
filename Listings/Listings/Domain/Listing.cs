@@ -3,6 +3,7 @@ using Db4objects.Db4o;
 using Listings.EventArguments;
 using Listings.Exceptions;
 using Listings.Utils;
+using Perst;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,39 @@ namespace Listings.Domain
 {
     public class Listing : PropertyChangedBase
     {
+        private int _indexYear;
+        public int _IndexYear
+        {
+            get { return _indexYear; }
+            private set { _indexYear = value; }
+        }
+
+
+        private int _indexMonth;
+        public int _IndexMonth
+        {
+            get { return _indexMonth; }
+            private set { _indexMonth = value; }
+        }
+
+
+        public void RefreshIndexes()
+        {
+            _IndexYear = Year;
+            _IndexMonth = Month;
+        }
+
+
+        public bool AreIndexesMatching()
+        {
+            return _IndexYear == Year && _IndexMonth == Month;
+        }
+
+
+        // -----
+
+
+
         private string _name;
         public string Name
         {
@@ -64,7 +98,9 @@ namespace Listings.Domain
             get { return _employer; }
             set
             {
+                _employer?.RemoveListing(this);
                 _employer = value;
+                _employer?.AddListing(this);
                 NotifyOfPropertyChange(() => Employer);
             }
         }
@@ -87,8 +123,8 @@ namespace Listings.Domain
         }
 
 
-        private Dictionary<int, ListingItem> _items;
-        public Dictionary<int, ListingItem> Items
+        private IPersistentMap<int, ListingItem> _items;
+        public IPersistentMap<int, ListingItem> Items
         {
             get { return _items; }
             private set
@@ -172,7 +208,6 @@ namespace Listings.Domain
         }
 
 
-        [Transient]
         private HashSet<string> _localities;
         public HashSet<string> Localities
         {
@@ -294,13 +329,17 @@ namespace Listings.Domain
         // -----
 
 
-        public Listing(int year, int month)
+        public Listing() { }
+
+
+        public Listing(Storage storage, int year, int month)
         {
             Year = year;
             Month = month;
             CreatedAt = DateTime.Now;
 
-            _items = new Dictionary<int, ListingItem>();
+            _items = storage.CreateMap<int, ListingItem>();
+            RefreshIndexes();
         }
 
 
@@ -401,7 +440,7 @@ namespace Listings.Domain
 
         public bool ContainsItem(ListingItem item)
         {
-            return _items.ContainsValue(item);
+            return _items.Contains(new KeyValuePair<int, ListingItem>(item.Day, item));
         }
         
     }

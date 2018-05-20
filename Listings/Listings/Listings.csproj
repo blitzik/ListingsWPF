@@ -135,6 +135,10 @@
     <Compile Include="Messages\IEventAggregatorMessage.cs" />
     <Compile Include="Services\Backup\IBackupImport.cs" />
     <Compile Include="Services\Backup\BackupImport.cs" />
+    <Compile Include="Services\Entities\EmployerFactory.cs" />
+    <Compile Include="Services\Entities\IEmployerFactory.cs" />
+    <Compile Include="Services\Entities\IListingFactory.cs" />
+    <Compile Include="Services\Entities\ListingFactory.cs" />
     <Compile Include="Services\Pdf\DefaultListingPdfReportFactory.cs" />
     <Compile Include="Domain\DefaultListingPdfReportSetting.cs" />
     <Compile Include="Domain\DefaultSettings.cs" />

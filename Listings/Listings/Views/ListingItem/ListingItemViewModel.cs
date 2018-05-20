@@ -169,7 +169,7 @@ namespace Listings.Views
                 new Time(WorkedTimeViewModel.OtherHours)
             );
 
-            _listingFacade.Save(_dayItem.Listing);
+            _listingFacade.Update(_dayItem.Listing);
 
             DayItem.Update(newItem);
 

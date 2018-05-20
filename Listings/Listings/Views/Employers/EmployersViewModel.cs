@@ -2,6 +2,7 @@
 using Listings.Commands;
 using Listings.Domain;
 using Listings.Facades;
+using Perst;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -55,8 +56,12 @@ namespace Listings.Views
         }
 
 
-        public EmployersViewModel(EmployerFacade employerFacade)
+        private Storage _storage;
+
+
+        public EmployersViewModel(Storage storage, EmployerFacade employerFacade)
         {
+            _storage = storage;
             _employerFacade = employerFacade;
 
             BaseWindowTitle = "Správa zaměstnavatelů";
@@ -67,8 +72,7 @@ namespace Listings.Views
 
         private void SaveNewEmployer()
         {
-            Employer e = new Employer(NewEmployerName.Trim());
-            _employerFacade.Save(e);
+            Employer e = _employerFacade.CreateEmployer(NewEmployerName.Trim());
 
             Employers.Insert(0, CreateEmployerItemViewModel(e));
 

@@ -76,7 +76,7 @@ namespace Listings.Views
             }
         }
 
-        private Employer _promptEmployer = new Employer("Bez zaměstnavatele");
+        private Employer _promptEmployer = new Employer() { Name = "Bez zaměstnavatele" };
         private Employer _selectedEmployer;
         public Employer SelectedEmployer
         {
@@ -300,7 +300,7 @@ namespace Listings.Views
             Listing.Prepayment = Prepayment;
             Listing.Sickness = Sickness;
 
-            _listingFacade.Save(Listing);
+            _listingFacade.Update(Listing);
 
             if (_hourlyWage != null && _hourlyWage <= 0) {
                 HourlyWage = null;

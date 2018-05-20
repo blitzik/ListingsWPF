@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using Listings.Commands;
 using Listings.Domain;
+using Listings.Services.Entities;
 using Listings.Services.IO;
 using Listings.Services.Pdf;
 using Listings.Utils;
@@ -52,13 +53,15 @@ namespace Listings.Views
         private readonly ISavingFilePathSelector _savingFilePathSelector;
         private readonly IMultipleListingReportFactory _multipleListingReportFactory;
         private readonly IListingReportGenerator _listingReportGenerator;
+        private readonly IListingFactory _listingFactory;
 
 
         public EmptyListingsGenerationViewModel(
             IWindowManager windowManager,
             ISavingFilePathSelector savingFilePathSelector,
             IMultipleListingReportFactory multipleListingReportFactory,
-            IListingReportGenerator listingReportGenerator
+            IListingReportGenerator listingReportGenerator,
+            IListingFactory listingFactory
         ) {
             BaseWindowTitle = "Generování prázných výčetek";
             SelectedYear = DateTime.Now.Year;
@@ -67,6 +70,7 @@ namespace Listings.Views
             _savingFilePathSelector = savingFilePathSelector;
             _multipleListingReportFactory = multipleListingReportFactory;
             _listingReportGenerator = listingReportGenerator;
+            _listingFactory = listingFactory;
 
             _years = Date.GetYears(2010, "DESC");
             _years.Insert(0, _years[0] + 1);
@@ -91,7 +95,7 @@ namespace Listings.Views
             Task.Run(async () => {
                 List<Listing> list = new List<Listing>();
                 for (int month = 0; month < 12; month++) {
-                    list.Add(new Listing(SelectedYear, month + 1));
+                    list.Add(_listingFactory.Create(SelectedYear, month + 1));
                 }
 
                 Document doc = _multipleListingReportFactory.Create(list, new DefaultListingPdfReportSetting());

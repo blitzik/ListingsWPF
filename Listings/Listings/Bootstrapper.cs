@@ -5,6 +5,7 @@ using Listings.Domain;
 using Listings.Facades;
 using Listings.Services;
 using Listings.Services.Backup;
+using Listings.Services.Entities;
 using Listings.Services.IO;
 using Listings.Services.Pdf;
 using Listings.Services.ViewModelResolver;
@@ -38,9 +39,7 @@ namespace Listings
             _container.Singleton<IEventAggregator, EventAggregator>();
 
             // Services
-            //_container.Singleton<Db4oObjectContainerFactory>();
             _container.Singleton<PerstStorageFactory>();
-            _container.Singleton<ObjectContainerRegistry>();
             _container.Singleton<IViewModelResolver<IViewModel>, ViewModelResolver>();
             _container.Singleton<IOpeningFilePathSelector, OpenFilePathSelector>();
             _container.Singleton<ISavingFilePathSelector, SaveFilePathSelector>();
@@ -49,6 +48,9 @@ namespace Listings
             _container.Singleton<IMultipleListingReportFactory, MultipleListingReportFactory>();
             _container.Singleton<IListingReportGenerator, ListingReportGenerator>();
             _container.Singleton<IBackupImport, BackupImport>();
+
+            _container.Singleton<IEmployerFactory, EmployerFactory>();
+            _container.Singleton<IListingFactory, ListingFactory>();
 
             // facades
             _container.Singleton<ListingFacade>();
@@ -78,18 +80,15 @@ namespace Listings
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
-            if (!mutex.WaitOne(TimeSpan.FromSeconds(1), false) || AppDomain.CurrentDomain.IsDefaultAppDomain() == true) {
+            /*if (!mutex.WaitOne(TimeSpan.FromSeconds(1), false) || AppDomain.CurrentDomain.IsDefaultAppDomain() == true) {
                 System.Windows.Application.Current.Shutdown();
-            }
-
-            //ObjectContainerRegistry ocr = _container.GetInstance<ObjectContainerRegistry>();
+            }*/
 
             ResultObject ro = new ResultObject(true);
             try {
-                //IObjectContainer db = _container.GetInstance<Db4oObjectContainerFactory>().Create(Db4oObjectContainerFactory.MAIN_DATABASE_NAME);
-                Storage db = _container.GetInstance<PerstStorageFactory>().OpenConnection();
-                //ocr.Add(Db4oObjectContainerFactory.MAIN_DATABASE_NAME, db);
+                Storage db = _container.GetInstance<PerstStorageFactory>().OpenConnection(PerstStorageFactory.MAIN_DATABASE_NAME);
                 _container.Instance<Storage>(db);
+
                 var vm = _container.GetInstance<MainWindowViewModel>();
                 _container.BuildUp(vm);
                 _container.GetInstance<IWindowManager>().ShowWindow(vm);
@@ -113,10 +112,7 @@ namespace Listings
 
         protected override void OnExit(object sender, EventArgs e)
         {
-            ObjectContainerRegistry ocr = _container.GetInstance<ObjectContainerRegistry>();
-            ocr.CloseAll();
-
-            mutex.ReleaseMutex();
+            //mutex.ReleaseMutex();
         }
 
 

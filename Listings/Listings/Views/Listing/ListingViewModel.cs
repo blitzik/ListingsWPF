@@ -3,6 +3,7 @@ using Listings.Commands;
 using Listings.Domain;
 using Listings.Facades;
 using Listings.Messages;
+using Listings.Services.Entities;
 using Listings.Utils;
 using System;
 using System.Collections.Generic;
@@ -62,7 +63,7 @@ namespace Listings.Views
             }
         }
 
-        private Employer _promptEmployer = new Employer("Bez zaměstnavatele");
+        private Employer _promptEmployer = new Employer() { Name = "Bez zaměstnavatele" };
         private Employer _selectedEmployer;
         public Employer SelectedEmployer
         {
@@ -131,10 +132,17 @@ namespace Listings.Views
         }
 
 
-        public ListingViewModel(ListingFacade listingFacade, EmployerFacade employerFacade)
-        {
+        private IListingFactory _listingFactory;
+
+
+        public ListingViewModel(
+            ListingFacade listingFacade,
+            EmployerFacade employerFacade,
+            IListingFactory listingFactory
+        ) {
             _listingFacade = listingFacade;
             _employerFacade = employerFacade;
+            _listingFactory = listingFactory;
 
             BaseWindowTitle = "Nová výčetka";
 
@@ -169,7 +177,7 @@ namespace Listings.Views
         {
             Name = string.IsNullOrEmpty(Name) ? null : Name.Trim();
 
-            Listing newListing = new Listing(SelectedYear, SelectedMonth);
+            Listing newListing = _listingFactory.Create(SelectedYear, SelectedMonth);
             newListing.Name = Name;
             newListing.HourlyWage = _hourlyWage;
             if (_hourlyWage != null && _hourlyWage <= 0) {
@@ -180,7 +188,7 @@ namespace Listings.Views
                 newListing.Employer = _selectedEmployer;
             }
 
-            _listingFacade.Save(newListing);
+            _listingFacade.StoreListing(newListing);
 
             SetDefaults();
 

@@ -7,45 +7,51 @@ using System.Text;
 using Db4objects.Db4o.Linq;
 using System.Threading.Tasks;
 using Listings.Services;
+using Perst;
 
 namespace Listings.Facades
 {
-    public class EmployerFacade// : BaseFacade
+    public class EmployerFacade : BaseFacade
     {
-        public EmployerFacade(ObjectContainerRegistry dbRegistry)// : base (dbRegistry)
+        public EmployerFacade(Storage db) : base (db)
         {
-            //_dbRegistry = dbRegistry;
         }
 
 
-        public void Save(Employer employer)
+        public Employer CreateEmployer(string name)
         {
-            //Db().Store(employer);
-            //Db().Commit();
+            Employer e = new Employer(_storage, name);
+
+            Storage.Store(e);
+            Root.Employers.Add(e);
+            Storage.Commit();
+
+            return e;
+        }
+
+
+        public void Update(Employer employer)
+        {
+            Storage.Modify(employer);
+            Storage.Commit();
         }
 
 
         public void Delete(Employer employer)
         {
-            //Db().Delete(employer);
-            //Db().Commit();
+            Root.Employers.Remove(employer);
+            foreach (Listing l in employer.GetListings()) {
+                l.Employer = null;
+                Storage.Modify(l);
+            }
+            Storage.Deallocate(employer);
+            Storage.Commit();
         }
 
 
-        public List<Employer> FindAllEmployers(string order = "DESC")
-        {
-            /*IEnumerable<Employer> employers;
-            switch (order.ToLower()) {
-                case "ASC":
-                    employers = from Employer e in Db() orderby e.CreatedAt ascending select e;
-                    break;
-
-                default:
-                    employers = from Employer e in Db() orderby e.CreatedAt descending select e;
-                    break;
-            }*/
-            
-            return new List<Employer>();
+        public List<Employer> FindAllEmployers()
+        {            
+            return new List<Employer>(from Employer e in Root.Employers select e);
         }
     }
 }

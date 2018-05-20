@@ -20,10 +20,10 @@ namespace Listings.Services
         }
 
 
-        public Storage OpenConnection()
+        public Storage OpenConnection(string databaseName)
         {
             Storage db = StorageFactory.Instance.CreateStorage();
-            db.Open(Path.Combine(GetDatabaseDirectoryPath(), MAIN_DATABASE_FILE_NAME), 4 * 1024 * 1024);
+            db.Open(Path.Combine(GetDatabaseDirectoryPath(), string.Format("{0}.{1}", databaseName, DATABASE_EXTENSION)), 4 * 1024 * 1024);
 
             Root root = db.Root as Root;
             if (root == null) {

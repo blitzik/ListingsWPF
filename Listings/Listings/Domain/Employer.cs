@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Perst;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,10 +30,40 @@ namespace Listings.Domain
         }
 
 
-        public Employer(string name)
+        private IPersistentList<Listing> _listings;
+        private IPersistentList<Listing> Listings
+        {
+            get { return _listings; }
+            set { _listings = value; }
+        }
+
+
+        public Employer() { }
+
+        public Employer(Storage db, string name)
         {
             Name = name;
             CreatedAt = DateTime.Now;
+
+            Listings = db.CreateScalableList<Listing>();
+        }
+
+
+        public void AddListing(Listing listing)
+        {
+            Listings.Add(listing);
+        }
+
+
+        public void RemoveListing(Listing listing)
+        {
+            Listings.Remove(listing);
+        }
+
+
+        public List<Listing> GetListings()
+        {
+            return new List<Listing>(Listings);
         }
 
 

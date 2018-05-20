@@ -78,7 +78,7 @@ namespace Listings.Views
             Name = Name.Trim();
 
             _employer.Name = Name;
-            _employerFacade.Save(_employer);
+            _employerFacade.Update(_employer);
 
             EmployerNameSaveCommand.RaiseCanExecuteChanged();
         }
