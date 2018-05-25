@@ -1,14 +1,10 @@
 ﻿using Listings.Domain;
 using Perst;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Listings.Services
 {
-    public class Root : Persistent
+    public class Root : Perst.Persistent
     {
         private CompoundIndex<Listing> _listings;
         public CompoundIndex<Listing> Listings

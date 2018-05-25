@@ -10,18 +10,18 @@ namespace Listings.Services.Entities
 {
     public class ListingFactory : IListingFactory
     {
-        private Storage _storage;
+        private StoragePool _storagePool;
 
 
-        public ListingFactory(Storage storage)
+        public ListingFactory(StoragePool storagePool)
         {
-            _storage = storage;
+            _storagePool = storagePool;
         }
 
 
         public Listing Create(int year, int month)
         {
-            return new Listing(_storage, year, month);
+            return new Listing(_storagePool.GetByName(PerstStorageFactory.MAIN_DATABASE_NAME), year, month);
         }
     }
 }

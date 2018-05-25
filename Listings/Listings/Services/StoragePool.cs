@@ -1,10 +1,5 @@
-﻿using Db4objects.Db4o;
-using Perst;
-using System;
+﻿using Perst;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Listings.Services
 {

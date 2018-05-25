@@ -10,18 +10,18 @@ namespace Listings.Services.Entities
 {
     public class EmployerFactory : IEmployerFactory
     {
-        private Storage _storage;
+        private StoragePool _storagePool;
 
 
-        public EmployerFactory(Storage storage)
+        public EmployerFactory(StoragePool storagePool)
         {
-            _storage = storage;
+            _storagePool = storagePool;
         }
 
 
         public Employer Create(string name)
         {
-            return new Employer(_storage, name);
+            return new Employer(_storagePool.GetByName(PerstStorageFactory.MAIN_DATABASE_NAME), name);
         }
     }
 }

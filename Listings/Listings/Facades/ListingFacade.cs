@@ -1,17 +1,9 @@
-﻿using Db4objects.Db4o;
-using Listings.Domain;
+﻿using Listings.Domain;
+using Listings.Services;
+using Perst;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Db4objects.Db4o.Linq;
-using Db4objects.Db4o.Foundation;
-using Listings.EventArguments;
-using Listings.Utils;
-using Db4objects.Db4o.Ext;
-using Listings.Services;
-using Perst;
 
 namespace Listings.Facades
 {

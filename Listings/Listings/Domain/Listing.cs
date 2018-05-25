@@ -1,14 +1,10 @@
 ﻿using Caliburn.Micro;
-using Db4objects.Db4o;
 using Listings.EventArguments;
 using Listings.Exceptions;
 using Listings.Utils;
 using Perst;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Listings.Domain
 {
@@ -217,7 +213,9 @@ namespace Listings.Domain
                 if (_localities == null) {
                     _localities = new List<string>();
                     foreach (ListingItem i in Items.Values) {
-                        _localities.Add(i.Locality);
+                        if (!string.IsNullOrEmpty(i.Locality)) {
+                            _localities.Add(i.Locality);
+                        }
                     }
                 }
                 return _localities;
