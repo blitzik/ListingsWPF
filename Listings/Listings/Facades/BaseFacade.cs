@@ -11,24 +11,35 @@ namespace Listings.Facades
 {
     abstract public class BaseFacade
     {
-        protected Storage _storage;
-        protected Storage Storage
+        private StoragePool _storagePool;
+        protected StoragePool StoragePool
         {
-            get { return _storage; }
+            get { return _storagePool; }
+            set { _storagePool = value; }
+        }
+   
+
+        public BaseFacade(StoragePool storagePool)
+        {
+            _storagePool = storagePool;
         }
 
 
-        protected Root _root;
-        protected Root Root
+        public Storage Storage(string name = null)
         {
-            get { return _root; }
+            if (string.IsNullOrEmpty(name)) {
+                return StoragePool.GetByName(PerstStorageFactory.MAIN_DATABASE_NAME);
+            }
+            return StoragePool.GetByName(name);
         }
 
 
-        public BaseFacade(Storage db)
+        public Root Root(string name = null)
         {
-            _storage = db;
-            _root = db.Root as Root;
+            if (string.IsNullOrEmpty(name)) {
+                return (Root)StoragePool.GetByName(PerstStorageFactory.MAIN_DATABASE_NAME).Root;
+            }
+            return (Root)StoragePool.GetByName(name).Root;
         }
     }
 }

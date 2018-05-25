@@ -166,12 +166,11 @@
     <Compile Include="Messages\ChangeViewMessage.cs" />
     <Compile Include="Messages\EditDayItemMessage.cs" />
     <Compile Include="Messages\ListingMessage.cs" />
-    <Compile Include="Services\Db4oObjectContainerFactory.cs" />
     <Compile Include="Services\IO\ISavingFilePathSelector.cs" />
     <Compile Include="Services\IO\IOpeningFilePathSelector.cs" />
     <Compile Include="Services\IO\OpenFilePathSelector.cs" />
     <Compile Include="Services\IO\SaveFilePathSelector.cs" />
-    <Compile Include="Services\ObjectContainerRegistry.cs" />
+    <Compile Include="Services\StoragePool.cs" />
     <Compile Include="Services\Pdf\IListingPdfDocumentFactory.cs" />
     <Compile Include="Services\Pdf\IListingReportGenerator.cs" />
     <Compile Include="Services\Pdf\IListingSectionFactory.cs" />

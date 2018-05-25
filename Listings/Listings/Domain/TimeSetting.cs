@@ -10,35 +10,35 @@ namespace Listings.Domain
 {
     public class TimeSetting
     {
-        private readonly Time _start;
+        private readonly Time _start = new Time();
         public Time Start
         {
             get { return _start; }
         }
 
 
-        private readonly Time _end;
+        private readonly Time _end = new Time();
         public Time End
         {
             get { return _end; }
         }
 
 
-        private readonly Time _lunchStart;
+        private readonly Time _lunchStart = new Time();
         public Time LunchStart
         {
             get { return _lunchStart; }
         }
 
 
-        private readonly Time _lunchEnd;
+        private readonly Time _lunchEnd = new Time();
         public Time LunchEnd
         {
             get { return _lunchEnd; }
         }
 
 
-        private readonly Time _otherHours;
+        private readonly Time _otherHours = new Time();
         public Time OtherHours
         {
             get { return _otherHours; }
@@ -82,14 +82,7 @@ namespace Listings.Domain
         }
 
 
-        public TimeSetting()
-        {
-            _start = new Time();
-            _end = new Time();
-            _lunchStart = new Time();
-            _lunchEnd = new Time();
-            _otherHours = new Time();
-        }
+        public TimeSetting() { }
 
 
         public TimeSetting(TimeSetting timeSetting)

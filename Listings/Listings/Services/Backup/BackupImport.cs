@@ -9,17 +9,20 @@ using Db4objects.Db4o.Linq;
 using Db4objects.Db4o.Ext;
 using System.IO;
 using System.Reflection;
+using Perst;
 
 namespace Listings.Services.Backup
 {
     public class BackupImport : IBackupImport
     {
-        private readonly Db4oObjectContainerFactory _factory;
+        private StoragePool _storagePool;
+        private PerstStorageFactory _storageFactory;
 
 
-        public BackupImport(Db4oObjectContainerFactory factory)
+        public BackupImport(StoragePool storagePool, PerstStorageFactory storageFactory)
         {
-            _factory = factory;
+            _storagePool = storagePool;
+            _storageFactory = storageFactory;
         }
 
 
@@ -27,30 +30,28 @@ namespace Listings.Services.Backup
         {
             ResultObject ro;
             try {
-                IObjectContainer db = _factory.OpenConnection(importFilePath);
+                Storage importedDb = StorageFactory.Instance.CreateStorage();
+                importedDb.Open(importFilePath, 4 * 1024 * 1024);
+                importedDb.Close();
 
-                ro = new ResultObject(true, db);
+                ro = new ResultObject(true);
                 ro.AddMessage("Import dat proběhl úspěšně!");
 
-                db.Close();
 
-            } catch (IncompatibleFileFormatException e) {
+            } catch (StorageError e) {
                 ro = new ResultObject(false);
-                ro.AddMessage("Import dat selhal. Špatný formát dat.");
-
-            } catch (DatabaseReadOnlyException e) {
-                ro = new ResultObject(false);
-                ro.AddMessage("Import dat selhal. Nelze importovat data jen pro čtení.");
+                ro.AddMessage("Ze zvoleného souboru nelze importovat data.");
 
             } catch (Exception e) {
                 ro = new ResultObject(false);
-                ro.AddMessage("Zvolená data nelze importovat.");
+                ro.AddMessage("Při importu dat došlo k chybě.");
             }
 
             if (!ro.Success) {
                 return ro;
             }
 
+            _storagePool.Close(PerstStorageFactory.MAIN_DATABASE_NAME);
             DateTime now = DateTime.Now;
 
             string activeDbFilePath = Path.Combine(appDBDirectory, activeDBName + "." + activeDBExtension);
@@ -60,6 +61,8 @@ namespace Listings.Services.Backup
 
             File.Move(activeDbFilePath, lastWorkingDbBackupPath);
             File.Copy(importFilePath, activeDbFilePath);
+
+            _storagePool.Add(PerstStorageFactory.MAIN_DATABASE_NAME, _storageFactory.OpenConnection(PerstStorageFactory.MAIN_DATABASE_NAME));
 
             return ro;
         }

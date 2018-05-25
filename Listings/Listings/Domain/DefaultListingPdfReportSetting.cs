@@ -256,10 +256,7 @@ namespace Listings.Domain
         }
 
 
-        public DefaultListingPdfReportSetting()
-        {
-            ResetSettings();
-        }
+        public DefaultListingPdfReportSetting() { }
 
 
         public DefaultListingPdfReportSetting(DefaultListingPdfReportSetting setting)
@@ -322,7 +319,12 @@ namespace Listings.Domain
 
             DefaultListingPdfReportSetting setting = (DefaultListingPdfReportSetting)obj;
 
-            if (OwnerName != setting.OwnerName) { return false; }
+            if (string.IsNullOrEmpty(OwnerName)) {
+                if (!string.IsNullOrEmpty(setting.OwnerName)) { return false; }
+            } else {
+                if (!OwnerName.Equals(setting.OwnerName)) { return false; }
+            }
+
             if (IsEmployerVisible != setting.IsEmployerVisible) { return false; }
             if (IsOwnerNameVisible != setting.IsOwnerNameVisible) { return false; }
 

@@ -8,53 +8,53 @@ using System.Threading.Tasks;
 
 namespace Listings.Services
 {
-    public class ObjectContainerRegistry
+    public class StoragePool
     {
-        private Dictionary<string, Storage> _objectContainers;
+        private Dictionary<string, Storage> _storages;
 
 
-        public ObjectContainerRegistry()
+        public StoragePool()
         {
-            _objectContainers = new Dictionary<string, Storage>();
+            _storages = new Dictionary<string, Storage>();
         }
 
 
         public void Add(string name, Storage db)
         {
-            _objectContainers.Add(name, db);
+            _storages.Add(name, db);
         }
 
 
         public void Close(string name)
         {
-            if (!_objectContainers.ContainsKey(name)) {
+            if (!_storages.ContainsKey(name)) {
                 return;
             }
-            _objectContainers[name].Close();
-            _objectContainers.Remove(name);
+            _storages[name].Close();
+            _storages.Remove(name);
         }
 
 
         public void CloseAll()
         {
-            foreach (KeyValuePair<string, Storage> entry in _objectContainers) {
+            foreach (KeyValuePair<string, Storage> entry in _storages) {
                 entry.Value.Close();
             }
 
-            _objectContainers.Clear();
+            _storages.Clear();
         }
 
 
         public bool ContainsByName(string name)
         {
-            return _objectContainers.ContainsKey(name);
+            return _storages.ContainsKey(name);
         }
 
 
         public Storage GetByName(string name)
         {
-            if (_objectContainers.ContainsKey(name)) {
-                return _objectContainers[name];
+            if (_storages.ContainsKey(name)) {
+                return _storages[name];
             }
 
             return null;
@@ -63,7 +63,7 @@ namespace Listings.Services
 
         public int Count()
         {
-            return _objectContainers.Count;
+            return _storages.Count;
         }
     }
 }

@@ -40,6 +40,7 @@ namespace Listings
 
             // Services
             _container.Singleton<PerstStorageFactory>();
+            _container.Singleton<StoragePool>();
             _container.Singleton<IViewModelResolver<IViewModel>, ViewModelResolver>();
             _container.Singleton<IOpeningFilePathSelector, OpenFilePathSelector>();
             _container.Singleton<ISavingFilePathSelector, SaveFilePathSelector>();
@@ -87,15 +88,16 @@ namespace Listings
             ResultObject ro = new ResultObject(true);
             try {
                 Storage db = _container.GetInstance<PerstStorageFactory>().OpenConnection(PerstStorageFactory.MAIN_DATABASE_NAME);
-                _container.Instance<Storage>(db);
+                StoragePool sp = _container.GetInstance<StoragePool>();
+                sp.Add(PerstStorageFactory.MAIN_DATABASE_NAME, db);
 
                 var vm = _container.GetInstance<MainWindowViewModel>();
                 _container.BuildUp(vm);
                 _container.GetInstance<IWindowManager>().ShowWindow(vm);
 
-            } catch (DatabaseFileLockedException ex) {
+            } catch (StorageError ex) {
                 ro = new ResultObject(false);
-                ro.AddMessage("Nelze načíst Vaše data. Soubor je využíván jiným procesem.");
+                ro.AddMessage("Nelze načíst Vaše data.");
 
             } catch (Exception ex) {
                 ro = new ResultObject(false);
@@ -112,6 +114,7 @@ namespace Listings
 
         protected override void OnExit(object sender, EventArgs e)
         {
+            _container.GetInstance<StoragePool>().CloseAll();
             //mutex.ReleaseMutex();
         }
 

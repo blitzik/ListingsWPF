@@ -5,6 +5,7 @@ using Listings.Domain;
 using Listings.Services;
 using Listings.Services.Backup;
 using Listings.Utils;
+using Perst;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,64 +16,74 @@ using System.Threading.Tasks;
 
 namespace Listings.Facades
 {
-    public class SettingFacade// : BaseFacade
+    public class SettingFacade : BaseFacade
     {
-        private readonly Db4oObjectContainerFactory _dbFactory;
         private IBackupImport _backupImport;
 
 
-        public SettingFacade(Db4oObjectContainerFactory dbFactory, ObjectContainerRegistry dbRegistry, IBackupImport backupImport)// : base (dbRegistry)
+        public SettingFacade(StoragePool db, IBackupImport backupImport) : base (db)
         {
-            _dbFactory = dbFactory;
             _backupImport = backupImport;
         }
 
 
-        public void SaveDefaultSetting(DefaultSettings setting)
+        public ResultObject CreateDefaultSettings(string identifier)
         {
-            //Db().Store(setting);
-            //Db().Commit();
+            DefaultSettings ds = new DefaultSettings(identifier);
+            ResultObject ro;
+            if (Root().DefaultSettings.Put(ds) == false) {
+                ro = new ResultObject(false);
+                ro.AddMessage(string.Format("Nastavení s názem \"{0}\" již existuje.", identifier));
+            } else {
+                ro = new ResultObject(true, ds);
+                Storage().Commit();
+            }
+
+            return ro;
+        }
+
+
+        public void UpdateDefaultSettings(DefaultSettings settings)
+        {
+            Storage().Modify(settings);
+            Storage().Commit();
         }
 
 
         public DefaultSettings GetDefaultSettings()
         {
-            //IEnumerable<DefaultSettings> x = from DefaultSettings ds in Db() where ds.ID == "main" select ds;
-            DefaultSettings settings/* = x.FirstOrDefault()*/;
-            //if (settings == null) {
-                settings = new DefaultSettings(DefaultSettings.MAIN_SETTINGS_ID);
-                //SaveDefaultSetting(settings);
-            //}
-
-            //Db().Activate(settings, 4);
-
-            //settings.OnTimeSettingUpdate += OnTimeSettingUpdate;
+            DefaultSettings ds = Root().DefaultSettings.Get(DefaultSettings.MAIN_SETTINGS_ID);
+            if (ds == null) {
+                ResultObject ro = CreateDefaultSettings(DefaultSettings.MAIN_SETTINGS_ID);
+                if (ro.Success) {
+                    ds = (DefaultSettings)ro.Result;
+                } // todo
+            }
             
-            return settings;
+            return ds;
         }
 
 
-        private void OnTimeSettingUpdate(object sender, TimeSetting oldSetting, TimeSetting newSetting)
+        public ResultObject BackupData(string filePath)
         {
-            //Db().Delete(oldSetting);
-        }
+            ResultObject ro;
+            try {
+                Storage().Backup(new FileStream(filePath, FileMode.Open));
+                ro = new ResultObject(true);
+                ro.AddMessage("Záloha databáze proběhla úspěšně!");
 
+            } catch (IOException e) {
+                ro = new ResultObject(false);
+                ro.AddMessage("Zálohu databáze nelze dokončit. Došlo k chybě.");
+            }
 
-        public void BackupData(string filePath)
-        {
-            //Db().Ext().Backup(filePath);
+            return ro;
         }
 
 
         public ResultObject ImportBackup(string filePath)
         {
-            //_dbRegistry.CloseAll();
-
-            ResultObject ro = _backupImport.Import(filePath, Db4oObjectContainerFactory.GetDatabaseDirectoryPath(), Db4oObjectContainerFactory.MAIN_DATABASE_NAME, Db4oObjectContainerFactory.DATABASE_EXTENSION);
-
-            //_dbRegistry.Add(Db4oObjectContainerFactory.MAIN_DATABASE_NAME, _dbFactory.Create(Db4oObjectContainerFactory.MAIN_DATABASE_NAME));
-
-            return ro;
+            return _backupImport.Import(filePath, PerstStorageFactory.GetDatabaseDirectoryPath(), PerstStorageFactory.MAIN_DATABASE_NAME, PerstStorageFactory.DATABASE_EXTENSION);
         }
 
     }

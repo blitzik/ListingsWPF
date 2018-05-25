@@ -169,6 +169,14 @@ namespace Listings.Views
         }
 
 
+        /*protected override void OnActivate()
+        {
+            base.OnActivate();
+
+            Reset();
+        }*/
+
+
         public void Reset()
         {
             _defaultSetting = _settingFacade.GetDefaultSettings();
@@ -223,9 +231,10 @@ namespace Listings.Views
                 new Time(_workedTimeViewModel.OtherHours)
             );
             _defaultSetting.TimeTickInMinutes = _workedTimeViewModel.SelectedTimeTickInMinutes;
-            _defaultSetting.Pdfsetting.UpdateBy(_pdfSetting);
-            
-            _settingFacade.SaveDefaultSetting(_defaultSetting);
+            //_defaultSetting.Pdfsetting.UpdateBy(_pdfSetting);
+            _defaultSetting.Pdfsetting = new DefaultListingPdfReportSetting(PdfSetting);
+
+            _settingFacade.UpdateDefaultSettings(_defaultSetting);
 
             CancelChangesCommand.RaiseCanExecuteChanged();
             SaveSettingsCommand.RaiseCanExecuteChanged();
@@ -245,7 +254,7 @@ namespace Listings.Views
         {
             string filePath = _openingFilePathSelector.GetFilePath(null, obj => {
                 OpenFileDialog d = (OpenFileDialog)obj;
-                d.DefaultExt = "." + Db4oObjectContainerFactory.DATABASE_EXTENSION;
+                d.DefaultExt = "." + PerstStorageFactory.DATABASE_EXTENSION;
                 d.Filter = "Evidoo data (*.evdo)|*.evdo";
             });
             if (string.IsNullOrEmpty(filePath)) {
@@ -272,9 +281,9 @@ namespace Listings.Views
 
             ProgressBarWindowViewModel pb = new ProgressBarWindowViewModel();
             Task.Run(async () => {
-                _settingFacade.BackupData(filePath);
+                ResultObject ro = _settingFacade.BackupData(filePath);
 
-                pb.Success = true;
+                pb.Success = ro.Success;
                 await Task.Delay(pb.ResultIconDelay);
 
                 pb.TryClose();

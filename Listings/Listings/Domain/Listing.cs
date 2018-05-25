@@ -208,13 +208,14 @@ namespace Listings.Domain
         }
 
 
-        private HashSet<string> _localities;
-        public HashSet<string> Localities
+        [NonSerialized()]
+        private List<string> _localities;
+        public List<string> Localities
         {
             get
             {
                 if (_localities == null) {
-                    _localities = new HashSet<string>();
+                    _localities = new List<string>();
                     foreach (ListingItem i in Items.Values) {
                         _localities.Add(i.Locality);
                     }

@@ -20,25 +20,14 @@ namespace Listings.Domain
         }
 
 
-        public delegate void TimeSettingUpdateHandler(object sender, TimeSetting oldSetting, TimeSetting newSetting);
-        public event TimeSettingUpdateHandler OnTimeSettingUpdate;
         private TimeSetting _time;
         public TimeSetting Time
         {
             get { return _time; }
             set
             {
-                OnTimeSettingUpdate?.Invoke(this, _time, value);
                 _time = value;
             }
-        }
-
-
-        private string _ownerName;
-        public string OwnerName
-        {
-            get { return _ownerName; }
-            set { _ownerName = value; }
         }
 
 
@@ -61,6 +50,9 @@ namespace Listings.Domain
         }
 
 
+        public DefaultSettings() { }
+
+
         public DefaultSettings(string identifier)
         {
             _id = identifier;
@@ -76,6 +68,7 @@ namespace Listings.Domain
             TimeTickInMinutes = 5;
 
             Pdfsetting = new DefaultListingPdfReportSetting();
+            Pdfsetting.ResetSettings();
         }
 
 

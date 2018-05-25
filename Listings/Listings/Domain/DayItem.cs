@@ -130,7 +130,7 @@ namespace Listings.Domain
         }
 
 
-        public HashSet<string> Localities
+        public List<string> Localities
         {
             get { return _listing.Localities; }
         }
